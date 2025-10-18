@@ -3,7 +3,7 @@
     return(
 
         <footer>
-            <p>&copy; your website name</p>
+            <p>&copy; your website name new-new</p>
         </footer>
     );
 
