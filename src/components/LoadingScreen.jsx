@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import styles from './LoadingScreen.module.css';
 
 export default function LoadingScreen({ onComplete }) {
     const [progress, setProgress] = useState(0);
@@ -19,16 +20,16 @@ export default function LoadingScreen({ onComplete }) {
     }, [onComplete]);
 
     return (
-        <div className="loading-screen">
-            <div className="loading-container">
-                <div className="loading-circle">
+        <div className={styles.loadingScreen}>
+            <div className={styles.loadingContainer}>
+                <div className={styles.loadingCircle}>
                     <svg viewBox="0 0 100 100">
-                        <circle cx="50" cy="50" r="45" className="circle-bg" />
+                        <circle cx="50" cy="50" r="45" className={styles.circleBg} />
                         <circle
                             cx="50"
                             cy="50"
                             r="45"
-                            className="circle-progress"
+                            className={styles.circleProgress}
                             style={{
                                 strokeDasharray: 283,
                                 strokeDashoffset: 283 - (283 * progress) / 100,

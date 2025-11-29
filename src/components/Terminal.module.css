@@ -1,0 +1,69 @@
+.terminalContainer {
+    width: 100%;
+    height: 100%;
+    padding: 8px 12px;
+    /* Adjusted padding */
+    box-sizing: border-box;
+    /* Ensure padding doesn't affect width/height */
+    background-color: #0c0c0c;
+    color: #cccccc;
+    font-family: 'Consolas', 'Lucida Console', monospace;
+    font-size: 1rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.terminalHistory {
+    padding-right: 5px;
+    word-break: break-all;
+}
+
+/* Scrollbar styling for Webkit browsers */
+.terminalContainer::-webkit-scrollbar {
+    width: 8px;
+}
+
+.terminalContainer::-webkit-scrollbar-track {
+    background: #0c0c0c;
+}
+
+.terminalContainer::-webkit-scrollbar-thumb {
+    background: #444;
+}
+
+.terminalContainer::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.historyEntry {
+    margin-bottom: 2px;
+}
+
+.commandLine {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.prompt {
+    color: #cccccc;
+    font-weight: normal;
+    white-space: nowrap;
+    margin-right: 8px;
+}
+
+.adminPrompt {
+    color: #cccccc;
+}
+
+.command {
+    color: #cccccc;
+    word-break: break-all;
+}
+
+.output {
+    margin-top: 2px;
+    white-space: pre-wrap;
+    line-height: 1.2;
+    word-break: break-word;
+}

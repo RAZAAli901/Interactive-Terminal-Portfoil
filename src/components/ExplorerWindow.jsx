@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { fileSystem } from '../utils/fileSystem';
+import styles from './ExplorerWindow.module.css';
 
 export default function ExplorerWindow() {
     const [currentPath, setCurrentPath] = useState([fileSystem]);
@@ -20,62 +21,45 @@ export default function ExplorerWindow() {
         }
     };
 
-    const getIcon = (type) => {
-        switch (type) {
-            case 'drive': return '💿';
-            case 'folder': return 'qh'; // Using text/emoji for folder
-            case 'file': return '📄';
-            default: return '❓';
-        }
-    };
-
     // Custom folder icon using CSS/Unicode if needed, or just emoji
     const FolderIcon = () => <span style={{ color: '#f1c40f', fontSize: '2rem' }}>📁</span>;
     const DriveIcon = () => <span style={{ fontSize: '2rem' }}>💿</span>;
     const FileIcon = () => <span style={{ fontSize: '2rem' }}>📄</span>;
 
     return (
-        <div className="explorer-window">
-            <div className="explorer-toolbar">
-                <button onClick={handleBack} disabled={currentPath.length <= 1}>⬅</button>
-                <button>➡</button>
-                <div className="address-bar">
+        <div className={styles.explorerWindow}>
+            <div className={styles.explorerToolbar}>
+                <button className={styles.navBtn} onClick={handleBack} disabled={currentPath.length <= 1}>⬅</button>
+                <button className={styles.navBtn}>➡</button>
+                <div className={styles.addressBar}>
                     {currentPath.map(p => p.name).join(' > ')}
                 </div>
-                <div className="search-bar">
-                    Search {currentFolder.name}
-                </div>
             </div>
-            <div className="explorer-body">
-                <div className="explorer-sidebar">
-                    <div className="sidebar-group">
-                        <div className="sidebar-header">Favorites</div>
-                        <div className="sidebar-item">Desktop</div>
-                        <div className="sidebar-item">Downloads</div>
-                        <div className="sidebar-item">Recent Places</div>
-                    </div>
-                    <div className="sidebar-group">
-                        <div className="sidebar-header">Computer</div>
-                        <div className="sidebar-item">Local Disk (C:)</div>
-                    </div>
+            <div className={styles.explorerContent}>
+                <div className={styles.explorerSidebar}>
+                    <div className={styles.sidebarItem}>Desktop</div>
+                    <div className={styles.sidebarItem}>Downloads</div>
+                    <div className={styles.sidebarItem}>Recent Places</div>
+                    <div style={{ margin: '10px 0', borderBottom: '1px solid #3c3c3c' }}></div>
+                    <div className={styles.sidebarItem}>Local Disk (C:)</div>
                 </div>
-                <div className="explorer-content">
+                <div className={styles.explorerMain}>
                     {currentFolder.children && currentFolder.children.length > 0 ? (
                         currentFolder.children.map((item, index) => (
                             <div
                                 key={index}
-                                className="explorer-item"
+                                className={styles.fileItem}
                                 onDoubleClick={() => handleDoubleClick(item)}
                             >
-                                <div className="item-icon">
+                                <div className={styles.fileIcon}>
                                     {item.type === 'folder' ? <FolderIcon /> :
                                         item.type === 'drive' ? <DriveIcon /> : <FileIcon />}
                                 </div>
-                                <div className="item-name">{item.name}</div>
+                                <div className={styles.fileName}>{item.name}</div>
                             </div>
                         ))
                     ) : (
-                        <div className="empty-folder">This folder is empty.</div>
+                        <div style={{ padding: '20px', color: '#888' }}>This folder is empty.</div>
                     )}
                 </div>
             </div>

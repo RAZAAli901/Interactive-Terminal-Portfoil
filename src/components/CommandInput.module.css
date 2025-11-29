@@ -1,0 +1,33 @@
+.commandInput {
+    display: flex;
+    gap: 0;
+    /* No gap in Windows terminal usually, but a small one is fine. 0 is safer for strict look */
+    margin-top: 0;
+    align-items: center;
+}
+
+.terminalInput {
+    background: transparent;
+    border: none;
+    color: #cccccc;
+    /* Standard Windows CMD text color is often light gray/white */
+    font-family: 'Consolas', 'Lucida Console', monospace;
+    font-size: 1rem;
+    flex: 1;
+    outline: none;
+    padding-left: 8px;
+    /* Space after prompt */
+}
+
+.prompt {
+    color: #cccccc;
+    /* Windows CMD prompt is same color as text usually */
+    font-family: 'Consolas', 'Lucida Console', monospace;
+    font-weight: normal;
+    white-space: nowrap;
+}
+
+.adminPrompt {
+    color: #cccccc;
+    /* Admin prompt in CMD doesn't change color, but title bar does. We'll keep text consistent */
+}

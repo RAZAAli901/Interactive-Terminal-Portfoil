@@ -6,6 +6,7 @@ import Taskbar from "./components/Taskbar";
 import DesktopIcon from "./components/DesktopIcon";
 import StartMenu from "./components/StartMenu";
 import ExplorerWindow from "./components/ExplorerWindow";
+import styles from './App.module.css';
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -81,7 +82,7 @@ export default function App() {
 
   return (
     <div
-      className="desktop"
+      className={styles.desktop}
       style={{ backgroundImage: `url(${wallpapers[wallpaper]})` }}
       onClick={handleDesktopClick}
     >
@@ -89,7 +90,7 @@ export default function App() {
         <LoadingScreen onComplete={() => setIsLoading(false)} />
       ) : (
         <>
-          <div className="desktop-icons">
+          <div className={styles.desktopIcons}>
             <DesktopIcon
               label="Terminal"
               icon="💻"

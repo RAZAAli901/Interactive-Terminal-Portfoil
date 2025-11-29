@@ -1,8 +1,10 @@
+import styles from './DesktopIcon.module.css';
+
 export default function DesktopIcon({ label, icon, onDoubleClick }) {
     return (
-        <div className="desktop-icon" onDoubleClick={onDoubleClick}>
-            <div className="icon-img">{icon}</div>
-            <div className="icon-label">{label}</div>
+        <div className={styles.desktopIcon} onDoubleClick={onDoubleClick}>
+            <div className={styles.iconImg}>{icon}</div>
+            <div className={styles.iconLabel}>{label}</div>
         </div>
     );
 }

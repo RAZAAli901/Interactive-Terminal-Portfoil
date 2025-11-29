@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import styles from './CommandInput.module.css';
 
 export default function CommandInput({ onSubmit, mode = 'command', history = [], isAdmin = false }) {
     const [input, setInput] = useState('');
@@ -37,20 +38,20 @@ export default function CommandInput({ onSubmit, mode = 'command', history = [],
     };
 
     return (
-        <div className="command-input">
+        <div className={styles.commandInput}>
             {mode === 'command' && (
-                <span className={`prompt ${isAdmin ? 'admin-prompt' : ''}`}>
-                    {isAdmin ? 'admin@portfolio:' : 'visitor@portfolio:~$'}
+                <span className={`${styles.prompt} ${isAdmin ? styles.adminPrompt : ''}`}>
+                    {isAdmin ? 'C:\\Users\\admin>' : 'C:\\Users\\lenovo>'}
                 </span>
             )}
-            {mode === 'password' && <span className="prompt">Password:</span>}
+            {mode === 'password' && <span className={styles.prompt}>Password:</span>}
             <input
                 ref={inputRef}
                 type={mode === 'password' ? 'password' : 'text'}
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleKeyDown}
-                className="terminal-input"
+                className={styles.terminalInput}
                 autoFocus
             />
         </div>

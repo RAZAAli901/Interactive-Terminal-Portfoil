@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import styles from './Taskbar.module.css';
 
 export default function Taskbar({ windows, onToggleWindow, onToggleStartMenu, isStartMenuOpen }) {
     const [time, setTime] = useState(new Date());
@@ -9,39 +10,43 @@ export default function Taskbar({ windows, onToggleWindow, onToggleStartMenu, is
     }, []);
 
     return (
-        <div className="taskbar">
-            <div className="taskbar-left">
-                <div className={`start-button ${isStartMenuOpen ? 'active' : ''}`} onClick={onToggleStartMenu}>
-                    <div className="win11-logo">
+        <div className={styles.taskbar}>
+            <div className={styles.taskbarCenter}>
+                <div className={`${styles.startButton} start-button ${isStartMenuOpen ? styles.active : ''}`} onClick={onToggleStartMenu}>
+                    <div className={styles.win11Logo}>
                         <div></div><div></div><div></div><div></div>
                     </div>
                 </div>
-                <div className="taskbar-search">
-                    <span className="search-icon">🔍</span>
+
+                <div className={styles.taskbarSearch}>
+                    <span className={styles.searchIcon}>🔍</span>
                     <input type="text" placeholder="Search" readOnly />
                 </div>
-                <div className="taskbar-apps">
+
+                <div className={styles.taskbarApps}>
+                    {/* Pinned Apps (Mock) */}
+                    <div className={`${styles.taskbarItem} mock`} title="Chat"><span className={styles.taskbarIcon}>💬</span></div>
+                    <div className={`${styles.taskbarItem} mock`} title="File Explorer"><span className={styles.taskbarIcon}>📁</span></div>
+                    <div className={`${styles.taskbarItem} mock`} title="Browser"><span className={styles.taskbarIcon}>🌐</span></div>
+
                     {windows.map((window) => (
                         <div
                             key={window.id}
-                            className={`taskbar-item ${window.isOpen && !window.isMinimized ? 'focused' : ''}`}
+                            className={`${styles.taskbarItem} ${window.isOpen && !window.isMinimized ? styles.focused : ''}`}
                             onClick={() => onToggleWindow(window.id)}
                             title={window.title}
                         >
-                            <span className="taskbar-icon">{window.id === 'terminal' ? '💻' : '📁'}</span>
+                            <span className={styles.taskbarIcon}>{window.id === 'terminal' ? '💻' : '📁'}</span>
                         </div>
                     ))}
-                    {/* Mock Icons for aesthetic */}
-                    <div className="taskbar-item mock" title="Chat"><span className="taskbar-icon">💬</span></div>
-                    <div className="taskbar-item mock" title="Browser"><span className="taskbar-icon">🌐</span></div>
                 </div>
             </div>
 
-            <div className="system-tray">
-                <div className="tray-icon">☁️ 19°C</div>
-                <div className="tray-icon">ENG</div>
-                <div className="tray-icon">📶 🔊 🔋</div>
-                <div className="tray-clock">
+            <div className={styles.systemTray}>
+                <div className={styles.trayIcon}>☁️ 19°C</div>
+                <div className={styles.trayIcon}>ENG</div>
+                <div className={styles.trayIcon}>📶 🔊 🔋</div>
+                <div className={styles.trayClock}>
                     <div>{time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
                     <div>{time.toLocaleDateString()}</div>
                 </div>
