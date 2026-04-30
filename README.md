@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://razaali901.github.io/my-portfolio/" target="_blank">
+  <a href="https://RAZAAli901.github.io/my-portfolio/" target="_blank">
     <img src="https://img.shields.io/badge/LIVE_DEMO-Interactive_OS_Portfolio-00e676?style=for-the-badge&logo=react&logoColor=white" alt="Live Demo">
   </a>
 </p>
