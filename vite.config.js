@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import react from '@vitejs/react'
 
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
+  base: "/Interactive-Terminal-Portfoil/", // Add this line!
 })
