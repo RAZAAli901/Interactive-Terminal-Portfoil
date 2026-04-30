@@ -17,12 +17,12 @@ Interact with my portfolio using these built-in commands:
 | :--- | :--- |
 | `whoami` | Displays my professional summary |
 | `about` | Display info about me |
-| `projects` | View my portfolio projects[cite: 3] |
-| `wallpaper [1-12]` | Change the desktop background[cite: 3] |
-| `clear` | Clear the terminal screen[cite: 3] |
+| `projects` | View my portfolio projects |
+| `wallpaper [1-12]` | Change the desktop background |
+| `clear` | Clear the terminal screen |
 
 ## ✨ Features
-* **Live Terminal**: Functional command-line interface for navigation[cite: 3].
-* **Desktop Environment**: Interactive Windows-style desktop with taskbar[cite: 3].
-* **12 Wallpapers**: Built-in switcher for various themes (space, code, landscapes)[cite: 3].
-* **File Structure**: Visual tree representing the React + Vite project layout[cite: 3].
+* **Live Terminal**: Functional command-line interface for navigation.
+* **Desktop Environment**: Interactive Windows-style desktop with taskbar.
+* **12 Wallpapers**: Built-in switcher for various themes (space, code, landscapes).
+* **File Structure**: Visual tree representing the React + Vite project layout.
