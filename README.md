@@ -22,7 +22,7 @@ Interact with my portfolio using these built-in commands:
 | `clear` | Clear the terminal screen |
 
 ## ✨ Features
-* **Live Terminal**: Functional command-line  interface for navigation.
+* **Live Terminal**: Functional command-line interface for navigation.
 * **Desktop Environment**: Interactive Windows-style desktop with taskbar.
 * **12 Wallpapers**: Built-in switcher for various themes (space, code, landscapes).
 * **File Structure**: Visual tree representing the React + Vite project layout.
