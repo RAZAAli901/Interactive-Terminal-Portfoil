@@ -42,6 +42,4 @@ You can control the portfolio using the following terminal commands[cite: 2]:
 ## 🚀 Quick Setup
 To run this project locally, follow these steps[cite: 2]:
 
-1. **Clone the repository**[cite: 2]:
-   ```bash
-   git clone [https://github.com/RAZAAli901/my-portfolio.git](https://github.com/RAZAAli901/my-portfolio.git)
+
