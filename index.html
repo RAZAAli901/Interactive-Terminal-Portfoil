@@ -1,13 +1,269 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>my-first-react</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
-</html>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Outfit:wght@300;400;500;600&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0d0d0f;--bg2:#141416;--bg3:#1c1c1f;
+  --border:#2a2a2e;--border2:#3a3a3f;
+  --green:#00e676;--green2:#69f0ae;--green-dim:#00e67622;
+  --blue:#40c4ff;--amber:#ffd740;--red:#ff5252;
+  --text:#e8e6e0;--text2:#9e9c96;--text3:#5a5855;
+  --mono:'Share Tech Mono',monospace;
+  --sans:'Outfit',sans-serif;
+}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14px;line-height:1.7;padding:0 0 48px}
+
+/* scanline overlay */
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.03) 2px,rgba(0,0,0,0.03) 4px);pointer-events:none;z-index:0}
+
+.wrap{position:relative;z-index:1;max-width:720px;margin:0 auto;padding:0 24px}
+
+/* Hero terminal window */
+.terminal-hero{background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin:32px 0 28px}
+.t-titlebar{display:flex;align-items:center;gap:8px;padding:10px 14px;background:var(--bg3);border-bottom:1px solid var(--border)}
+.t-btn{width:12px;height:12px;border-radius:50%}
+.t-close{background:#ff5f57}
+.t-min{background:#febc2e}
+.t-max{background:#28c840}
+.t-title{font-family:var(--mono);font-size:11px;color:var(--text3);margin-left:6px}
+.t-body{padding:20px 24px;font-family:var(--mono);font-size:13px;line-height:2}
+.t-prompt{color:var(--green)}
+.t-cmd{color:var(--text)}
+.t-out{color:var(--text2);padding-left:2px}
+.t-out.hi{color:var(--green2)}
+.t-out.bl{color:var(--blue)}
+.t-out.am{color:var(--amber)}
+.cursor{display:inline-block;width:8px;height:14px;background:var(--green);vertical-align:middle;animation:blink 1s step-end infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+
+/* badges */
+.badge-row{display:flex;flex-wrap:wrap;gap:6px;margin:20px 0}
+.badge{font-family:var(--mono);font-size:10px;padding:3px 10px;border-radius:3px;border:1px solid}
+.b-react{color:#61dafb;border-color:#61dafb33;background:#61dafb11}
+.b-vite{color:#a78bfa;border-color:#a78bfa33;background:#a78bfa11}
+.b-css{color:#f9c74f;border-color:#f9c74f33;background:#f9c74f11}
+.b-js{color:#f0db4f;border-color:#f0db4f33;background:#f0db4f11}
+.b-win{color:#00e676;border-color:#00e67633;background:#00e67611}
+
+/* section headings */
+.sec{margin:32px 0 14px}
+.sec-label{font-family:var(--mono);font-size:11px;color:var(--green);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:6px}
+.sec-label::before{content:'// ';color:var(--text3)}
+h2{font-size:18px;font-weight:500;color:var(--text)}
+
+/* feature grid */
+.feat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin:4px 0}
+.feat{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:14px 16px}
+.feat:hover{border-color:var(--border2)}
+.feat-icon{font-size:18px;margin-bottom:6px}
+.feat-name{font-size:13px;font-weight:500;margin-bottom:3px}
+.feat-desc{font-size:11px;color:var(--text2);line-height:1.5}
+
+/* file tree */
+.tree-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:16px 20px;font-family:var(--mono);font-size:12px;line-height:2.1}
+.tr-folder{color:var(--blue)}
+.tr-jsx{color:var(--green2)}
+.tr-css{color:var(--amber)}
+.tr-js{color:#f0db4f}
+.tr-dim{color:var(--text3)}
+.tr-conf{color:#a78bfa}
+
+/* install steps */
+.steps{display:flex;flex-direction:column;gap:8px}
+.step{display:flex;align-items:flex-start;gap:12px}
+.step-num{font-family:var(--mono);font-size:10px;color:var(--green);background:var(--green-dim);border:1px solid var(--green);border-radius:3px;padding:2px 7px;white-space:nowrap;margin-top:3px}
+.step-body{}
+.step-label{font-size:12px;color:var(--text2);margin-bottom:4px}
+.code{background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:7px 12px;font-family:var(--mono);font-size:12px;color:var(--green2)}
+.code .pr{color:var(--text3)}
+
+/* command table */
+.cmd-table{width:100%;border-collapse:collapse;font-size:12px}
+.cmd-table th{font-family:var(--mono);font-size:10px;color:var(--text3);text-align:left;padding:6px 12px;border-bottom:1px solid var(--border);text-transform:uppercase;letter-spacing:0.08em}
+.cmd-table td{padding:7px 12px;border-bottom:1px solid var(--border)}
+.cmd-table tr:last-child td{border-bottom:none}
+.cmd-table tr:hover td{background:var(--bg3)}
+.cmd-mono{font-family:var(--mono);color:var(--green2);font-size:11px}
+.cmd-desc{color:var(--text2)}
+
+/* wallpaper grid */
+.wp-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.wp{border-radius:5px;height:48px;background-size:cover;background-position:center;border:1px solid var(--border);position:relative;overflow:hidden}
+.wp::after{content:'';position:absolute;inset:0;background:rgba(0,0,0,0.2)}
+
+/* divider */
+.divider{border:none;border-top:1px solid var(--border);margin:28px 0}
+
+/* footer */
+.footer{font-family:var(--mono);font-size:11px;color:var(--text3);text-align:center;padding-top:8px}
+.footer span{color:var(--green)}
+</style>
+
+<div class="wrap">
+
+  <!-- Hero terminal -->
+  <div class="terminal-hero">
+    <div class="t-titlebar">
+      <div class="t-btn t-close"></div>
+      <div class="t-btn t-min"></div>
+      <div class="t-btn t-max"></div>
+      <span class="t-title">README.md — my-portfolio</span>
+    </div>
+    <div class="t-body">
+      <div><span class="t-prompt">C:\portfolio&gt; </span><span class="t-cmd">whoami</span></div>
+      <div class="t-out hi">RAZA Ali — Frontend Developer</div>
+      <div style="margin-top:8px"><span class="t-prompt">C:\portfolio&gt; </span><span class="t-cmd">cat description.txt</span></div>
+      <div class="t-out">A fully interactive <span style="color:var(--amber)">Windows desktop</span> experience</div>
+      <div class="t-out">built as a developer portfolio. Open windows,</div>
+      <div class="t-out">run terminal commands, change wallpapers.</div>
+      <div style="margin-top:8px"><span class="t-prompt">C:\portfolio&gt; </span><span class="t-cmd">get-stack</span></div>
+      <div class="t-out bl">React 19 + Vite + CSS Modules</div>
+      <div style="margin-top:8px"><span class="t-prompt">C:\portfolio&gt; </span><span class="cursor"></span></div>
+    </div>
+  </div>
+
+  <div class="badge-row">
+    <span class="badge b-react">React 19</span>
+    <span class="badge b-vite">Vite / Rolldown</span>
+    <span class="badge b-css">CSS Modules</span>
+    <span class="badge b-js">JavaScript</span>
+    <span class="badge b-win">Windows UI Theme</span>
+  </div>
+
+  <hr class="divider">
+
+  <!-- Features -->
+  <div class="sec"><div class="sec-label">Features</div><h2>What's inside</h2></div>
+  <div class="feat-grid">
+    <div class="feat">
+      <div class="feat-icon">🖥️</div>
+      <div class="feat-name">Desktop environment</div>
+      <div class="feat-desc">Fully interactive Windows-style desktop with draggable icons and taskbar</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">💻</div>
+      <div class="feat-name">Live terminal</div>
+      <div class="feat-desc">Functional terminal window with custom commands to navigate the portfolio</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">📁</div>
+      <div class="feat-name">File explorer</div>
+      <div class="feat-desc">My Computer window that acts as a file system browser for portfolio content</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">🎨</div>
+      <div class="feat-name">12 wallpapers</div>
+      <div class="feat-desc">Switch between 12 wallpapers including space, gaming, code, landscapes and more</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">⊞</div>
+      <div class="feat-name">Start menu</div>
+      <div class="feat-desc">Windows-style start menu to launch apps and navigate sections</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">✨</div>
+      <div class="feat-name">Loading screen</div>
+      <div class="feat-desc">Custom boot animation on first load before the desktop appears</div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- File structure -->
+  <div class="sec"><div class="sec-label">Structure</div><h2>Project layout</h2></div>
+  <div class="tree-wrap">
+<span class="tr-folder">my-portfolio/</span>
+├── <span class="tr-folder">public/</span>
+│   └── <span class="tr-folder">wallpapers/</span>         <span class="tr-dim">wp1–wp4.jpg</span>
+├── <span class="tr-folder">src/</span>
+│   ├── <span class="tr-folder">components/</span>          <span class="tr-dim">reusable UI pieces</span>
+│   │   ├── <span class="tr-folder">CommandInput/</span>
+│   │   ├── <span class="tr-folder">DesktopIcon/</span>
+│   │   ├── <span class="tr-folder">ExplorerWindow/</span>
+│   │   ├── <span class="tr-folder">LoadingScreen/</span>
+│   │   ├── <span class="tr-folder">StartMenu/</span>
+│   │   ├── <span class="tr-folder">Taskbar/</span>
+│   │   ├── <span class="tr-folder">Terminal/</span>
+│   │   └── <span class="tr-folder">Window/</span>
+│   ├── <span class="tr-folder">sections/</span>            <span class="tr-dim">About, Hero, Projects, Contact…</span>
+│   ├── <span class="tr-folder">utils/</span>               <span class="tr-dim">commandHandler, fileSystem</span>
+│   ├── <span class="tr-jsx">App.jsx</span>
+│   ├── <span class="tr-css">App.module.css</span>
+│   └── <span class="tr-js">main.jsx</span>
+├── <span class="tr-conf">vite.config.js</span>
+└── <span class="tr-dim">package.json</span>
+  </div>
+
+  <hr class="divider">
+
+  <!-- Setup -->
+  <div class="sec"><div class="sec-label">Setup</div><h2>Getting started</h2></div>
+  <div class="steps">
+    <div class="step">
+      <span class="step-num">01</span>
+      <div class="step-body">
+        <div class="step-label">Clone the repo</div>
+        <div class="code"><span class="pr">$ </span>git clone https://github.com/RAZAAli901/my-portfolio.git</div>
+      </div>
+    </div>
+    <div class="step">
+      <span class="step-num">02</span>
+      <div class="step-body">
+        <div class="step-label">Install dependencies</div>
+        <div class="code"><span class="pr">$ </span>npm install</div>
+      </div>
+    </div>
+    <div class="step">
+      <span class="step-num">03</span>
+      <div class="step-body">
+        <div class="step-label">Start dev server</div>
+        <div class="code"><span class="pr">$ </span>npm run dev</div>
+      </div>
+    </div>
+    <div class="step">
+      <span class="step-num">04</span>
+      <div class="step-body">
+        <div class="step-label">Open in browser</div>
+        <div class="code">http://localhost:5173</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- Terminal commands -->
+  <div class="sec"><div class="sec-label">Terminal</div><h2>Available commands</h2></div>
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;overflow:hidden">
+    <table class="cmd-table">
+      <thead><tr><th>Command</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td class="cmd-mono">help</td><td class="cmd-desc">List all available commands</td></tr>
+        <tr><td class="cmd-mono">about</td><td class="cmd-desc">Display info about me</td></tr>
+        <tr><td class="cmd-mono">projects</td><td class="cmd-desc">View my projects</td></tr>
+        <tr><td class="cmd-mono">contact</td><td class="cmd-desc">Show contact details</td></tr>
+        <tr><td class="cmd-mono">wallpaper [1-12]</td><td class="cmd-desc">Change the desktop wallpaper</td></tr>
+        <tr><td class="cmd-mono">clear</td><td class="cmd-desc">Clear the terminal screen</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr class="divider">
+
+  <!-- Wallpapers -->
+  <div class="sec"><div class="sec-label">Wallpapers</div><h2>12 built-in wallpapers</h2></div>
+  <div class="wp-grid">
+    <div class="wp" style="background-image:url('https://images.unsplash.com/photo-1496247749665-49cf5b1022e9?w=200&q=60')"></div>
+    <div class="wp" style="background-image:url('https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=200&q=60')"></div>
+    <div class="wp" style="background-image:url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=200&q=60')"></div>
+    <div class="wp" style="background-image:url('https://images.unsplash.com/photo-1518770660439-4636190af475?w=200&q=60')"></div>
+    <div class="wp" style="background-image:url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=200&q=60')"></div>
+    <div class="wp" style="background-image:url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=200&q=60')"></div>
+    <div class="wp" style="background-image:url('https://images.unsplash.com/photo-1519681393784-d120267933ba?w=200&q=60')"></div>
+    <div class="wp" style="background-image:url('https://images.unsplash.com/photo-1511512578047-dfb367046420?w=200&q=60')"></div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="footer">built with <span>React 19</span> + <span>Vite</span> — RAZAAli901</div>
+
+</div>
