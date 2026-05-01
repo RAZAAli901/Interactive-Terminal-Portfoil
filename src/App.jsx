@@ -6,6 +6,7 @@ import Taskbar from "./components/Taskbar";
 import DesktopIcon from "./components/DesktopIcon";
 import StartMenu from "./components/StartMenu";
 import ExplorerWindow from "./components/ExplorerWindow";
+import Notepad from "./components/Notepad";
 import styles from './App.module.css';
 
 export default function App() {
@@ -23,7 +24,14 @@ export default function App() {
     isMinimized: false,
   });
 
+  const [notepadState, setNotepadState] = useState({
+    isOpen: false,
+    isMinimized: false,
+  });
+
   const [isStartMenuOpen, setIsStartMenuOpen] = useState(false);
+  const [contextMenu, setContextMenu] = useState({ visible: false, x: 0, y: 0 });
+  const [terminalInitialCommand, setTerminalInitialCommand] = useState(null);
 
   const wallpapers = {
     1: 'https://images.unsplash.com/photo-1496247749665-49cf5b1022e9?q=80&w=2073&auto=format&fit=crop', // Glitch/Broken Screen alternative
@@ -64,6 +72,10 @@ export default function App() {
     setExplorerState({ isOpen: false, isMinimized: false });
   };
 
+  const closeNotepad = () => {
+    setNotepadState({ isOpen: false, isMinimized: false });
+  };
+
   const openTerminal = () => {
     setTerminalState({ isOpen: true, isMinimized: false });
     setIsStartMenuOpen(false);
@@ -74,10 +86,39 @@ export default function App() {
     setIsStartMenuOpen(false);
   };
 
+  const openNotepad = () => {
+    setNotepadState({ isOpen: true, isMinimized: false });
+    setIsStartMenuOpen(false);
+  };
+
+  const toggleNotepad = () => {
+    if (!notepadState.isOpen) {
+      setNotepadState({ isOpen: true, isMinimized: false });
+    } else {
+      setNotepadState(prev => ({ ...prev, isMinimized: !prev.isMinimized }));
+    }
+  };
+
+  const openTerminalWithCommand = (cmd) => {
+    setTerminalInitialCommand(cmd);
+    setTerminalState({ isOpen: true, isMinimized: false });
+    setIsStartMenuOpen(false);
+  };
+
   const handleDesktopClick = (e) => {
+    if (contextMenu.visible) setContextMenu({ visible: false, x: 0, y: 0 });
     if (!e.target.closest('.start-menu') && !e.target.closest('.start-button')) {
       setIsStartMenuOpen(false);
     }
+  };
+
+  const handleContextMenu = (e) => {
+    e.preventDefault();
+    setContextMenu({
+      visible: true,
+      x: e.clientX,
+      y: e.clientY
+    });
   };
 
   return (
@@ -85,7 +126,9 @@ export default function App() {
       className={styles.desktop}
       style={{ backgroundImage: `url(${wallpapers[wallpaper]})` }}
       onClick={handleDesktopClick}
+      onContextMenu={handleContextMenu}
     >
+      <div className={styles.desktopOverlay}></div>
       {isLoading ? (
         <LoadingScreen onComplete={() => setIsLoading(false)} />
       ) : (
@@ -106,16 +149,25 @@ export default function App() {
               icon="🗑️"
               onDoubleClick={() => alert("Empty")}
             />
+            <DesktopIcon
+              label="Notepad"
+              icon="📝"
+              onDoubleClick={openNotepad}
+            />
           </div>
 
           {terminalState.isOpen && (
             <Window
-              title="Terminal"
+              title="Command Prompt"
               onClose={closeTerminal}
               onMinimize={() => setTerminalState(prev => ({ ...prev, isMinimized: true }))}
               isMinimized={terminalState.isMinimized}
+              defaultWidth={800}
+              defaultHeight={500}
+              offsetX={0}
+              offsetY={0}
             >
-              <Terminal setWallpaper={setWallpaper} />
+              <Terminal setWallpaper={setWallpaper} initialCommand={terminalInitialCommand} setInitialCommand={setTerminalInitialCommand} />
             </Window>
           )}
 
@@ -130,6 +182,21 @@ export default function App() {
             </Window>
           )}
 
+          {notepadState.isOpen && (
+            <Window
+              title="Notepad"
+              onClose={closeNotepad}
+              onMinimize={() => setNotepadState(prev => ({ ...prev, isMinimized: true }))}
+              isMinimized={notepadState.isMinimized}
+              defaultWidth={650}
+              defaultHeight={500}
+              offsetX={80}
+              offsetY={40}
+            >
+              <Notepad />
+            </Window>
+          )}
+
           <StartMenu
             isOpen={isStartMenuOpen}
             onAppClick={(app) => {
@@ -141,15 +208,34 @@ export default function App() {
           <Taskbar
             windows={[
               { id: 'terminal', title: 'Terminal', isOpen: terminalState.isOpen, isMinimized: terminalState.isMinimized },
-              { id: 'explorer', title: 'My Computer', isOpen: explorerState.isOpen, isMinimized: explorerState.isMinimized }
+              { id: 'explorer', title: 'My Computer', isOpen: explorerState.isOpen, isMinimized: explorerState.isMinimized },
+              { id: 'notepad', title: 'Notepad', isOpen: notepadState.isOpen, isMinimized: notepadState.isMinimized }
             ].filter(w => w.isOpen)}
             onToggleWindow={(id) => {
               if (id === 'terminal') toggleTerminal();
               if (id === 'explorer') toggleExplorer();
+              if (id === 'notepad') toggleNotepad();
             }}
             onToggleStartMenu={() => setIsStartMenuOpen(!isStartMenuOpen)}
             isStartMenuOpen={isStartMenuOpen}
           />
+
+          {contextMenu.visible && (
+            <div 
+              className={styles.contextMenu}
+              style={{ left: contextMenu.x, top: contextMenu.y }}
+            >
+              <div className={styles.contextMenuItem} onClick={() => setWallpaper((prev) => (prev % 12) + 1)}>
+                Change Wallpaper
+              </div>
+              <div className={styles.contextMenuItem} onClick={openTerminal}>
+                Open Terminal
+              </div>
+              <div className={styles.contextMenuItem} onClick={() => openTerminalWithCommand('about')}>
+                About
+              </div>
+            </div>
+          )}
         </>
       )}
     </div>

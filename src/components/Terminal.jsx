@@ -4,10 +4,10 @@ import { handleCommand } from '../utils/commandHandler';
 import Hero from '../sections/Hero';
 import styles from './Terminal.module.css';
 
-export default function Terminal({ setWallpaper }) {
-    const [history, setHistory] = useState([
-        { command: '', output: { type: 'text', content: ['Microsoft Windows [Version 10.0.26200.7171]', '(c) Microsoft Corporation. All rights reserved.', ''] } },
-    ]);
+export default function Terminal({ setWallpaper, initialCommand, setInitialCommand }) {
+    const welcomeLines = ['Microsoft Windows [Version 10.0.26200.7171]', '(c) Microsoft Corporation. All rights reserved.', ''];
+    const [history, setHistory] = useState([]);
+    const [isTyping, setIsTyping] = useState(true);
     const [inputMode, setInputMode] = useState('command'); // 'command' or 'password'
     const [pendingCommand, setPendingCommand] = useState(null);
     const [isAdmin, setIsAdmin] = useState(false);
@@ -62,6 +62,48 @@ export default function Terminal({ setWallpaper }) {
         bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [history]);
 
+    useEffect(() => {
+        if (history.length === 0 && isTyping) {
+            let currentLine = 0;
+            let currentChar = 0;
+            let tempContent = ['', '', ''];
+
+            const typeChar = () => {
+                if (currentLine >= welcomeLines.length) {
+                    setIsTyping(false);
+                    return;
+                }
+                
+                if (currentChar < welcomeLines[currentLine].length) {
+                    tempContent[currentLine] += welcomeLines[currentLine][currentChar];
+                    currentChar++;
+                } else {
+                    currentLine++;
+                    currentChar = 0;
+                }
+                
+                setHistory([
+                    { command: '', output: { type: 'text', content: [...tempContent] } }
+                ]);
+
+                if (currentLine < welcomeLines.length) {
+                    setTimeout(typeChar, 10);
+                } else {
+                    setIsTyping(false);
+                }
+            };
+            
+            setTimeout(typeChar, 300);
+        }
+    }, []);
+
+    useEffect(() => {
+        if (!isTyping && initialCommand) {
+            onCommandSubmit(initialCommand);
+            if (setInitialCommand) setInitialCommand(null);
+        }
+    }, [initialCommand, isTyping]);
+
     return (
         <div className={styles.terminalContainer}>
             <div className={styles.terminalHistory}>
@@ -85,12 +127,14 @@ export default function Terminal({ setWallpaper }) {
                     </div>
                 ))}
             </div>
-            <CommandInput
-                onSubmit={onCommandSubmit}
-                mode={inputMode}
-                history={history.map(h => h.command).filter(c => c !== '')}
-                isAdmin={isAdmin}
-            />
+            {!isTyping && (
+                <CommandInput
+                    onSubmit={onCommandSubmit}
+                    mode={inputMode}
+                    history={history.map(h => h.command).filter(c => c !== '')}
+                    isAdmin={isAdmin}
+                />
+            )}
             <div ref={bottomRef} />
         </div>
     );

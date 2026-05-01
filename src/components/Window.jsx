@@ -1,9 +1,17 @@
 import { useState, useRef, useEffect } from 'react';
 import styles from './Window.module.css';
 
-export default function Window({ children, title = "Terminal", onClose, onMinimize, onMaximize, isMinimized }) {
-    const [position, setPosition] = useState({ x: 0, y: 0 });
-    const [size, setSize] = useState({ width: 800, height: 600 });
+export default function Window({ children, title = "Terminal", onClose, onMinimize, onMaximize, isMinimized, defaultWidth = 800, defaultHeight = 500, offsetX = 0, offsetY = 0 }) {
+    const [size, setSize] = useState({ width: defaultWidth, height: defaultHeight });
+    const [position, setPosition] = useState(() => {
+        if (typeof window !== 'undefined') {
+            return {
+                x: Math.max(0, (window.innerWidth - defaultWidth) / 2) + offsetX,
+                y: Math.max(0, (window.innerHeight - defaultHeight) / 2) + offsetY,
+            };
+        }
+        return { x: 0, y: 0 };
+    });
     const [isDragging, setIsDragging] = useState(false);
     const [isResizing, setIsResizing] = useState(false);
     const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
@@ -11,16 +19,7 @@ export default function Window({ children, title = "Terminal", onClose, onMinimi
     const [preMaximizeState, setPreMaximizeState] = useState(null);
 
     const windowRef = useRef(null);
-
-    useEffect(() => {
-        const winWidth = window.innerWidth;
-        const winHeight = window.innerHeight;
-        setPosition({
-            x: (winWidth - 800) / 2,
-            y: (winHeight - 600) / 2,
-        });
-    }, []);
-
+    const isTerminal = title === "Terminal" || title === "Command Prompt";
     const handleMouseDown = (e) => {
         if (e.target.closest(`.${styles.windowControls}`) || e.target.closest(`.${styles.resizeHandle}`)) return;
         setIsDragging(true);
@@ -32,9 +31,19 @@ export default function Window({ children, title = "Terminal", onClose, onMinimi
 
     const handleMouseMove = (e) => {
         if (isDragging && !isMaximized) {
+            let newX = e.clientX - dragOffset.x;
+            let newY = e.clientY - dragOffset.y;
+            
+            // Edge snapping logic
+            const snapThreshold = 20;
+            if (newX < snapThreshold) newX = 0;
+            if (newY < snapThreshold) newY = 0;
+            if (newX + size.width > window.innerWidth - snapThreshold) newX = window.innerWidth - size.width;
+            if (newY + size.height > window.innerHeight - snapThreshold) newY = window.innerHeight - size.height;
+
             setPosition({
-                x: e.clientX - dragOffset.x,
-                y: e.clientY - dragOffset.y,
+                x: newX,
+                y: newY,
             });
         }
         if (isResizing && !isMaximized) {
@@ -82,7 +91,7 @@ export default function Window({ children, title = "Terminal", onClose, onMinimi
     return (
         <div
             ref={windowRef}
-            className={`${styles.windowFrame} ${isMaximized ? styles.maximized : ''}`}
+            className={`${styles.windowFrame} ${isMaximized ? styles.maximized : ''} ${isDragging ? styles.dragging : ''}`}
             style={{
                 transform: isMaximized ? 'none' : `translate(${position.x}px, ${position.y}px)`,
                 width: isMaximized ? '100%' : size.width,
@@ -91,22 +100,29 @@ export default function Window({ children, title = "Terminal", onClose, onMinimi
                 left: isMaximized ? 0 : undefined,
             }}
         >
-            <div className={styles.windowHeader} onMouseDown={handleMouseDown}>
-                <div className={styles.tabBar}>
-                    <div className={styles.windowTab}>
-                        <span className={styles.tabIcon}>
-                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <rect x="2" y="3" width="12" height="10" rx="1" fill="#333" />
-                                <path d="M4 6L6 8L4 10" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                                <path d="M8 10H12" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
-                            </svg>
-                        </span>
-                        <span className={styles.tabTitle}>Command Prompt</span>
-                        <span className={styles.tabCloseBtn} onClick={onClose}>×</span>
+            <div className={`${styles.windowHeader} ${!isTerminal ? styles.lightHeader : ''}`} onMouseDown={handleMouseDown}>
+                {isTerminal ? (
+                    <div className={styles.tabBar}>
+                        <div className={styles.windowTab}>
+                            <span className={styles.tabIcon}>
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <rect x="2" y="3" width="12" height="10" rx="1" fill="#333" />
+                                    <path d="M4 6L6 8L4 10" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                    <path d="M8 10H12" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+                                </svg>
+                            </span>
+                            <span className={styles.tabTitle}>{title}</span>
+                            <span className={styles.tabCloseBtn} onClick={onClose}>×</span>
+                        </div>
+                        <div className={styles.newTabBtn}>+</div>
                     </div>
-                    <div className={styles.newTabBtn}>+</div>
-                </div>
-                <div className={styles.windowControls}>
+                ) : (
+                    <div className={styles.simpleTitleBar}>
+                        <span className={styles.simpleIcon}>{title === 'Notepad' ? '📝' : '🖥️'}</span>
+                        <span className={styles.simpleTitle}>{title}</span>
+                    </div>
+                )}
+                <div className={`${styles.windowControls} ${!isTerminal ? styles.lightControls : ''}`}>
                     <button className={`${styles.controlBtn} ${styles.minimize}`} onClick={onMinimize}>
                         <svg viewBox="0 0 10 1"><path d="M0 0h10v1H0z" /></svg>
                     </button>
@@ -122,7 +138,7 @@ export default function Window({ children, title = "Terminal", onClose, onMinimi
                     </button>
                 </div>
             </div>
-            <div className={styles.windowContent}>
+            <div className={styles.windowContent} style={{ backgroundColor: isTerminal ? '#0c0c0c' : '#ffffff' }}>
                 {children}
             </div>
             {!isMaximized && (

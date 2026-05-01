@@ -1,33 +1,56 @@
 .commandInput {
     display: flex;
     gap: 0;
-    /* No gap in Windows terminal usually, but a small one is fine. 0 is safer for strict look */
     margin-top: 0;
     align-items: center;
+    cursor: text;
 }
 
-.terminalInput {
-    background: transparent;
-    border: none;
-    color: #cccccc;
-    /* Standard Windows CMD text color is often light gray/white */
+.inputWrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex: 1;
+}
+
+.inputText {
+    color: var(--terminal-text);
     font-family: 'Consolas', 'Lucida Console', monospace;
     font-size: 1rem;
-    flex: 1;
-    outline: none;
-    padding-left: 8px;
-    /* Space after prompt */
+    white-space: pre;
+}
+
+.cursor {
+    color: var(--phosphor-color);
+    animation: blink 1s step-end infinite;
+    font-size: 1rem;
+    margin-left: 2px;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+.hiddenInput {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
 }
 
 .prompt {
-    color: #cccccc;
-    /* Windows CMD prompt is same color as text usually */
+    color: var(--phosphor-color);
     font-family: 'Consolas', 'Lucida Console', monospace;
     font-weight: normal;
     white-space: nowrap;
+    padding-right: 8px;
 }
 
 .adminPrompt {
-    color: #cccccc;
-    /* Admin prompt in CMD doesn't change color, but title bar does. We'll keep text consistent */
+    color: var(--admin-color);
+    text-shadow: 0 0 5px var(--admin-color);
 }

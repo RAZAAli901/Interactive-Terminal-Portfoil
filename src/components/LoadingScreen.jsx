@@ -3,42 +3,37 @@ import styles from './LoadingScreen.module.css';
 
 export default function LoadingScreen({ onComplete }) {
     const [progress, setProgress] = useState(0);
+    const [isFadingOut, setIsFadingOut] = useState(false);
 
     useEffect(() => {
         const interval = setInterval(() => {
             setProgress((prev) => {
                 if (prev >= 100) {
                     clearInterval(interval);
-                    setTimeout(onComplete, 500); // Small delay before finishing
+                    setIsFadingOut(true);
+                    setTimeout(onComplete, 800); // Wait for fade out
                     return 100;
                 }
-                return prev + 2; // Adjust speed here
+                return prev + Math.floor(Math.random() * 5) + 2; // Random chunks for realism
             });
-        }, 30);
+        }, 50);
 
         return () => clearInterval(interval);
     }, [onComplete]);
 
     return (
-        <div className={styles.loadingScreen}>
+        <div className={`${styles.loadingScreen} ${isFadingOut ? styles.fadeOut : ''}`}>
             <div className={styles.loadingContainer}>
-                <div className={styles.loadingCircle}>
-                    <svg viewBox="0 0 100 100">
-                        <circle cx="50" cy="50" r="45" className={styles.circleBg} />
-                        <circle
-                            cx="50"
-                            cy="50"
-                            r="45"
-                            className={styles.circleProgress}
-                            style={{
-                                strokeDasharray: 283,
-                                strokeDashoffset: 283 - (283 * progress) / 100,
-                            }}
-                        />
-                    </svg>
-                    <div className="loading-text">{progress}%</div>
+                <div className={styles.windowsLogo}>
+                    <div className={styles.winIcon}></div>
                 </div>
-                <div className="loading-message">INITIALIZING SYSTEM...</div>
+                <div className={styles.bootText}>Starting portfolio...</div>
+                <div className={styles.progressBarContainer}>
+                    <div 
+                        className={styles.progressBar}
+                        style={{ width: `${progress}%` }}
+                    />
+                </div>
             </div>
         </div>
     );

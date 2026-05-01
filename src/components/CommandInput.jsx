@@ -38,22 +38,28 @@ export default function CommandInput({ onSubmit, mode = 'command', history = [],
     };
 
     return (
-        <div className={styles.commandInput}>
+        <div className={styles.commandInput} onClick={() => inputRef.current?.focus()}>
             {mode === 'command' && (
                 <span className={`${styles.prompt} ${isAdmin ? styles.adminPrompt : ''}`}>
                     {isAdmin ? 'C:\\Users\\admin>' : 'C:\\Users\\lenovo>'}
                 </span>
             )}
             {mode === 'password' && <span className={styles.prompt}>Password:</span>}
-            <input
-                ref={inputRef}
-                type={mode === 'password' ? 'password' : 'text'}
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={handleKeyDown}
-                className={styles.terminalInput}
-                autoFocus
-            />
+            <div className={styles.inputWrapper}>
+                <span className={styles.inputText}>{mode === 'password' ? '*'.repeat(input.length) : input}</span>
+                <span className={styles.cursor}>█</span>
+                <input
+                    ref={inputRef}
+                    type={mode === 'password' ? 'password' : 'text'}
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                    className={styles.hiddenInput}
+                    autoFocus
+                    autoComplete="off"
+                    spellCheck="false"
+                />
+            </div>
         </div>
     );
 }

@@ -7,6 +7,15 @@
   --admin-color: #ff0000;
   --font-family: 'Courier New', Courier, monospace;
   --game-font: 'Press Start 2P', cursive;
+  
+  /* Redesign Variables */
+  --terminal-bg: #0c0c0c;
+  --terminal-text: #cccccc;
+  --phosphor-color: #00ff00;
+  --window-bg: #000000;
+  --glass-bg: rgba(0, 0, 0, 0.6);
+  --titlebar-bg: #000000;
+  --tab-bg: #2d2d2d;
 }
 
 body {

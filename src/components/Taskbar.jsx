@@ -36,18 +36,18 @@ export default function Taskbar({ windows, onToggleWindow, onToggleStartMenu, is
                             onClick={() => onToggleWindow(window.id)}
                             title={window.title}
                         >
-                            <span className={styles.taskbarIcon}>{window.id === 'terminal' ? '💻' : '📁'}</span>
+                            <span className={styles.taskbarIcon}>{window.id === 'terminal' ? '💻' : window.id === 'notepad' ? '📝' : '📁'}</span>
                         </div>
                     ))}
                 </div>
             </div>
 
             <div className={styles.systemTray}>
-                <div className={styles.trayIcon}>☁️ 19°C</div>
-                <div className={styles.trayIcon}>ENG</div>
-                <div className={styles.trayIcon}>📶 🔊 🔋</div>
-                <div className={styles.trayClock}>
-                    <div>{time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+                <div className={styles.trayIcon} title="Weather">☁️ 19°C</div>
+                <div className={styles.trayIcon} title="Language">ENG</div>
+                <div className={styles.trayIcon} title="Network, Volume, Battery">📶 🔊 🔋</div>
+                <div className={styles.trayClock} title={time.toLocaleDateString()}>
+                    <div>{time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}</div>
                     <div>{time.toLocaleDateString()}</div>
                 </div>
             </div>

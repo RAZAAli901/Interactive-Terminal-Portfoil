@@ -2,11 +2,17 @@
     width: 100%;
     height: 100%;
     padding: 8px 12px;
-    /* Adjusted padding */
     box-sizing: border-box;
-    /* Ensure padding doesn't affect width/height */
-    background-color: #0c0c0c;
-    color: #cccccc;
+    background-color: var(--terminal-bg);
+    background-image: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0, 0, 0, 0.15) 2px,
+        rgba(0, 0, 0, 0.15) 4px
+    );
+    color: var(--terminal-text);
+    text-shadow: 0 0 5px var(--phosphor-color);
     font-family: 'Consolas', 'Lucida Console', monospace;
     font-size: 1rem;
     overflow-y: auto;
@@ -46,18 +52,19 @@
 }
 
 .prompt {
-    color: #cccccc;
+    color: var(--phosphor-color);
     font-weight: normal;
     white-space: nowrap;
     margin-right: 8px;
 }
 
 .adminPrompt {
-    color: #cccccc;
+    color: var(--admin-color);
+    text-shadow: 0 0 5px var(--admin-color);
 }
 
 .command {
-    color: #cccccc;
+    color: var(--phosphor-color);
     word-break: break-all;
 }
 

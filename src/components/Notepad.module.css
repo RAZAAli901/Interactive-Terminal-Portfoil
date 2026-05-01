@@ -1,0 +1,70 @@
+.notepadContainer {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff;
+    color: #000000;
+}
+
+.menuBar {
+    display: flex;
+    background-color: #f0f0f0;
+    border-bottom: 1px solid #d9d9d9;
+    padding: 2px 4px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 13px;
+    user-select: none;
+}
+
+.menuItem {
+    position: relative;
+    padding: 4px 8px;
+    cursor: pointer;
+}
+
+.menuItem:hover {
+    background-color: #e5f3ff;
+    outline: 1px solid #cce8ff;
+}
+
+.dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #f2f2f2;
+    border: 1px solid #ccc;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+    min-width: 150px;
+    z-index: 1000;
+    flex-direction: column;
+}
+
+.menuItem:hover .dropdown {
+    display: flex;
+}
+
+.dropdown div {
+    padding: 6px 12px;
+    white-space: nowrap;
+    color: #000;
+}
+
+.dropdown div:hover {
+    background-color: #91c9f7;
+    color: white;
+}
+
+.textArea {
+    flex: 1;
+    border: none;
+    resize: none;
+    outline: none;
+    padding: 12px;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    background-color: #fff;
+    color: #000;
+    line-height: 1.5;
+}
