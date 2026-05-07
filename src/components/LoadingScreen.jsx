@@ -21,20 +21,5 @@ export default function LoadingScreen({ onComplete }) {
         return () => clearInterval(interval);
     }, [onComplete]);
 
-    return (
-        <div className={`${styles.loadingScreen} ${isFadingOut ? styles.fadeOut : ''}`}>
-            <div className={styles.loadingContainer}>
-                <div className={styles.windowsLogo}>
-                    <div className={styles.winIcon}></div>
-                </div>
-                <div className={styles.bootText}>Starting portfolio...</div>
-                <div className={styles.progressBarContainer}>
-                    <div 
-                        className={styles.progressBar}
-                        style={{ width: `${progress}%` }}
-                    />
-                </div>
-            </div>
-        </div>
-    );
+
 }
