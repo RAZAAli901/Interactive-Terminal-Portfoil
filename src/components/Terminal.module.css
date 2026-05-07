@@ -5,11 +5,14 @@
     box-sizing: border-box;
     background-color: var(--terminal-bg);
     background-image: repeating-linear-gradient(
+        
         0deg,
         transparent,
         transparent 2px,
         rgba(0, 0, 0, 0.15) 2px,
         rgba(0, 0, 0, 0.15) 4px
+
+        
     );
     color: var(--terminal-text);
     text-shadow: 0 0 5px var(--phosphor-color);
@@ -18,9 +21,11 @@
     overflow-y: auto;
     display: flex;
     flex-direction: column;
+    
 }
 
 .terminalHistory {
+    
     padding-right: 5px;
     word-break: break-all;
 }
