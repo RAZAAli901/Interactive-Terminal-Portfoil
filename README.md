@@ -8,7 +8,9 @@
   <i>A fully interactive terminal experience featuring a Windows-style UI, file explorer, and custom commands.</i>
 </p>
 
+
 ---
+
 
 ## 🖥️ Terminal Commands
 Interact with my portfolio using these built-in commands:
