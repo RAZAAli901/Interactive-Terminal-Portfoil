@@ -12,7 +12,8 @@
 ---
 
 
-## 🖥️ Terminal Commands
+## 🖥️ Terminal Commands     
+
 Interact with my portfolio using these built-in commands:
 
 | Command | Description |
