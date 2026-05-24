@@ -1,5 +1,11 @@
-
-<style>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interactive Terminal Portfolio</title>
+    <style>
 @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Outfit:wght@300;400;500;600&display=swap');
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -98,8 +104,9 @@ h2{font-size:18px;font-weight:500;color:var(--text)}
 .footer{font-family:var(--mono);font-size:11px;color:var(--text3);text-align:center;padding-top:8px}
 .footer span{color:var(--green)}
 </style>
-
-<div class="wrap">
+  </head>
+  <body>
+    <div class="wrap">
 
   <!-- Hero terminal -->
   <div class="terminal-hero">
@@ -267,3 +274,8 @@ h2{font-size:18px;font-weight:500;color:var(--text)}
   <div class="footer">built with <span>React 19</span> + <span>Vite</span> — RAZAAli901</div>
 
 </div>
+
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
