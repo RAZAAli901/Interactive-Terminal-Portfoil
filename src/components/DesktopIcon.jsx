@@ -10,14 +10,28 @@ export default function DesktopIcon({ label, icon, onDoubleClick }) {
         onDoubleClick(e);
     };
 
+    
+
     const renderIcon = () => {
-        if (label === 'Terminal') {
+
+        
+        if (label === 'Terminal') 
+        
+        {
+
+            
             return (
+
+                
                 <svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <defs>
+
+                        
                         <linearGradient id="termGrad" x1="0" y1="0" x2="56" y2="56" gradientUnits="userSpaceOnUse">
                             <stop stopColor="#1a1a2e" />
                             <stop offset="1" stopColor="#0d0d0d" />
+
+                            
                         </linearGradient>
                         <filter id="glow">
                             <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
@@ -25,14 +39,25 @@ export default function DesktopIcon({ label, icon, onDoubleClick }) {
                                 <feMergeNode in="coloredBlur"/>
                                 <feMergeNode in="SourceGraphic"/>
                             </feMerge>
+
+                            
                         </filter>
                     </defs>
+
+                    
                     <rect x="4" y="4" width="48" height="48" rx="8" fill="url(#termGrad)" stroke="#333" strokeWidth="2"/>
                     <path d="M14 20l8 8-8 8M28 36h14" stroke="#00ff00" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" filter="url(#glow)"/>
+
+                    
                 </svg>
+                
             );
+            
         }
-        if (label === 'My Computer') {
+        
+        if (label === 'My Computer') 
+        
+        {
             return (
                 <svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <defs>
