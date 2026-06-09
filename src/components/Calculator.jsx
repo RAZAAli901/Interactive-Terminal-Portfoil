@@ -1,0 +1,103 @@
+import { useState } from 'react';
+import styles from './Calculator.module.css';
+
+export default function Calculator() {
+    const [display, setDisplay] = useState('0');
+    const [equation, setEquation] = useState('');
+    const [shouldReset, setShouldReset] = useState(false);
+
+    const handleNumber = (num) => {
+        if (display === '0' || shouldReset) {
+            setDisplay(num);
+            setShouldReset(false);
+        } else {
+            setDisplay(display + num);
+        }
+    };
+
+    const handleOperator = (op) => {
+        setEquation(display + ' ' + op + ' ');
+        setShouldReset(true);
+    };
+
+    const handleEqual = () => {
+        if (!equation) return;
+        const fullEquation = equation + display;
+        try {
+            // Safe evaluation of simple math equations
+            // Replace divide and multiply characters if any
+            const sanitized = fullEquation.replace(/×/g, '*').replace(/÷/g, '/');
+            // Basic validation
+            if (!/^[0-9.+\-*/\s]+$/.test(sanitized)) {
+                throw new Error("Invalid Input");
+            }
+            // Evaluate
+            const result = Function(`"use strict"; return (${sanitized})`)();
+            setDisplay(Number(result.toFixed(8)).toString());
+            setEquation('');
+            setShouldReset(true);
+        } catch (e) {
+            setDisplay('Error');
+            setEquation('');
+            setShouldReset(true);
+        }
+    };
+
+    const handleClear = () => {
+        setDisplay('0');
+        setEquation('');
+        setShouldReset(false);
+    };
+
+    const handleBackspace = () => {
+        if (display.length > 1) {
+            setDisplay(display.slice(0, -1));
+        } else {
+            setDisplay('0');
+        }
+    };
+
+    const handleDecimal = () => {
+        if (shouldReset) {
+            setDisplay('0.');
+            setShouldReset(false);
+            return;
+        }
+        if (!display.includes('.')) {
+            setDisplay(display + '.');
+        }
+    };
+
+    return (
+        <div className={styles.calculator}>
+            <div className={styles.display}>
+                <div className={styles.history}>{equation}</div>
+                <div className={styles.current}>{display}</div>
+            </div>
+            <div className={styles.buttons}>
+                <button className={`${styles.btn} ${styles.clear}`} onClick={handleClear}>C</button>
+                <button className={`${styles.btn} ${styles.operator}`} onClick={handleBackspace}>⌫</button>
+                <button className={`${styles.btn} ${styles.operator}`} onClick={() => handleOperator('/')}>÷</button>
+                <button className={`${styles.btn} ${styles.operator}`} onClick={() => handleOperator('*')}>×</button>
+
+                <button className={styles.btn} onClick={() => handleNumber('7')}>7</button>
+                <button className={styles.btn} onClick={() => handleNumber('8')}>8</button>
+                <button className={styles.btn} onClick={() => handleNumber('9')}>9</button>
+                <button className={`${styles.btn} ${styles.operator}`} onClick={() => handleOperator('-')}>-</button>
+
+                <button className={styles.btn} onClick={() => handleNumber('4')}>4</button>
+                <button className={styles.btn} onClick={() => handleNumber('5')}>5</button>
+                <button className={styles.btn} onClick={() => handleNumber('6')}>6</button>
+                <button className={`${styles.btn} ${styles.operator}`} onClick={() => handleOperator('+')}>+</button>
+
+                <button className={styles.btn} onClick={() => handleNumber('1')}>1</button>
+                <button className={styles.btn} onClick={() => handleNumber('2')}>2</button>
+                <button className={styles.btn} onClick={() => handleNumber('3')}>3</button>
+                <button className={`${styles.btn} ${styles.equals}`} style={{ gridRow: 'span 2', height: '100%' }} onClick={handleEqual}>=</button>
+
+                <button className={styles.btn} style={{ gridColumn: 'span 2' }} onClick={() => handleNumber('0')}>0</button>
+                <button className={styles.btn} onClick={handleDecimal}>.</button>
+            </div>
+        </div>
+    );
+}

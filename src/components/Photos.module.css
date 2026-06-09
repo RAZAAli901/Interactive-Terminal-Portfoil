@@ -1,0 +1,103 @@
+.photosContainer {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-color: #1a1a1a;
+    color: #fff;
+    font-family: 'Segoe UI', sans-serif;
+    position: relative;
+}
+
+.galleryGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 15px;
+    padding: 20px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.photoCard {
+    border-radius: 6px;
+    overflow: hidden;
+    cursor: default;
+    border: 2px solid transparent;
+    padding-bottom: 75%; /* 4:3 Ratio */
+    background-size: cover;
+    background-position: center;
+    transition: transform 0.2s, border-color 0.2s;
+}
+
+.photoCard:hover {
+    transform: scale(1.03);
+    border-color: #0078d4;
+}
+
+/* Lightbox view styles */
+.lightbox {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.95);
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
+}
+
+.lightboxHeader {
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.closeBtn {
+    font-size: 20px;
+    cursor: default;
+    color: #fff;
+}
+
+.closeBtn:hover {
+    color: #cc1111;
+}
+
+.lightboxContent {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    padding: 0 10px;
+}
+
+.mainImage {
+    max-width: 80%;
+    max-height: 80%;
+    object-fit: contain;
+    transition: transform 0.2s;
+}
+
+.navBtn {
+    background-color: rgba(255,255,255,0.1);
+    color: #fff;
+    border: none;
+    font-size: 24px;
+    padding: 15px 10px;
+    cursor: default;
+    border-radius: 4px;
+}
+
+.navBtn:hover {
+    background-color: rgba(255,255,255,0.25);
+}
+
+.lightboxFooter {
+    padding: 15px;
+    text-align: center;
+    font-size: 14px;
+    color: #ccc;
+    background-color: rgba(0,0,0,0.5);
+}

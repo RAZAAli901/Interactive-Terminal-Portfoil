@@ -1,0 +1,113 @@
+.settingsContainer {
+    display: flex;
+    height: 100%;
+    background-color: #202020;
+    color: #fff;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.sidebar {
+    width: 200px;
+    background-color: #1a1a1a;
+    border-right: 1px solid #333;
+    padding: 10px 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebarItem {
+    padding: 12px 20px;
+    cursor: default;
+    font-size: 14px;
+    transition: background-color 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.sidebarItem:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.sidebarItemActive {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-left: 3px solid #0078d4;
+    font-weight: 600;
+}
+
+.content {
+    flex: 1;
+    padding: 30px;
+    overflow-y: auto;
+}
+
+.title {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+/* Personalization Wallpaper Grid */
+.wallpaperGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.wallpaperThumb {
+    position: relative;
+    border-radius: 6px;
+    overflow: hidden;
+    cursor: default;
+    border: 2px solid transparent;
+    padding-bottom: 56.25%; /* 16:9 ratio */
+    background-size: cover;
+    background-position: center;
+    transition: border-color 0.2s, transform 0.2s;
+}
+
+.wallpaperThumb:hover {
+    transform: scale(1.05);
+}
+
+.activeWallpaper {
+    border-color: #0078d4;
+}
+
+.wpLabel {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0,0,0,0.7);
+    color: #fff;
+    font-size: 10px;
+    text-align: center;
+    padding: 2px 0;
+}
+
+/* System Details */
+.systemSpecs {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.specRow {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 15px;
+    background-color: #2b2b2b;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.specLabel {
+    color: #aaa;
+}
+
+.specValue {
+    font-weight: 600;
+}

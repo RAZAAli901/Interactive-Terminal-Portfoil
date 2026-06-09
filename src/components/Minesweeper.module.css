@@ -1,0 +1,94 @@
+.minesweeper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #bdbdbd;
+    border: 3px solid;
+    border-color: #eee #7b7b7b #7b7b7b #eee;
+    padding: 10px;
+    height: 100%;
+    user-select: none;
+    font-family: monospace;
+}
+
+.headerBar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    background-color: #bdbdbd;
+    border: 3px solid;
+    border-color: #7b7b7b #eee #eee #7b7b7b;
+    padding: 4px 8px;
+    margin-bottom: 10px;
+}
+
+.counter {
+    background-color: #000;
+    color: #ff0000;
+    font-size: 22px;
+    padding: 2px 6px;
+    font-weight: bold;
+    min-width: 50px;
+    text-align: right;
+    border: 1px solid #7b7b7b;
+}
+
+.smiley {
+    font-size: 20px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid;
+    border-color: #eee #7b7b7b #7b7b7b #eee;
+    cursor: default;
+    background-color: #bdbdbd;
+}
+
+.smiley:active {
+    border-color: #7b7b7b #eee #eee #7b7b7b;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    border: 3px solid;
+    border-color: #7b7b7b #eee #eee #7b7b7b;
+    background-color: #7b7b7b;
+    gap: 1px;
+}
+
+.cell {
+    width: 28px;
+    height: 28px;
+    background-color: #bdbdbd;
+    border: 2.5px solid;
+    border-color: #eee #7b7b7b #7b7b7b #eee;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: default;
+}
+
+.cellRevealed {
+    background-color: #bdbdbd;
+    border: 1px solid #7b7b7b;
+}
+
+.cellMine {
+    background-color: #ff0000;
+}
+
+/* Cell Colors for counts */
+.c1 { color: blue; }
+.c2 { color: green; }
+.c3 { color: red; }
+.c4 { color: darkblue; }
+.c5 { color: darkred; }
+.c6 { color: teal; }
+.c7 { color: black; }
+.c8 { color: gray; }

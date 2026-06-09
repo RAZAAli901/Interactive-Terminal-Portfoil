@@ -24,10 +24,10 @@ export default function Taskbar({ windows, onToggleWindow, onToggleStartMenu, is
                 </div>
 
                 <div className={styles.taskbarApps}>
-                    {/* Pinned Apps (Mock) */}
-                    <div className={`${styles.taskbarItem} mock`} title="Chat"><span className={styles.taskbarIcon}>💬</span></div>
-                    <div className={`${styles.taskbarItem} mock`} title="File Explorer"><span className={styles.taskbarIcon}>📁</span></div>
-                    <div className={`${styles.taskbarItem} mock`} title="Browser"><span className={styles.taskbarIcon}>🌐</span></div>
+                    {/* Pinned Apps */}
+                    <div className={styles.taskbarItem} title="Chat" onClick={() => onToggleWindow('chat')}><span className={styles.taskbarIcon}>💬</span></div>
+                    <div className={styles.taskbarItem} title="File Explorer" onClick={() => onToggleWindow('explorer')}><span className={styles.taskbarIcon}>📁</span></div>
+                    <div className={styles.taskbarItem} title="Web Browser" onClick={() => onToggleWindow('browser')}><span className={styles.taskbarIcon}>🌐</span></div>
 
                     {windows.map((window) => (
                         <div
@@ -36,7 +36,7 @@ export default function Taskbar({ windows, onToggleWindow, onToggleStartMenu, is
                             onClick={() => onToggleWindow(window.id)}
                             title={window.title}
                         >
-                            <span className={styles.taskbarIcon}>{window.id === 'terminal' ? '💻' : window.id === 'notepad' ? '📝' : '📁'}</span>
+                            <span className={styles.taskbarIcon}>{window.icon || '🖥️'}</span>
                         </div>
                     ))}
                 </div>

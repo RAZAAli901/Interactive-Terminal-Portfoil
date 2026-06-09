@@ -1,23 +1,53 @@
 import { useState, useRef } from 'react';
 import styles from './Notepad.module.css';
 
-const CHEATSHEET = `========================================
- TERMINAL PORTFOLIO - COMMAND REFERENCE
-========================================
+const CHEATSHEET = `=========================================================
+      PORTFOLIOS DESKTOP - SYSTEM MANUAL & CHEATSHEET
+=========================================================
 
-about        - Learn more about me
-projects     - View my projects
-contact      - Get in touch
-clear        - Clear the terminal
-help         - Show this help message
-fastfetch    - Show system info
-sudo         - Run as administrator
-wallpaper N  - Change wallpaper (1-12)
-whoami       - Display professional summary
+1. SECURITY & ELEVATED ACCESS
+---------------------------------------------------------
+SUDO PASSWORD: admin
 
-TIP: Use ↑/↓ arrow keys to navigate
-     command history in the terminal.
-========================================
+To execute administrative commands in the terminal, run:
+  sudo
+  (and enter "admin" when prompted)
+
+To run a single command as admin:
+  sudo [command] (e.g. "sudo wallpaper 5")
+
+To log out of the administrator session, run:
+  exit
+
+
+2. TERMINAL COMMAND REFERENCE
+---------------------------------------------------------
+help         - List all available commands
+about        - Learn more about me & my background
+projects     - View my software engineering projects
+contact      - Get in touch / contact details
+fastfetch    - Show system hardware & OS information
+clear        - Clear the terminal screen history
+whoami       - Display a summary of my background
+wallpaper N  - Change wallpaper ID (1-12) [Requires Sudo]
+exit         - Exit administrative session [Requires Sudo]
+
+Pro-Tip: Use the UP (↑) and DOWN (↓) arrow keys in the
+terminal to cycle through your command history.
+
+
+3. INTERACTIVE DESKTOP FEATURES
+---------------------------------------------------------
+• Settings App: Change desktop wallpapers, check system
+  specifications, and view developer details.
+• File Explorer: Double-click local files (e.g. text
+  documents, pictures) to open them in their native apps.
+• Microsoft Store: Search and dynamically install new apps
+  like Visual Studio Code or MineSweeper!
+• Playable Apps: Play MineSweeper or the Card Memory game,
+  use the Clock/Stopwatch/Timer, or calculate math in the
+  Calculator app.
+=========================================================
 `;
 
 export default function Notepad() {

@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import styles from './Window.module.css';
 
-export default function Window({ children, title = "Terminal", onClose, onMinimize, onMaximize, isMinimized, defaultWidth = 800, defaultHeight = 500, offsetX = 0, offsetY = 0 }) {
+export default function Window({ children, title = "Terminal", icon = "🖥️", onClose, onMinimize, onMaximize, isMinimized, defaultWidth = 800, defaultHeight = 500, offsetX = 0, offsetY = 0, zIndex = 1, onFocus }) {
     const [size, setSize] = useState({ width: defaultWidth, height: defaultHeight });
     const [position, setPosition] = useState(() => {
         if (typeof window !== 'undefined') {
@@ -92,12 +92,14 @@ export default function Window({ children, title = "Terminal", onClose, onMinimi
         <div
             ref={windowRef}
             className={`${styles.windowFrame} ${isMaximized ? styles.maximized : ''} ${isDragging ? styles.dragging : ''}`}
+            onMouseDown={() => onFocus && onFocus()}
             style={{
                 transform: isMaximized ? 'none' : `translate(${position.x}px, ${position.y}px)`,
                 width: isMaximized ? '100%' : size.width,
                 height: isMaximized ? 'calc(100% - 40px)' : size.height,
-                top: isMaximized ? 0 : undefined,
-                left: isMaximized ? 0 : undefined,
+                top: 0,
+                left: 0,
+                zIndex: zIndex,
             }}
         >
             <div className={`${styles.windowHeader} ${!isTerminal ? styles.lightHeader : ''}`} onMouseDown={handleMouseDown}>
@@ -118,7 +120,7 @@ export default function Window({ children, title = "Terminal", onClose, onMinimi
                     </div>
                 ) : (
                     <div className={styles.simpleTitleBar}>
-                        <span className={styles.simpleIcon}>{title === 'Notepad' ? '📝' : '🖥️'}</span>
+                        <span className={styles.simpleIcon}>{icon}</span>
                         <span className={styles.simpleTitle}>{title}</span>
                     </div>
                 )}

@@ -1,0 +1,135 @@
+.storeContainer {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-color: #0c0d12;
+    color: #fff;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 25px;
+    background-color: #161822;
+    border-bottom: 1px solid #252839;
+}
+
+.logo {
+    font-size: 18px;
+    font-weight: bold;
+    color: #00a4ef;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.tabs {
+    display: flex;
+    gap: 15px;
+}
+
+.tab {
+    padding: 6px 12px;
+    cursor: default;
+    border-radius: 4px;
+    font-size: 13px;
+    transition: background-color 0.2s;
+}
+
+.tab:hover {
+    background-color: rgba(255,255,255,0.05);
+}
+
+.activeTab {
+    background-color: rgba(0, 164, 239, 0.15);
+    color: #00a4ef;
+    font-weight: 600;
+}
+
+.content {
+    flex: 1;
+    padding: 25px;
+    overflow-y: auto;
+}
+
+.catalogGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.appCard {
+    background-color: #161822;
+    border: 1px solid #252839;
+    border-radius: 8px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    position: relative;
+}
+
+.appIcon {
+    font-size: 48px;
+    margin-bottom: 12px;
+}
+
+.appName {
+    font-weight: bold;
+    font-size: 15px;
+    margin-bottom: 6px;
+}
+
+.appDesc {
+    font-size: 11px;
+    color: #8c92ac;
+    height: 36px;
+    overflow: hidden;
+    margin-bottom: 15px;
+    line-height: 1.4;
+}
+
+.btn {
+    border: none;
+    background-color: #00a4ef;
+    color: #fff;
+    padding: 8px 20px;
+    font-size: 13px;
+    border-radius: 4px;
+    font-weight: 600;
+    width: 100%;
+    cursor: default;
+    transition: background-color 0.2s;
+}
+
+.btn:hover {
+    background-color: #0084cf;
+}
+
+.installedBtn {
+    background-color: #2b2e3a;
+    color: #8c92ac;
+}
+
+.installedBtn:hover {
+    background-color: #2b2e3a;
+}
+
+.progressContainer {
+    width: 100%;
+    background-color: #252839;
+    border-radius: 4px;
+    height: 8px;
+    overflow: hidden;
+    margin-top: 15px;
+}
+
+.progressBar {
+    background-color: #00a4ef;
+    height: 100%;
+    transition: width 0.1s linear;
+}

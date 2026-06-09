@@ -1,0 +1,118 @@
+.solitaireContainer {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-color: #1e3d2f; /* Deep green card table color */
+    color: #fff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 20px;
+    align-items: center;
+    overflow-y: auto;
+}
+
+.dashboard {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    background-color: rgba(0,0,0,0.3);
+    padding: 10px 15px;
+    border-radius: 6px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    width: 100%;
+    max-width: 400px;
+    flex: 1;
+}
+
+.card {
+    aspect-ratio: 3/4;
+    perspective: 1000px;
+    cursor: default;
+}
+
+.cardInner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+}
+
+.flipped .cardInner {
+    transform: rotateY(180deg);
+}
+
+.cardFront, .cardBack {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 6px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.cardBack {
+    background: linear-gradient(135deg, #cc1111 0%, #770000 100%);
+    border: 2px fill #fff;
+    color: #fff;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.cardFront {
+    background-color: #fff;
+    color: #333;
+    transform: rotateY(180deg);
+    font-size: 32px;
+}
+
+.matched .cardFront {
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+}
+
+.restartBtn {
+    background-color: #0078d4;
+    color: #fff;
+    border: none;
+    padding: 6px 12px;
+    font-size: 12px;
+    border-radius: 4px;
+    cursor: default;
+}
+
+.restartBtn:hover {
+    background-color: #1084e4;
+}
+
+.winOverlay {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 100%;
+}
+
+.winTitle {
+    font-size: 36px;
+    color: #ffd700;
+    margin-bottom: 15px;
+    animation: bounce 1s infinite alternate;
+}
+
+@keyframes bounce {
+    from { transform: translateY(0); }
+    to { transform: translateY(-10px); }
+}

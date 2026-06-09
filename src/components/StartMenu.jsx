@@ -19,59 +19,59 @@ export default function StartMenu({ isOpen, onAppClick }) {
                     <button className={styles.allAppsBtn}>All apps &gt;</button>
                 </div>
                 <div className={styles.appsGrid}>
-                    <div className={styles.appItem}>
+                    <div className={styles.appItem} onClick={() => onAppClick('browser')}>
                         <span className={styles.appIcon}>🌐</span>
                         <span className={styles.appName}>Edge</span>
                     </div>
-                    <div className={styles.appItem}>
+                    <div className={styles.appItem} onClick={() => onAppClick('word')}>
                         <span className={styles.appIcon}>📝</span>
                         <span className={styles.appName}>Word</span>
                     </div>
-                    <div className={styles.appItem}>
+                    <div className={styles.appItem} onClick={() => onAppClick('excel')}>
                         <span className={styles.appIcon}>📊</span>
                         <span className={styles.appName}>Excel</span>
                     </div>
-                    <div className={styles.appItem}>
+                    <div className={styles.appItem} onClick={() => onAppClick('powerpoint')}>
                         <span className={styles.appIcon}>🔴</span>
                         <span className={styles.appName}>PowerPoint</span>
                     </div>
-                    <div className={styles.appItem}>
+                    <div className={styles.appItem} onClick={() => onAppClick('outlook')}>
                         <span className={styles.appIcon}>📧</span>
                         <span className={styles.appName}>Outlook</span>
                     </div>
-                    <div className={styles.appItem}>
+                    <div className={styles.appItem} onClick={() => onAppClick('store')}>
                         <span className={styles.appIcon}>🛍️</span>
                         <span className={styles.appName}>Microsoft Store</span>
                     </div>
-                    <div className={styles.appItem}>
+                    <div className={styles.appItem} onClick={() => onAppClick('settings')}>
                         <span className={styles.appIcon}>⚙️</span>
                         <span className={styles.appName}>Settings</span>
                     </div>
-                    <div className={styles.appItem}>
+                    <div className={styles.appItem} onClick={() => onAppClick('photos')}>
                         <span className={styles.appIcon}>🖼️</span>
                         <span className={styles.appName}>Photos</span>
                     </div>
-                    <div className={styles.appItem}>
+                    <div className={styles.appItem} onClick={() => onAppClick('solitaire')}>
                         <span className={styles.appIcon}>🃏</span>
                         <span className={styles.appName}>Solitaire & Casual Games</span>
                     </div>
-                    <div className={styles.appItem}>
+                    <div className={styles.appItem} onClick={() => onAppClick('calculator')}>
                         <span className={styles.appIcon}>🧮</span>
                         <span className={styles.appName}>Calculator</span>
                     </div>
-                    <div className={styles.appItem}>
+                    <div className={styles.appItem} onClick={() => onAppClick('clock')}>
                         <span className={styles.appIcon}>⏰</span>
                         <span className={styles.appName}>Clock</span>
                     </div>
-                    <div className={styles.appItem}>
+                    <div className={styles.appItem} onClick={() => onAppClick('notepad')}>
                         <span className={styles.appIcon}>🗒️</span>
                         <span className={styles.appName}>Notepad</span>
                     </div>
-                    <div className={styles.appItem}>
+                    <div className={styles.appItem} onClick={() => onAppClick('snipping')}>
                         <span className={styles.appIcon}>✂️</span>
                         <span className={styles.appName}>Snipping Tool</span>
                     </div>
-                    <div className={styles.appItem}>
+                    <div className={styles.appItem} onClick={() => onAppClick('onenote')}>
                         <span className={styles.appIcon}>📓</span>
                         <span className={styles.appName}>OneNote</span>
                     </div>
@@ -79,7 +79,7 @@ export default function StartMenu({ isOpen, onAppClick }) {
                         <span className={styles.appIcon}>📁</span>
                         <span className={styles.appName}>File Explorer</span>
                     </div>
-                    <div className={styles.appItem}>
+                    <div className={styles.appItem} onClick={() => onAppClick('browser')}>
                         <span className={styles.appIcon}>🔵</span>
                         <span className={styles.appName}>Google Chrome</span>
                     </div>

@@ -15,13 +15,25 @@ export default function Terminal({ setWallpaper, initialCommand, setInitialComma
 
     const onCommandSubmit = (input) => {
         if (inputMode === 'password') {
-            // Logic for successful password entry (for demo purposes, accept any non-empty or specific)
-            // The user wants: "asks me for password and then displays in green my portfoilo"
-            // and "top Microsoft Windows... disaperars"
-
-            setHistory([
-                { command: '', output: { type: 'component', content: <Hero /> } }
-            ]);
+            if (input === 'admin') {
+                setIsAdmin(true);
+                if (pendingCommand) {
+                    const output = handleCommand(pendingCommand, { isAdmin: true, setWallpaper, setIsAdmin });
+                    setHistory((prev) => [
+                        ...prev,
+                        { command: 'sudo ' + pendingCommand, output }
+                    ]);
+                } else {
+                    setHistory([
+                        { command: '', output: { type: 'component', content: <Hero /> } }
+                    ]);
+                }
+            } else {
+                setHistory((prev) => [
+                    ...prev,
+                    { command: '', output: { type: 'text', content: ['sudo: incorrect password attempt.', 'Access denied.'] } }
+                ]);
+            }
             setInputMode('command');
             setPendingCommand(null);
             return;

@@ -1,0 +1,109 @@
+.vscodeContainer {
+    display: flex;
+    height: 100%;
+    background-color: #1e1e1e;
+    color: #d4d4d4;
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 13px;
+}
+
+.sidebar {
+    width: 200px;
+    background-color: #252526;
+    border-right: 1px solid #3c3c3c;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebarTitle {
+    padding: 10px 15px;
+    font-size: 11px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #8c8c8c;
+    letter-spacing: 0.5px;
+}
+
+.fileList {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.fileItem {
+    padding: 6px 20px;
+    cursor: default;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.1s;
+}
+
+.fileItem:hover {
+    background-color: #2a2d2e;
+}
+
+.fileActive {
+    background-color: #37373d;
+    color: #fff;
+}
+
+.editorArea {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.tabHeader {
+    display: flex;
+    background-color: #2d2d2d;
+    height: 35px;
+    border-bottom: 1px solid #1e1e1e;
+}
+
+.tab {
+    padding: 0 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #2d2d2d;
+    border-right: 1px solid #252526;
+    cursor: default;
+    color: #969696;
+}
+
+.activeTab {
+    background-color: #1e1e1e;
+    color: #fff;
+    border-top: 1px solid #007acc;
+}
+
+.codeEditor {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+}
+
+.lineNumbers {
+    width: 45px;
+    padding: 15px 0;
+    text-align: right;
+    color: #858585;
+    background-color: #1e1e1e;
+    user-select: none;
+    line-height: 1.5;
+    padding-right: 12px;
+}
+
+.codeArea {
+    flex: 1;
+    padding: 15px;
+    background-color: #1e1e1e;
+    color: #9cdcfe;
+    overflow-y: auto;
+    white-space: pre;
+    line-height: 1.5;
+    outline: none;
+    border: none;
+    resize: none;
+}

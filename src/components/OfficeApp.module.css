@@ -1,0 +1,280 @@
+.officeContainer {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-color: #f3f2f1;
+    color: #323130;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Word Styles */
+.wordToolbar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 15px;
+    background-color: #f3f2f1;
+    border-bottom: 1px solid #edebe9;
+}
+
+.wordBtn {
+    border: none;
+    background: transparent;
+    padding: 6px 10px;
+    font-size: 13px;
+    cursor: default;
+    border-radius: 2px;
+}
+
+.wordBtn:hover {
+    background-color: #edebe9;
+}
+
+.wordActive {
+    background-color: #dad8d6;
+}
+
+.wordPageContainer {
+    flex: 1;
+    padding: 20px;
+    background-color: #eaeae9;
+    overflow-y: auto;
+    display: flex;
+    justify-content: center;
+}
+
+.wordPage {
+    background-color: #fff;
+    width: 100%;
+    max-width: 600px;
+    min-height: 500px;
+    padding: 40px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    outline: none;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* Excel Styles */
+.excelToolbar {
+    padding: 6px 12px;
+    background-color: #f3f2f1;
+    border-bottom: 1px solid #d2d0ce;
+    font-size: 12px;
+}
+
+.excelFormulaBar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 12px;
+    background-color: #fff;
+    border-bottom: 1px solid #d2d0ce;
+}
+
+.formulaLabel {
+    font-weight: bold;
+    color: #605e5c;
+    font-size: 12px;
+}
+
+.formulaInput {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 13px;
+}
+
+.excelGridContainer {
+    flex: 1;
+    overflow: auto;
+    background-color: #eaeaea;
+}
+
+.excelTable {
+    border-collapse: collapse;
+    width: 100%;
+    background-color: #fff;
+}
+
+.excelTable th, .excelTable td {
+    border: 1px solid #d2d0ce;
+    font-size: 12px;
+    text-align: left;
+    height: 24px;
+    padding: 0 8px;
+}
+
+.excelTable th {
+    background-color: #f3f2f1;
+    text-align: center;
+    font-weight: normal;
+    color: #323130;
+    user-select: none;
+}
+
+.excelCell {
+    outline: none;
+    cursor: default;
+}
+
+.excelCell:focus {
+    border: 2px solid #107c41;
+    padding: 0 7px;
+}
+
+/* PowerPoint Styles */
+.pptContainer {
+    display: flex;
+    flex: 1;
+    background-color: #eaeaea;
+}
+
+.pptSidebar {
+    width: 150px;
+    background-color: #fff;
+    border-right: 1px solid #d2d0ce;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    gap: 10px;
+    overflow-y: auto;
+}
+
+.pptSlideThumb {
+    border: 1px solid #d2d0ce;
+    padding: 10px;
+    background-color: #fff;
+    cursor: default;
+    border-radius: 4px;
+    font-size: 11px;
+    height: 70px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.pptSlideThumbActive {
+    border: 2px solid #c43e1c;
+}
+
+.pptMain {
+    flex: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.pptSlideEditor {
+    width: 100%;
+    max-width: 500px;
+    aspect-ratio: 16/9;
+    background-color: #fff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    border: 1px solid #ccc;
+    position: relative;
+}
+
+/* Outlook Styles */
+.outlookContainer {
+    display: flex;
+    flex: 1;
+    background-color: #fff;
+}
+
+.outlookInbox {
+    width: 250px;
+    border-right: 1px solid #edebe9;
+    display: flex;
+    flex-direction: column;
+    background-color: #f3f2f1;
+}
+
+.outlookHeader {
+    padding: 15px;
+    font-weight: 600;
+    font-size: 16px;
+    border-bottom: 1px solid #edebe9;
+    background-color: #fff;
+}
+
+.emailList {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.emailItem {
+    padding: 12px 15px;
+    cursor: default;
+    border-bottom: 1px solid #edebe9;
+    transition: background-color 0.2s;
+    background-color: #fff;
+}
+
+.emailItem:hover {
+    background-color: #f3f2f1;
+}
+
+.emailActive {
+    background-color: #c7e0f4;
+}
+
+.emailSender {
+    font-weight: 600;
+    font-size: 13px;
+    margin-bottom: 3px;
+}
+
+.emailSubject {
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 3px;
+    color: #323130;
+}
+
+.emailPreview {
+    font-size: 11px;
+    color: #605e5c;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.outlookPane {
+    flex: 1;
+    padding: 25px;
+    overflow-y: auto;
+    background-color: #fff;
+}
+
+.emailDetailHeader {
+    border-bottom: 1px solid #edebe9;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+}
+
+.emailDetailSubj {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.emailDetailSender {
+    font-size: 13px;
+    color: #605e5c;
+}
+
+.emailBody {
+    font-size: 14px;
+    line-height: 1.5;
+    color: #323130;
+    white-space: pre-line;
+}
