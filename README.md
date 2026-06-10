@@ -7,9 +7,7 @@
 <p align="center">
   <i>A fully interactive terminal experience featuring a Windows-style UI, file explorer, and custom commands.</i>
 </p>
-
 ---
-
 
 
 
