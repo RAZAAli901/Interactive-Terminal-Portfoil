@@ -1,3 +1,5 @@
+
+
 <p align="center">
   <a href="https://razaali901.github.io/Interactive-Terminal-Portfoil/" target="_blank">
     <img src="https://img.shields.io/badge/LAUNCH_PORTFOLIO-Interactive_Terminal-00e676?style=for-the-badge&logo=visual-studio-code&logoColor=white" height="45">
@@ -14,7 +16,6 @@
 ## 🖥️ Terminal Commands    
 
 
-
 Interact with my portfolio using these built-in commands:
 
 | Command | Description |
@@ -27,6 +28,7 @@ Interact with my portfolio using these built-in commands:
 
 ## 🚀 Quick Setup
 To run this project locally, follow these steps[cite: 2]:
+
 
 
 ## ✨ Features
