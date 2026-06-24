@@ -47,8 +47,8 @@ export default function Taskbar({ windows, onToggleWindow, onToggleStartMenu, is
                 <div className={styles.trayIcon} title="Language">ENG</div>
                 <div className={styles.trayIcon} title="Network, Volume, Battery">📶 🔊 🔋</div>
                 <div className={styles.trayClock} title={time.toLocaleDateString()}>
-                    <div>{time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}</div>
-                    <div>{time.toLocaleDateString()}</div>
+                    <div className={styles.clockTime}>{time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true })}</div>
+                    <div className={styles.clockDate}>{time.toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' })}</div>
                 </div>
             </div>
         </div>
