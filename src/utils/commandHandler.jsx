@@ -13,13 +13,17 @@ export const handleCommand = (command, { isAdmin, setWallpaper, setIsAdmin } = {
         case '--help':
             const helpText = [
                 'Available commands:',
-                '  about    - Learn more about me',
-                '  projects - View my projects',
-                '  contact  - Get in touch',
-                '  clear    - Clear the terminal',
-                '  help     - Show this help message',
+                '  about     - Learn more about me',
+                '  projects  - View my projects',
+                '  contact   - Get in touch',
+                '  clear     - Clear the terminal',
+                '  help      - Show this help message',
                 '  fastfetch - Show system info',
-                '  sudo     - Run as administrator',
+                '  ask       - Ask Raza\'s AI Assistant (e.g., ask what stack Raza uses)',
+                '  github    - Fetch live GitHub statistics',
+                '  skills    - Render ASCII chart of technical skills',
+                '  theme     - Switch colors (Dracula, Nord, Monokai, Retro)',
+                '  sudo      - Run as administrator',
                 '',
                 'Type "sudo" to access admin commands.',
             ];
@@ -104,6 +108,11 @@ export const handleCommand = (command, { isAdmin, setWallpaper, setIsAdmin } = {
             return {
                 type: 'ai-assistant',
                 query: query,
+            };
+        case 'github':
+            return {
+                type: 'github-api',
+                args: args.slice(1)
             };
         default:
             if (trimmedCommand.startsWith('sudo ')) {
