@@ -68,6 +68,8 @@ export default function CommandInput({ onSubmit, mode = 'command', history = [],
         }
     }, [input]);
 
+    const suggestionGhost = suggestion && suggestion.startsWith(input.toLowerCase()) ? suggestion.slice(input.length) : '';
+
     return (
         <div className={styles.commandInput} onClick={() => inputRef.current?.focus()}>
             {mode === 'command' && (
@@ -78,6 +80,9 @@ export default function CommandInput({ onSubmit, mode = 'command', history = [],
             {mode === 'password' && <span className={styles.prompt}>Password:</span>}
             <div className={styles.inputWrapper}>
                 <span className={styles.inputText}>{mode === 'password' ? '*'.repeat(input.length) : input}</span>
+                {mode !== 'password' && suggestionGhost && (
+                    <span className={styles.suggestionGhost}>{suggestionGhost}</span>
+                )}
                 <span className={styles.cursor}>█</span>
                 <input
                     ref={inputRef}

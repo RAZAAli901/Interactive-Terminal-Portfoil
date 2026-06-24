@@ -54,3 +54,11 @@
     color: var(--admin-color);
     text-shadow: 0 0 5px var(--admin-color);
 }
+
+.suggestionGhost {
+    color: rgba(255, 255, 255, 0.35);
+    font-family: 'Consolas', 'Lucida Console', monospace;
+    font-size: 1rem;
+    white-space: pre;
+    pointer-events: none;
+}
