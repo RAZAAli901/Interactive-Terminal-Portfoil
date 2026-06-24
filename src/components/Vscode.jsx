@@ -1,7 +1,30 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import styles from './Vscode.module.css';
 
 export default function Vscode() {
+    const containerRef = useRef(null);
+    const editorRef = useRef(null);
+    const [monacoLoaded, setMonacoLoaded] = useState(false);
+
+    useEffect(() => {
+        const loadMonaco = () => {
+            if (window.monaco) {
+                setMonacoLoaded(true);
+                return;
+            }
+            const script = document.createElement('script');
+            script.src = 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.39.0/min/vs/loader.min.js';
+            script.async = true;
+            script.onload = () => {
+                window.require.config({ paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.39.0/min/vs' } });
+                window.require(['vs/editor/editor.main'], () => {
+                    setMonacoLoaded(true);
+                });
+            };
+            document.body.appendChild(script);
+        };
+        loadMonaco();
+    }, []);
     const files = {
         'App.jsx': `import { useState } from 'react';
 import Terminal from "./components/Terminal";
