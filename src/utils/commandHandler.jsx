@@ -114,6 +114,10 @@ export const handleCommand = (command, { isAdmin, setWallpaper, setIsAdmin } = {
                 type: 'github-api',
                 args: args.slice(1)
             };
+        case 'skills':
+            return {
+                type: 'skills-chart'
+            };
         default:
             if (trimmedCommand.startsWith('sudo ')) {
                 return { type: 'action', action: 'sudo', pendingCommand: trimmedCommand.slice(5) };
