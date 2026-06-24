@@ -102,7 +102,7 @@ export default function Window({ children, title = "Terminal", icon = "🖥️",
                 pointerEvents: isMinimized ? 'none' : 'auto',
             }}
         >
-            <div className={`${styles.windowHeader} ${!isTerminal ? styles.lightHeader : ''}`} onMouseDown={handleMouseDown}>
+            <div className={`${styles.windowHeader} ${!isTerminal ? styles.lightHeader : ''}`} onMouseDown={handleMouseDown} onDoubleClick={toggleMaximize}>
                 {isTerminal ? (
                     <div className={styles.tabBar}>
                         <div className={styles.windowTab}>
