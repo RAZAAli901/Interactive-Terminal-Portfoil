@@ -18,14 +18,20 @@ export default function CommandInput({ onSubmit, mode = 'command', history = [],
         }
     }, [history]);
 
+    const [tempInput, setTempInput] = useState('');
+
     const handleKeyDown = (e) => {
         if (e.key === 'Enter') {
             onSubmit(input);
             setInput('');
             setHistoryIndex(-1);
+            setTempInput('');
         } else if (e.key === 'ArrowUp') {
             e.preventDefault();
             if (history.length > 0) {
+                if (historyIndex === -1) {
+                    setTempInput(input);
+                }
                 const newIndex = historyIndex < history.length - 1 ? historyIndex + 1 : historyIndex;
                 setHistoryIndex(newIndex);
                 setInput(history[history.length - 1 - newIndex]);
@@ -38,7 +44,7 @@ export default function CommandInput({ onSubmit, mode = 'command', history = [],
                 setInput(history[history.length - 1 - newIndex]);
             } else if (historyIndex === 0) {
                 setHistoryIndex(-1);
-                setInput('');
+                setInput(tempInput);
             }
         }
     };
