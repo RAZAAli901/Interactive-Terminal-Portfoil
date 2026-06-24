@@ -91,7 +91,7 @@ export default function Window({ children, title = "Terminal", icon = "🖥️",
     return (
         <div
             ref={windowRef}
-            className={`${styles.windowFrame} ${isMaximized ? styles.maximized : ''} ${isDragging ? styles.dragging : ''}`}
+            className={`${styles.windowFrame} ${isMaximized ? styles.maximized : ''} ${isDragging ? styles.dragging : ''} ${isResizing ? styles.resizing : ''}`}
             onMouseDown={() => onFocus && onFocus()}
             style={{
                 transform: isMaximized ? 'none' : `translate(${position.x}px, ${position.y}px)`,
