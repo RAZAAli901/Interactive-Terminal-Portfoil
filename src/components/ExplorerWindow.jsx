@@ -1,10 +1,15 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { fileSystem } from '../utils/fileSystem';
 import styles from './ExplorerWindow.module.css';
 
 export default function ExplorerWindow() {
     const [currentPath, setCurrentPath] = useState([fileSystem]);
     const [activeProject, setActiveProject] = useState(null);
+    const [screenshotIdx, setScreenshotIdx] = useState(0);
+
+    useEffect(() => {
+        setScreenshotIdx(0);
+    }, [activeProject]);
 
     const currentFolder = currentPath[currentPath.length - 1];
 
@@ -57,9 +62,36 @@ export default function ExplorerWindow() {
                 <div className={styles.explorerMain}>
                     {activeProject ? (
                         <div className={styles.projectDetails}>
+                            <div className={styles.backLink} onClick={() => setActiveProject(null)}>
+                                ⬅ Back to Projects
+                            </div>
                             <h3 className={styles.projectTitle}>{activeProject.title}</h3>
+                            
+                            {activeProject.screenshots && activeProject.screenshots.length > 0 && (
+                                <div className={styles.carouselContainer}>
+                                    <button 
+                                        className={styles.carouselBtn} 
+                                        onClick={() => setScreenshotIdx(prev => (prev === 0 ? activeProject.screenshots.length - 1 : prev - 1))}
+                                    >
+                                        ◀
+                                    </button>
+                                    <div className={styles.carouselImageWrapper}>
+                                        <img 
+                                            src={activeProject.screenshots[screenshotIdx]} 
+                                            alt={`${activeProject.title} screenshot`}
+                                            className={styles.carouselImage}
+                                        />
+                                    </div>
+                                    <button 
+                                        className={styles.carouselBtn} 
+                                        onClick={() => setScreenshotIdx(prev => (prev === activeProject.screenshots.length - 1 ? 0 : prev + 1))}
+                                    >
+                                        ▶
+                                    </button>
+                                </div>
+                            )}
+                            
                             <p className={styles.projectDescription}>{activeProject.description}</p>
-                            {/* Project carousel placeholder (Commit 25) */}
                         </div>
                     ) : currentFolder.children && currentFolder.children.length > 0 ? (
                         currentFolder.children.map((item, index) => (
