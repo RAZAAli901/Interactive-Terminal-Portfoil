@@ -80,6 +80,37 @@ export default function Terminal({ setWallpaper, initialCommand, setInitialComma
             }, 1200);
             return;
         }
+        if (output.type === 'github-api') {
+            setHistory((prev) => [
+                ...prev,
+                {
+                    command: input,
+                    output: {
+                        type: 'text',
+                        content: ['📡 Querying GitHub REST API for @RAZAAli901...', '⚡ Accessing endpoints: /users/RAZAAli901, /users/RAZAAli901/repos']
+                    }
+                }
+            ]);
+
+            setTimeout(() => {
+                import('../utils/githubApi').then(({ fetchGithubStats }) => {
+                    fetchGithubStats().then(stats => {
+                        import('../utils/githubFormatter').then(({ formatGithubStats }) => {
+                            const formatted = formatGithubStats(stats);
+                            setHistory((prev) => {
+                                const nextHist = [...prev];
+                                nextHist[nextHist.length - 1] = {
+                                    command: input,
+                                    output: { type: 'text', content: formatted }
+                                };
+                                return nextHist;
+                            });
+                        });
+                    });
+                });
+            }, 1000);
+            return;
+        }
 
         if (output.type === 'action') {
             if (output.action === 'clear') {
