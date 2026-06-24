@@ -50,3 +50,44 @@ body {
 .animate-caret-blink {
   animation: caret-blink 1s step-end infinite;
 }
+
+/* Theme Classes */
+.theme-dracula {
+  --bg-color: #282a36;
+  --text-color: #f8f8f2;
+  --prompt-color: #50fa7b;
+  --admin-color: #ff5555;
+  --terminal-bg: #282a36;
+  --terminal-text: #f8f8f2;
+  --phosphor-color: #bd93f9;
+}
+
+.theme-nord {
+  --bg-color: #2e3440;
+  --text-color: #d8dee9;
+  --prompt-color: #8fbcbb;
+  --admin-color: #bf616a;
+  --terminal-bg: #2e3440;
+  --terminal-text: #eceff4;
+  --phosphor-color: #88c0d0;
+}
+
+.theme-monokai {
+  --bg-color: #272822;
+  --text-color: #f8f8f2;
+  --prompt-color: #a6e22e;
+  --admin-color: #f92672;
+  --terminal-bg: #272822;
+  --terminal-text: #f8f8f2;
+  --phosphor-color: #66d9ef;
+}
+
+.theme-retro {
+  --bg-color: #0c0c0c;
+  --text-color: #00ff00;
+  --prompt-color: #00ff00;
+  --admin-color: #ff0000;
+  --terminal-bg: #0c0c0c;
+  --terminal-text: #00ff00;
+  --phosphor-color: #00ff00;
+}
