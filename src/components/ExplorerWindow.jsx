@@ -92,6 +92,39 @@ export default function ExplorerWindow() {
                             )}
                             
                             <p className={styles.projectDescription}>{activeProject.description}</p>
+                            
+                            {/* Tech Stack Badges */}
+                            {activeProject.tech && (
+                                <div className={styles.techBadgesContainer}>
+                                    {activeProject.tech.map(t => (
+                                        <span key={t} className={styles.techBadge}>{t}</span>
+                                    ))}
+                                </div>
+                            )}
+
+                            {/* Project Links */}
+                            <div className={styles.projectLinks}>
+                                {activeProject.liveLink && (
+                                    <a 
+                                        href={activeProject.liveLink} 
+                                        target="_blank" 
+                                        rel="noopener noreferrer"
+                                        className={styles.projectLinkBtn}
+                                    >
+                                        🌐 Live Demo
+                                    </a>
+                                )}
+                                {activeProject.repoLink && (
+                                    <a 
+                                        href={activeProject.repoLink} 
+                                        target="_blank" 
+                                        rel="noopener noreferrer"
+                                        className={styles.projectLinkBtn}
+                                    >
+                                        💻 View Source
+                                    </a>
+                                )}
+                            </div>
                         </div>
                     ) : currentFolder.children && currentFolder.children.length > 0 ? (
                         currentFolder.children.map((item, index) => (

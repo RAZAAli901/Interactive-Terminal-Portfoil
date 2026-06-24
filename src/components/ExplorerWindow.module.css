@@ -178,3 +178,40 @@
     color: #ccc;
     line-height: 1.5;
 }
+
+.techBadgesContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 5px;
+}
+
+.techBadge {
+    background: #2a2a2a;
+    color: #00ff00;
+    font-size: 0.75rem;
+    font-family: monospace;
+    padding: 3px 8px;
+    border-radius: 4px;
+    border: 1px solid #333;
+}
+
+.projectLinks {
+    display: flex;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.projectLinkBtn {
+    background: #0078d4;
+    color: white;
+    text-decoration: none;
+    font-size: 0.85rem;
+    padding: 6px 12px;
+    border-radius: 4px;
+    transition: background 0.2s;
+}
+
+.projectLinkBtn:hover {
+    background: #106ebe;
+}
