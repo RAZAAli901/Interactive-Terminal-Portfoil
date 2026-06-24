@@ -46,8 +46,27 @@ export default function CommandInput({ onSubmit, mode = 'command', history = [],
                 setHistoryIndex(-1);
                 setInput(tempInput);
             }
+        } else if (e.key === 'Tab') {
+            e.preventDefault();
+            if (suggestion) {
+                setInput(suggestion);
+                setSuggestion('');
+            }
         }
     };
+
+    useEffect(() => {
+        if (input.trim() === '') {
+            setSuggestion('');
+            return;
+        }
+        const match = availableCommands.find(cmd => cmd.startsWith(input.toLowerCase()) && cmd !== input.toLowerCase());
+        if (match) {
+            setSuggestion(match);
+        } else {
+            setSuggestion('');
+        }
+    }, [input]);
 
     return (
         <div className={styles.commandInput} onClick={() => inputRef.current?.focus()}>
