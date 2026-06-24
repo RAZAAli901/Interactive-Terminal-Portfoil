@@ -161,7 +161,26 @@ export default function Terminal({ setWallpaper, initialCommand, setInitialComma
                         )}
                         <div className={styles.output}>
                             {entry.output.type === 'text' ? (
-                                entry.output.content.map((line, i) => <div key={i}>{line}</div>)
+                                entry.output.content.map((line, i) => {
+                                    if (typeof line === 'string') {
+                                        if (line.startsWith('🤖') || line.startsWith('💻') || line.startsWith('💼') || line.startsWith('📧') || line.startsWith('🚀')) {
+                                            return <div key={i} className={styles.terminalHeaderLine}>{line}</div>;
+                                        }
+                                        if (line.startsWith('•')) {
+                                            const colonIdx = line.indexOf(':');
+                                            if (colonIdx !== -1) {
+                                                const label = line.substring(0, colonIdx + 1);
+                                                const value = line.substring(colonIdx + 1);
+                                                return (
+                                                    <div key={i} className={styles.terminalBulletLine}>
+                                                        <span className={styles.highlightText}>{label}</span>{value}
+                                                    </div>
+                                                );
+                                            }
+                                        }
+                                    }
+                                    return <div key={i}>{line}</div>;
+                                })
                             ) : (
                                 entry.output.content
                             )}

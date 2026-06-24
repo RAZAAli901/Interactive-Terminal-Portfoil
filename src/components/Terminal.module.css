@@ -79,3 +79,20 @@
     line-height: 1.2;
     word-break: break-word;
 }
+
+.terminalHeaderLine {
+    color: #50fa7b;
+    font-weight: bold;
+    margin-top: 6px;
+    margin-bottom: 2px;
+}
+
+.terminalBulletLine {
+    padding-left: 8px;
+}
+
+.highlightText {
+    color: #8be9fd;
+    font-weight: bold;
+}
+
