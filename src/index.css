@@ -91,3 +91,10 @@ body {
   --terminal-text: #00ff00;
   --phosphor-color: #00ff00;
 }
+
+@media (max-width: 768px) {
+  .mobile-terminal-active {
+    background: var(--terminal-bg) !important;
+    background-image: none !important;
+  }
+}
