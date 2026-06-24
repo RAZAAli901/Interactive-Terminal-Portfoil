@@ -112,6 +112,14 @@ export default function Terminal({ setWallpaper, initialCommand, setInitialComma
             return;
         }
 
+        if (output.type === 'skills-chart') {
+            import('../utils/asciiChart').then(({ renderSkillsChart }) => {
+                const chartText = renderSkillsChart();
+                setHistory((prev) => [...prev, { command: input, output: { type: 'text', content: chartText } }]);
+            });
+            return;
+        }
+
         if (output.type === 'action') {
             if (output.action === 'clear') {
                 setHistory([
