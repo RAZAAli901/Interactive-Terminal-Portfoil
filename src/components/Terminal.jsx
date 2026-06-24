@@ -51,6 +51,36 @@ export default function Terminal({ setWallpaper, initialCommand, setInitialComma
 
         const output = handleCommand(input, { isAdmin, setWallpaper, setIsAdmin });
 
+        if (output.type === 'ai-assistant') {
+            // Add user's command and initial thinking lines
+            setHistory((prev) => [
+                ...prev,
+                {
+                    command: input,
+                    output: {
+                        type: 'text',
+                        content: ['🤖 Analyzing query...', '🔍 Retrieval-Augmented vector lookup in progress...']
+                    }
+                }
+            ]);
+
+            // Simulate RAG network/inference delay
+            setTimeout(() => {
+                import('../utils/aiParser').then(({ parseAiQuery }) => {
+                    const answer = parseAiQuery(output.query);
+                    setHistory((prev) => {
+                        const nextHist = [...prev];
+                        nextHist[nextHist.length - 1] = {
+                            command: input,
+                            output: { type: 'text', content: answer }
+                        };
+                        return nextHist;
+                    });
+                });
+            }, 1200);
+            return;
+        }
+
         if (output.type === 'action') {
             if (output.action === 'clear') {
                 setHistory([
