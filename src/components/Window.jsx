@@ -86,20 +86,20 @@ export default function Window({ children, title = "Terminal", icon = "🖥️",
         }
     };
 
-    if (isMinimized) return null;
-
     return (
         <div
             ref={windowRef}
-            className={`${styles.windowFrame} ${isMaximized ? styles.maximized : ''} ${isDragging ? styles.dragging : ''} ${isResizing ? styles.resizing : ''}`}
+            className={`${styles.windowFrame} ${isMaximized ? styles.maximized : ''} ${isDragging ? styles.dragging : ''} ${isResizing ? styles.resizing : ''} ${isMinimized ? styles.minimized : ''}`}
             onMouseDown={() => onFocus && onFocus()}
             style={{
-                transform: isMaximized ? 'none' : `translate(${position.x}px, ${position.y}px)`,
+                transform: isMinimized ? 'scale(0.8) translateY(300px)' : (isMaximized ? 'none' : `translate(${position.x}px, ${position.y}px)`),
                 width: isMaximized ? '100%' : size.width,
                 height: isMaximized ? 'calc(100% - 40px)' : size.height,
                 top: 0,
                 left: 0,
                 zIndex: zIndex,
+                opacity: isMinimized ? 0 : 1,
+                pointerEvents: isMinimized ? 'none' : 'auto',
             }}
         >
             <div className={`${styles.windowHeader} ${!isTerminal ? styles.lightHeader : ''}`} onMouseDown={handleMouseDown}>
