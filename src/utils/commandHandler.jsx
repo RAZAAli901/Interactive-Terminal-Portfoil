@@ -118,6 +118,29 @@ export const handleCommand = (command, { isAdmin, setWallpaper, setIsAdmin } = {
             return {
                 type: 'skills-chart'
             };
+        case 'theme':
+            const themeName = args[1];
+            const validThemes = ['dracula', 'nord', 'monokai', 'retro'];
+            if (!themeName || !validThemes.includes(themeName)) {
+                return {
+                    type: 'text',
+                    content: [
+                        'Theme Command Usage:',
+                        '  theme [name]',
+                        '',
+                        'Available themes:',
+                        '  dracula  - Sleek dark theme with purple accents',
+                        '  nord     - Cool arctic blue theme',
+                        '  monokai  - Classic contrast coder theme',
+                        '  retro    - Green phosphor retro theme',
+                    ],
+                };
+            }
+            return {
+                type: 'action',
+                action: 'theme',
+                theme: themeName
+            };
         default:
             if (trimmedCommand.startsWith('sudo ')) {
                 return { type: 'action', action: 'sudo', pendingCommand: trimmedCommand.slice(5) };
