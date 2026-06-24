@@ -68,14 +68,40 @@ export default function Terminal() {
     };
 
     const [activeFile, setActiveFile] = useState('App.jsx');
-    const [codeContent, setCodeContent] = useState(files);
 
-    const handleCodeChange = (e) => {
-        const value = e.target.value;
-        setCodeContent(prev => ({ ...prev, [activeFile]: value }));
-    };
+    useEffect(() => {
+        if (!monacoLoaded) return;
+        
+        if (containerRef.current) {
+            editorRef.current = window.monaco.editor.create(containerRef.current, {
+                value: files[activeFile],
+                language: activeFile.endsWith('.css') ? 'css' : 'javascript',
+                theme: 'vs-dark',
+                readOnly: true,
+                automaticLayout: true,
+                minimap: { enabled: false },
+                fontSize: 13,
+                fontFamily: "'Consolas', 'Lucida Console', monospace",
+            });
+        }
 
-    const lines = codeContent[activeFile].split('\n');
+        return () => {
+            if (editorRef.current) {
+                editorRef.current.dispose();
+            }
+        };
+    }, [monacoLoaded]);
+
+    useEffect(() => {
+        if (editorRef.current && monacoLoaded) {
+            editorRef.current.setValue(files[activeFile]);
+            const model = editorRef.current.getModel();
+            if (model) {
+                const lang = activeFile.endsWith('.css') ? 'css' : (activeFile.endsWith('.jsx') ? 'javascript' : 'javascript');
+                window.monaco.editor.setModelLanguage(model, lang);
+            }
+        }
+    }, [activeFile, monacoLoaded]);
 
     return (
         <div className={styles.vscodeContainer}>
@@ -102,19 +128,11 @@ export default function Terminal() {
                         ⚛️ {activeFile}
                     </div>
                 </div>
-                <div className={styles.codeEditor}>
-                    <div className={styles.lineNumbers}>
-                        {lines.map((_, idx) => (
-                            <div key={idx}>{idx + 1}</div>
-                        ))}
-                    </div>
-                    <textarea 
-                        className={styles.codeArea}
-                        value={codeContent[activeFile]}
-                        onChange={handleCodeChange}
-                        spellCheck="false"
-                    />
-                </div>
+                <div 
+                    ref={containerRef} 
+                    className={styles.monacoContainer} 
+                    style={{ width: '100%', height: 'calc(100% - 35px)', background: '#1e1e1e' }}
+                />
             </div>
         </div>
     );
