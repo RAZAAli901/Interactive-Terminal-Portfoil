@@ -4,7 +4,13 @@ import styles from './CommandInput.module.css';
 export default function CommandInput({ onSubmit, mode = 'command', history = [], isAdmin = false }) {
     const [input, setInput] = useState('');
     const [historyIndex, setHistoryIndex] = useState(-1);
+    const [suggestion, setSuggestion] = useState('');
     const inputRef = useRef(null);
+
+    const availableCommands = [
+        'about', 'projects', 'contact', 'clear', 'help', 'fastfetch', 
+        'sudo', 'wallpaper', 'exit', 'ask', 'chat', 'github', 'skills', 'theme'
+    ];
 
     useEffect(() => {
         if (inputRef.current) {
