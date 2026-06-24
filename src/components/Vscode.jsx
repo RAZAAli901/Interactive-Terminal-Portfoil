@@ -26,44 +26,85 @@ export default function Vscode() {
         loadMonaco();
     }, []);
     const files = {
-        'App.jsx': `import { useState } from 'react';
+        'App.jsx': `import { useState, useEffect } from 'react';
 import Terminal from "./components/Terminal";
 import Window from "./components/Window";
 import Taskbar from "./components/Taskbar";
+import DesktopIcon from "./components/DesktopIcon";
 
 export default function App() {
   const [windows, setWindows] = useState({
-    terminal: { isOpen: true, title: 'Terminal' }
+    terminal: { id: 'terminal', title: 'Command Prompt', icon: '💻', isOpen: true, isMinimized: false, zIndex: 10 },
+    explorer: { id: 'explorer', title: 'My Computer', icon: '🖥️', isOpen: false, isMinimized: false, zIndex: 1 }
   });
+  const [maxZIndex, setMaxZIndex] = useState(10);
+
+  const openWindow = (id) => {
+    const nextZ = maxZIndex + 1;
+    setMaxZIndex(nextZ);
+    setWindows(prev => ({
+      ...prev,
+      [id]: { ...prev[id], isOpen: true, isMinimized: false, zIndex: nextZ }
+    }));
+  };
 
   return (
     <div className="desktop">
-      <Taskbar windows={windows} />
+      <div className="desktopIcons">
+        <DesktopIcon label="Terminal" icon="💻" onDoubleClick={() => openWindow('terminal')} />
+      </div>
+      <Taskbar windows={Object.values(windows)} />
     </div>
   );
 }`,
-        'Terminal.jsx': `import { useState } from 'react';
+        'Terminal.jsx': `import { useState, useEffect, useRef } from 'react';
+import CommandInput from './CommandInput';
 import { handleCommand } from '../utils/commandHandler';
 
-export default function Terminal() {
-  const [history, setHistory] = useState([]);
+export default function Terminal({ setTheme, setWallpaper }) {
+    const [history, setHistory] = useState([]);
+    const [isTyping, setIsTyping] = useState(false);
 
-  const onSubmit = (input) => {
-    const out = handleCommand(input);
-    setHistory([...history, { input, out }]);
-  };
+    const onCommandSubmit = (input) => {
+        const output = handleCommand(input, { setTheme, setWallpaper });
+        setHistory((prev) => [...prev, { command: input, output }]);
+    };
 
-  return <div className="terminal">Running...</div>;
+    return (
+        <div className="terminalContainer">
+            <div className="terminalHistory">
+                {history.map((entry, index) => (
+                    <div key={index}>
+                        <span>{'> '}{entry.command}</span>
+                        <div>{entry.output.content}</div>
+                    </div>
+                ))}
+            </div>
+            <CommandInput onSubmit={onCommandSubmit} />
+        </div>
+    );
 }`,
-        'commandHandler.jsx': `export const handleCommand = (cmd) => {
-  switch (cmd.trim().toLowerCase()) {
-    case 'help':
-      return ['about', 'projects', 'contact', 'clear'];
-    case 'about':
-      return 'Full stack developer portfolio OS.';
-    default:
-      return 'Command not found';
-  }
+        'commandHandler.jsx': `import { parseAiQuery } from './aiParser';
+
+export const handleCommand = (command, { setTheme, setWallpaper } = {}) => {
+    const trimmedCommand = command.trim().toLowerCase();
+    const args = trimmedCommand.split(' ');
+    const cmd = args[0];
+
+    switch (cmd) {
+        case 'help':
+            return {
+                type: 'text',
+                content: ['about - Bio', 'projects - Portfolio', 'skills - Skill list', 'theme - Switch colors']
+            };
+        case 'ask':
+        case 'chat':
+            return { type: 'ai-assistant', query: args.slice(1).join(' ') };
+        case 'theme':
+            return { type: 'action', action: 'theme', theme: args[1] };
+        default:
+            return { type: 'text', content: [\`Command not found: \${cmd}\`] };
+    }
 };`
     };
 
