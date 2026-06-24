@@ -15,13 +15,22 @@ export const fileSystem = {
                         {
                             name: "Visitor",
                             type: "folder",
-                            children: [
+                             children: [
                                 {
                                     name: "Documents",
                                     type: "folder",
                                     children: [
                                         { name: "Resume.pdf", type: "file", content: "Resume content placeholder..." },
                                         { name: "Project_Notes.txt", type: "file", content: "Notes on current projects..." }
+                                    ]
+                                },
+                                {
+                                    name: "Projects",
+                                    type: "folder",
+                                    children: [
+                                        { name: "Terminal_Portfolio.proj", type: "project", projectId: "portfolio" },
+                                        { name: "Enterprise_RAG_Pipeline.proj", type: "project", projectId: "rag-pipeline" },
+                                        { name: "Typing_Speed_Test.proj", type: "project", projectId: "typing-test" }
                                     ]
                                 },
                                 {

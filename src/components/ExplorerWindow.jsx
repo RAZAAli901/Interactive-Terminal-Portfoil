@@ -4,19 +4,29 @@ import styles from './ExplorerWindow.module.css';
 
 export default function ExplorerWindow() {
     const [currentPath, setCurrentPath] = useState([fileSystem]);
+    const [activeProject, setActiveProject] = useState(null);
 
     const currentFolder = currentPath[currentPath.length - 1];
 
     const handleDoubleClick = (item) => {
         if (item.type === 'folder' || item.type === 'drive') {
             setCurrentPath([...currentPath, item]);
+        } else if (item.type === 'project') {
+            import('../utils/portfolioData').then(({ projectsData }) => {
+                const proj = projectsData.find(p => p.id === item.projectId);
+                if (proj) {
+                    setActiveProject(proj);
+                }
+            });
         } else {
             alert(`Opening file: ${item.name}`);
         }
     };
 
     const handleBack = () => {
-        if (currentPath.length > 1) {
+        if (activeProject) {
+            setActiveProject(null);
+        } else if (currentPath.length > 1) {
             setCurrentPath(currentPath.slice(0, -1));
         }
     };
@@ -25,6 +35,7 @@ export default function ExplorerWindow() {
     const FolderIcon = () => <span style={{ color: '#f1c40f', fontSize: '2rem' }}>📁</span>;
     const DriveIcon = () => <span style={{ fontSize: '2rem' }}>💿</span>;
     const FileIcon = () => <span style={{ fontSize: '2rem' }}>📄</span>;
+    const ProjectIcon = () => <span style={{ fontSize: '2rem' }}>🚀</span>;
 
     return (
         <div className={styles.explorerWindow}>
@@ -44,7 +55,13 @@ export default function ExplorerWindow() {
                     <div className={styles.sidebarItem}>Local Disk (C:)</div>
                 </div>
                 <div className={styles.explorerMain}>
-                    {currentFolder.children && currentFolder.children.length > 0 ? (
+                    {activeProject ? (
+                        <div className={styles.projectDetails}>
+                            <h3 className={styles.projectTitle}>{activeProject.title}</h3>
+                            <p className={styles.projectDescription}>{activeProject.description}</p>
+                            {/* Project carousel placeholder (Commit 25) */}
+                        </div>
+                    ) : currentFolder.children && currentFolder.children.length > 0 ? (
                         currentFolder.children.map((item, index) => (
                             <div
                                 key={index}
@@ -53,7 +70,8 @@ export default function ExplorerWindow() {
                             >
                                 <div className={styles.fileIcon}>
                                     {item.type === 'folder' ? <FolderIcon /> :
-                                        item.type === 'drive' ? <DriveIcon /> : <FileIcon />}
+                                        item.type === 'drive' ? <DriveIcon /> : 
+                                        item.type === 'project' ? <ProjectIcon /> : <FileIcon />}
                                 </div>
                                 <div className={styles.fileName}>{item.name}</div>
                             </div>
