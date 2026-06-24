@@ -29,9 +29,20 @@ export default function App() {
   const [wallpaper, setWallpaper] = useState(4); // Default wallpaper ID
   const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'retro');
 
+  const [isMobile, setIsMobile] = useState(false);
+
   useEffect(() => {
     localStorage.setItem('theme', theme);
   }, [theme]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Dynamic installation state for Store apps
   const [installedApps, setInstalledApps] = useState({
@@ -213,7 +224,7 @@ export default function App() {
 
   return (
     <div
-      className={`${styles.desktop} theme-${theme}`}
+      className={`${styles.desktop} theme-${theme} ${isMobile ? 'mobile-terminal-active' : ''}`}
       style={{ backgroundImage: `url(${wallpapers[wallpaper]})` }}
       onClick={handleDesktopClick}
       onContextMenu={handleContextMenu}
