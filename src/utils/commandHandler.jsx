@@ -85,6 +85,26 @@ export const handleCommand = (command, { isAdmin, setWallpaper, setIsAdmin } = {
             return { type: 'text', content: ['You are not logged in as root.'] };
         case '':
             return { type: 'text', content: [] };
+        case 'ask':
+        case 'chat':
+            const query = args.slice(1).join(' ');
+            if (!query) {
+                return {
+                    type: 'text',
+                    content: [
+                        'AI Assistant Command Usage:',
+                        '  ask [your question]',
+                        '  chat [your question]',
+                        '',
+                        'Example:',
+                        '  ask what stack does Raza use for RAG pipelines?',
+                    ],
+                };
+            }
+            return {
+                type: 'ai-assistant',
+                query: query,
+            };
         default:
             if (trimmedCommand.startsWith('sudo ')) {
                 return { type: 'action', action: 'sudo', pendingCommand: trimmedCommand.slice(5) };
