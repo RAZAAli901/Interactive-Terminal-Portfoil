@@ -1,6 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
 import styles from './Vscode.module.css';
 
+/**
+ * Vscode component rendering a read-only code showcase using Monaco Editor
+ * loaded dynamically from a public CDN (cdnjs).
+ */
+
 export default function Vscode() {
     const containerRef = useRef(null);
     const editorRef = useRef(null);
