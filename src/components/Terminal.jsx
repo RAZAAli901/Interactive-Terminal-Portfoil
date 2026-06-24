@@ -4,7 +4,7 @@ import { handleCommand } from '../utils/commandHandler';
 import Hero from '../sections/Hero';
 import styles from './Terminal.module.css';
 
-export default function Terminal({ setWallpaper, initialCommand, setInitialCommand }) {
+export default function Terminal({ setTheme, setWallpaper, initialCommand, setInitialCommand }) {
     const welcomeLines = ['Microsoft Windows [Version 10.0.26200.7171]', '(c) Microsoft Corporation. All rights reserved.', ''];
     const [history, setHistory] = useState([]);
     const [isTyping, setIsTyping] = useState(true);
@@ -125,6 +125,11 @@ export default function Terminal({ setWallpaper, initialCommand, setInitialComma
                 setHistory([
                     { command: '', output: { type: 'text', content: ['Microsoft Windows [Version 10.0.26200.7171]', '(c) Microsoft Corporation. All rights reserved.', ''] } },
                 ]);
+            } else if (output.action === 'theme') {
+                if (setTheme) {
+                    setTheme(output.theme);
+                    setHistory((prev) => [...prev, { command: input, output: { type: 'text', content: [`Theme successfully updated to '${output.theme}'.`] } }]);
+                }
             } else if (output.action === 'sudo') {
                 if (isAdmin) {
                     setHistory((prev) => [...prev, { command: input, output: { type: 'text', content: ['You are already root.'] } }]);

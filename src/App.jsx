@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Terminal from "./components/Terminal";
 import LoadingScreen from "./components/LoadingScreen";
 import Window from "./components/Window";
@@ -27,6 +27,11 @@ import styles from './App.module.css';
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [wallpaper, setWallpaper] = useState(4); // Default wallpaper ID
+  const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'retro');
+
+  useEffect(() => {
+    localStorage.setItem('theme', theme);
+  }, [theme]);
 
   // Dynamic installation state for Store apps
   const [installedApps, setInstalledApps] = useState({
@@ -164,7 +169,7 @@ export default function App() {
   const renderWindowContent = (id) => {
     switch (id) {
       case 'terminal':
-        return <Terminal setWallpaper={setWallpaper} initialCommand={terminalInitialCommand} setInitialCommand={setTerminalInitialCommand} />;
+        return <Terminal setTheme={setTheme} setWallpaper={setWallpaper} initialCommand={terminalInitialCommand} setInitialCommand={setTerminalInitialCommand} />;
       case 'explorer':
         return <ExplorerWindow />;
       case 'notepad':
@@ -208,7 +213,7 @@ export default function App() {
 
   return (
     <div
-      className={styles.desktop}
+      className={`${styles.desktop} theme-${theme}`}
       style={{ backgroundImage: `url(${wallpapers[wallpaper]})` }}
       onClick={handleDesktopClick}
       onContextMenu={handleContextMenu}
