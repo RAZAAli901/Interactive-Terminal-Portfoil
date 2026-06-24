@@ -232,6 +232,10 @@ export default function App() {
       <div className={styles.desktopOverlay}></div>
       {isLoading ? (
         <LoadingScreen onComplete={() => setIsLoading(false)} />
+      ) : isMobile ? (
+        <div style={{ width: '100vw', height: '100vh', background: 'var(--terminal-bg)', overflow: 'hidden' }}>
+          <Terminal setTheme={setTheme} setWallpaper={setWallpaper} />
+        </div>
       ) : (
         <>
           <div className={styles.desktopIcons}>
