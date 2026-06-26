@@ -398,6 +398,23 @@ export const commands = [
     usage: 'open-project [project_name]',
     examples: ['open-project Enterprise-RAG-Pipeline'],
     handler: openProjectHandler
+  },
+  {
+    name: 'github',
+    description: 'Fetch and display real-time GitHub profile, repositories, or activity stats',
+    usage: 'github [--user|--repos|--stats|--activity]',
+    examples: ['github', 'github --repos', 'github --activity'],
+    handler: (args) => {
+      let option = 'user';
+      if (args.includes('--repos')) option = 'repos';
+      else if (args.includes('--stats')) option = 'stats';
+      else if (args.includes('--activity')) option = 'activity';
+      
+      return {
+        type: 'github-api',
+        option: option
+      };
+    }
   }
 ];
 
