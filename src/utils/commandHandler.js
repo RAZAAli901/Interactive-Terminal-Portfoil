@@ -124,6 +124,101 @@ const techHandler = () => {
   };
 };
 
+const projectsHandler = (args) => {
+  let filtered = [...portfolioData.projects];
+
+  // Category filters
+  if (args.includes('--ml')) {
+    filtered = filtered.filter(p => p.category === 'ml');
+  }
+  if (args.includes('--web')) {
+    filtered = filtered.filter(p => p.category === 'web');
+  }
+  if (args.includes('--cpp')) {
+    filtered = filtered.filter(p => p.category === 'cpp');
+  }
+  if (args.includes('--featured')) {
+    filtered = filtered.filter(p => p.featured);
+  }
+
+  // Sort logic
+  const sortIdx = args.indexOf('--sort');
+  if (sortIdx !== -1 && args[sortIdx + 1]) {
+    const sortBy = args[sortIdx + 1].toLowerCase();
+    if (sortBy === 'date') {
+      filtered.sort((a, b) => b.date.localeCompare(a.date));
+    } else if (sortBy === 'stars') {
+      filtered.sort((a, b) => b.stars - a.stars);
+    } else if (sortBy === 'tech') {
+      filtered.sort((a, b) => a.tech.localeCompare(b.tech));
+    }
+  }
+
+  const headers = ['NAME', 'TECH', 'STATUS', 'DESCRIPTION'];
+  const rows = filtered.map(p => [
+    formatSuccess(p.name),
+    formatInfo(p.tech),
+    p.status,
+    p.description
+  ]);
+
+  const tableLines = formatTable(headers, rows);
+
+  return {
+    type: 'text',
+    content: [
+      ...formatSection('PROJECTS & PORTFOLIO'),
+      ...tableLines,
+      '',
+      formatInfo("Usage: projects [--ml|--web|--cpp|--featured] [--sort DATE|STARS|TECH]"),
+      formatInfo("To inspect a project: open-project [name]")
+    ]
+  };
+};
+
+const openProjectHandler = (args) => {
+  const queryName = args.join(' ');
+  if (!queryName) {
+    return {
+      type: 'text',
+      content: [formatError("Usage: open-project [project-name]")]
+    };
+  }
+
+  const proj = portfolioData.projects.find(p => 
+    p.name.toLowerCase() === queryName.toLowerCase() || 
+    p.id.toLowerCase() === queryName.toLowerCase()
+  );
+
+  if (!proj) {
+    return {
+      type: 'text',
+      content: [
+        formatError(`Project '${queryName}' not found.`),
+        formatInfo("Type 'projects' to view the full list.")
+      ]
+    };
+  }
+
+  const liveLink = formatLink('Live Link', proj.liveUrl);
+  const repoLink = formatLink('GitHub Link', proj.repoUrl);
+
+  return {
+    type: 'text',
+    content: [
+      ...formatSection(`PROJECT: ${proj.name.toUpperCase()}`),
+      `Description   : ${proj.longDescription}`,
+      `Links         : ${liveLink}  |  ${repoLink}`,
+      `Tech Stack    : ${proj.tech}`,
+      `Key Features  :`,
+      ...proj.features.map(f => `  • ${f}`),
+      `Stats         : ⭐ ${proj.stars} stars | 🍴 ${proj.forks} forks | 📅 Last Updated: ${proj.lastUpdated}`,
+      `Related Skills: ${proj.relatedSkills.join(', ')}`,
+      ''
+    ]
+  };
+};
+
 // Will hold the full commands registry
 export const commands = [
   {
@@ -282,6 +377,27 @@ export const commands = [
     usage: 'stack-details',
     examples: ['stack-details'],
     handler: techHandler
+  },
+  {
+    name: 'projects',
+    description: 'List portfolio projects with optional filtering and sorting',
+    usage: 'projects [--ml|--web|--cpp|--featured] [--sort DATE|STARS|TECH]',
+    examples: ['projects', 'projects --ml', 'projects --sort stars'],
+    handler: projectsHandler
+  },
+  {
+    name: 'portfolio',
+    description: 'Alias for projects',
+    usage: 'portfolio [--ml|--web|--cpp|--featured] [--sort DATE|STARS|TECH]',
+    examples: ['portfolio'],
+    handler: projectsHandler
+  },
+  {
+    name: 'open-project',
+    description: 'Show detailed project information including code repositories and features',
+    usage: 'open-project [project_name]',
+    examples: ['open-project Enterprise-RAG-Pipeline'],
+    handler: openProjectHandler
   }
 ];
 
