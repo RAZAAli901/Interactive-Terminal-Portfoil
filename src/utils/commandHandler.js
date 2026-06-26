@@ -1,6 +1,82 @@
 import { formatTable, formatSuccess, formatError, formatInfo, formatWarning, formatSection } from './terminalFormatting';
 import { getFuzzyMatches } from './fuzzyMatch';
 import { getHistory } from './localStorage';
+import portfolioData from '../data/portfolio.json';
+
+// Helper handlers to reuse between aliases
+const resumeHandler = () => {
+  const { name, title, location, email, github, linkedin } = portfolioData.bio;
+  
+  // Format skills string
+  const skillsLines = Object.entries(portfolioData.skills).map(([cat, list]) => {
+    const catName = cat.replace('_', '/').toUpperCase();
+    const items = list.map(s => s.name).join(', ');
+    return `  • ${catName.padEnd(12)}: ${items}`;
+  });
+
+  // Format experience list
+  const expLines = portfolioData.experience.map(job => 
+    `  • ${job.role} at ${job.company} (${job.period})`
+  );
+
+  return {
+    type: 'text',
+    content: [
+      ...formatSection('RESUME / CV'),
+      formatSuccess(`<strong>${name.toUpperCase()}</strong> | ${title}`),
+      `Location     : ${location}`,
+      `Email        : ${email}`,
+      `LinkedIn     : ${linkedin}`,
+      `GitHub       : ${github}`,
+      '',
+      formatWarning('--- SKILLS SUMMARY ---'),
+      ...skillsLines,
+      '',
+      formatWarning('--- WORK HISTORY SUMMARY ---'),
+      ...expLines,
+      '',
+      formatWarning('--- EDUCATION ---'),
+      `  • ${portfolioData.education.degree} (${portfolioData.education.gradYear}) - ${portfolioData.education.institution} (GPA: ${portfolioData.education.gpa})`,
+      '',
+      formatInfo("Download full resume: 'download resume.pdf'")
+    ]
+  };
+};
+
+const experienceHandler = () => {
+  const lines = [...formatSection('WORK EXPERIENCE')];
+  portfolioData.experience.forEach((job, idx) => {
+    lines.push(formatSuccess(`• ${job.role} @ ${job.company}`));
+    lines.push(`  Period : ${job.period}`);
+    job.details.forEach(detail => {
+      lines.push(`  - ${detail}`);
+    });
+    if (idx < portfolioData.experience.length - 1) {
+      lines.push('-----------------------------------------------------------');
+    }
+  });
+  return { type: 'text', content: lines };
+};
+
+const educationHandler = () => {
+  const edu = portfolioData.education;
+  return {
+    type: 'text',
+    content: [
+      ...formatSection('EDUCATION & CREDENTIALS'),
+      formatSuccess(`• ${edu.degree}`),
+      `  Institution : ${edu.institution}`,
+      `  Graduation  : ${edu.gradYear}`,
+      `  GPA         : ${edu.gpa}`,
+      '',
+      formatWarning('Relevant Coursework:'),
+      `  ${edu.coursework.join(', ')}`,
+      '',
+      formatWarning('Certifications:'),
+      ...edu.certifications.map(c => `  - ${c}`)
+    ]
+  };
+};
 
 // Will hold the full commands registry
 export const commands = [
@@ -90,6 +166,48 @@ export const commands = [
         ]
       };
     }
+  },
+  {
+    name: 'resume',
+    description: 'Display my resume/CV formatted in terminal',
+    usage: 'resume',
+    examples: ['resume'],
+    handler: resumeHandler
+  },
+  {
+    name: 'cv',
+    description: 'Alias for resume',
+    usage: 'cv',
+    examples: ['cv'],
+    handler: resumeHandler
+  },
+  {
+    name: 'experience',
+    description: 'Show detailed work history in reverse chronological order',
+    usage: 'experience',
+    examples: ['experience'],
+    handler: experienceHandler
+  },
+  {
+    name: 'exp',
+    description: 'Alias for experience',
+    usage: 'exp',
+    examples: ['exp'],
+    handler: experienceHandler
+  },
+  {
+    name: 'education',
+    description: 'Display education background, courses and credentials',
+    usage: 'education',
+    examples: ['education'],
+    handler: educationHandler
+  },
+  {
+    name: 'edu',
+    description: 'Alias for education',
+    usage: 'edu',
+    examples: ['edu'],
+    handler: educationHandler
   }
 ];
 
