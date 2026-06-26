@@ -1,0 +1,170 @@
+{
+  "bio": {
+    "name": "Raza Ali Murtaza",
+    "title": "AI/ML Engineer & Full-Stack Developer",
+    "location": "Lahore, Pakistan",
+    "email": "razaalymurtaza@gmail.com",
+    "linkedin": "linkedin.com/in/razaali",
+    "github": "github.com/RAZAAli901",
+    "twitter": "@RAZAAli901",
+    "timezone": "PKT (UTC+5)",
+    "tagline": "Building intelligent, responsive, and production-grade AI systems & web applications.",
+    "currentFocus": "RAG systems and interactive web UIs",
+    "availability": "Available for freelance/contract work or full-time AI/ML roles",
+    "rate": "$40-60/hr",
+    "responseTime": "24-48 hours",
+    "relocation": "Negotiable"
+  },
+  "education": {
+    "degree": "Bachelor of Science in Computer Science",
+    "institution": "FAST-NUCES",
+    "gradYear": "2024",
+    "gpa": "3.6/4.0",
+    "coursework": [
+      "Data Structures",
+      "Design & Analysis of Algorithms",
+      "Operating Systems",
+      "Machine Learning",
+      "Natural Language Processing",
+      "Computer Vision",
+      "Database Systems"
+    ],
+    "certifications": [
+      "DeepLearning.AI TensorFlow Developer",
+      "LangChain & Vector Databases Specialist",
+      "AWS Certified Cloud Practitioner"
+    ]
+  },
+  "experience": [
+    {
+      "company": "Smart Logics LLC",
+      "role": "AI/ML Engineer",
+      "period": "2023 - Present",
+      "details": [
+        "Architected and deployed enterprise-grade LangChain/RAG pipelines, integrating hybrid semantic search with FAISS/ChromaDB.",
+        "Optimized LLM performance and context compression, reducing token cost by 40% and latency by 30%.",
+        "Engineered Node.js/FastAPI backends to support real-time user chats with streaming API integrations."
+      ]
+    },
+    {
+      "company": "Ideas Animation Studio",
+      "role": "Computer Vision Engineer",
+      "period": "2022 - 2023",
+      "details": [
+        "Developed custom YOLO real-time object detection models for automatic video analysis and tracking.",
+        "Created OpenCV image preprocessing pipelines to clean high-resolution video feeds before inference.",
+        "Implemented multithreaded frame consumers in Python, boosting inference speed by 25%."
+      ]
+    },
+    {
+      "company": "Arrivy",
+      "role": "Frontend / MERN Developer",
+      "period": "2021 - 2022",
+      "details": [
+        "Designed and built responsive dashboard interfaces using React, Redux, and TailwindCSS.",
+        "Collaborated on Node.js/Express API integrations and MongoDB database modeling.",
+        "Implemented client-side caching and lazy loading, improving page load speeds by 20%."
+      ]
+    }
+  ],
+  "skills": {
+    "languages": [
+      { "name": "Python", "level": 95 },
+      { "name": "JavaScript", "level": 90 },
+      { "name": "C++", "level": 80 },
+      { "name": "SQL", "level": 75 }
+    ],
+    "ml_ai": [
+      { "name": "LangChain", "level": 90, "project": "Enterprise RAG Pipeline" },
+      { "name": "FAISS", "level": 85, "project": "Enterprise RAG Pipeline" },
+      { "name": "RAG Pipelines", "level": 90, "project": "Enterprise RAG Pipeline" },
+      { "name": "YOLO", "level": 85, "project": "Ideas Animation Studio detection" },
+      { "name": "OpenCV", "level": 80, "project": "Ideas Animation Studio preprocessing" }
+    ],
+    "frontend": [
+      { "name": "React", "level": 88 },
+      { "name": "Vite", "level": 85 },
+      { "name": "CSS Modules", "level": 80 },
+      { "name": "Tailwind", "level": 85 }
+    ],
+    "backend": [
+      { "name": "Node.js", "level": 80 },
+      { "name": "Express", "level": 80 },
+      { "name": "MongoDB", "level": 75 }
+    ],
+    "tools": [
+      { "name": "Git", "level": 85 },
+      { "name": "Docker", "level": 75 },
+      { "name": "VS Code", "level": 90 },
+      { "name": "Terminal", "level": 90 }
+    ]
+  },
+  "projects": [
+    {
+      "id": "Interactive-Terminal-Portfolio",
+      "name": "Interactive Terminal Portfolio",
+      "tech": "React/Vite",
+      "status": "Live",
+      "category": "web",
+      "featured": true,
+      "date": "2026-06",
+      "stars": 15,
+      "forks": 3,
+      "lastUpdated": "2026-06-25",
+      "description": "Windows-style desktop workspace portfolio with full window drag/resize support, simulated terminal shell, apps, and live system clocks.",
+      "longDescription": "A highly interactive simulated desktop experience that works inside web browsers. Mimics operating system layouts including a command prompt, file explorer, chat clients, and system configurations.",
+      "liveUrl": "https://github.com/RAZAAli901/Interactive-Terminal-Portfoil",
+      "repoUrl": "https://github.com/RAZAAli901/Interactive-Terminal-Portfoil",
+      "features": [
+        "Fully draggable, resizable window frames.",
+        "Interactive retro command prompt with Tab completion and history.",
+        "Real-time clock, Minesweeper game, and settings panel."
+      ],
+      "relatedSkills": ["React 19", "Vite", "CSS Modules", "TailwindCSS"]
+    },
+    {
+      "id": "Enterprise-RAG-Pipeline",
+      "name": "Enterprise RAG Pipeline",
+      "tech": "Python/LangChain",
+      "status": "Production",
+      "category": "ml",
+      "featured": true,
+      "date": "2025-11",
+      "stars": 42,
+      "forks": 12,
+      "lastUpdated": "2026-03-10",
+      "description": "High-performance RAG pipeline parsing massive document hubs using LangChain, sentence-transformers, and FAISS. Supports real-time QA and query caching.",
+      "longDescription": "An end-to-end question answering pipeline built to handle gigabytes of unstructured documents. Features hybrid BM25 and vector embeddings search, automated query reranking, and self-corrective retrieval logic.",
+      "liveUrl": "https://github.com/RAZAAli901/Enterprise-RAG-Pipeline",
+      "repoUrl": "https://github.com/RAZAAli901/Enterprise-RAG-Pipeline",
+      "features": [
+        "Dynamic document chunking with semantic headers overlap.",
+        "Integrated FAISS and ChromaDB retrievers.",
+        "Query expansion using OpenAI GPT model endpoints."
+      ],
+      "relatedSkills": ["Python", "LangChain", "FAISS", "FastAPI", "Vector Embeddings"]
+    },
+    {
+      "id": "Typing-Speed-Tester",
+      "name": "Typing Speed Test Engine",
+      "tech": "C++",
+      "status": "Stable",
+      "category": "cpp",
+      "featured": false,
+      "date": "2024-04",
+      "stars": 8,
+      "forks": 1,
+      "lastUpdated": "2024-05-18",
+      "description": "A fast terminal-based typing speed tester with real-time WPM, accuracy calculations, and neat ANSI colors.",
+      "longDescription": "High-performance native command-line typing simulator utilizing multi-threading for accurate microsecond keyboard event tracking. Generates stats summaries and performance reports.",
+      "liveUrl": "https://github.com/RAZAAli901/Typing-Speed-Tester",
+      "repoUrl": "https://github.com/RAZAAli901/Typing-Speed-Tester",
+      "features": [
+        "Multithreaded keyboard listener for latency-free tracking.",
+        "Real-time calculations of words-per-minute (WPM) and accuracy.",
+        "Full support for custom input paragraphs."
+      ],
+      "relatedSkills": ["C++", "CLI Design", "Multithreading", "Operating Systems API"]
+    }
+  ]
+}
