@@ -4,6 +4,7 @@ import { getHistory } from './localStorage';
 import portfolioData from '../data/portfolio.json';
 import { funFacts } from '../data/funFacts';
 import { resolveAbsolutePath, getFsItem } from './fileSystem';
+import { easterEggs } from '../data/easterEggs';
 
 // Helper handlers to reuse between aliases
 const resumeHandler = () => {
@@ -604,6 +605,123 @@ const systemInfoHandler = (args, context) => {
   };
 };
 
+const downloadHandler = (args) => {
+  const filename = args[0] ? args[0].toLowerCase() : null;
+  if (!filename) {
+    return {
+      type: 'text',
+      content: [
+        formatError("Usage: download [filename]"),
+        "Available files:",
+        "  • resume.pdf",
+        "  • portfolio.json",
+        "  • cv.txt"
+      ]
+    };
+  }
+  const validFiles = ['resume.pdf', 'portfolio.json', 'cv.txt'];
+  if (!validFiles.includes(filename)) {
+    return {
+      type: 'text',
+      content: [formatError(`File '${filename}' not found for download.`)]
+    };
+  }
+  return {
+    type: 'action',
+    action: 'download',
+    file: filename
+  };
+};
+
+const shareHandler = (args) => {
+  const type = args[0] ? args[0].toLowerCase() : null;
+  const name = args.slice(1).join(' ');
+  
+  if (!type) {
+    return {
+      type: 'text',
+      content: [
+        formatWarning("Usage: share [resume|portfolio|project [project-name]]"),
+        "",
+        "Examples:",
+        "  share portfolio",
+        "  share project Enterprise-RAG-Pipeline"
+      ]
+    };
+  }
+  
+  const portfolioUrl = window.location.origin + window.location.pathname;
+  
+  if (type === 'portfolio') {
+    const text = `Check out Raza Ali Murtaza's Interactive Terminal Portfolio: ${portfolioUrl}`;
+    return {
+      type: 'text',
+      content: [
+        ...formatSection('SHARE PORTFOLIO'),
+        `Link: ${formatLink(portfolioUrl, portfolioUrl)}`,
+        '',
+        formatWarning('Pre-filled Share Message:'),
+        formatCode(text),
+        '',
+        formatInfo('Link copied to clipboard (simulated)!')
+      ]
+    };
+  } else if (type === 'resume') {
+    const resumeUrl = `${portfolioUrl}resume.pdf`;
+    const text = `Check out Raza Ali Murtaza's Resume/CV: ${resumeUrl}`;
+    return {
+      type: 'text',
+      content: [
+        ...formatSection('SHARE RESUME'),
+        `Link: ${formatLink('Raza_Ali_Murtaza_Resume.pdf', resumeUrl)}`,
+        '',
+        formatWarning('Pre-filled Share Message:'),
+        formatCode(text)
+      ]
+    };
+  } else if (type === 'project') {
+    if (!name) {
+      return { type: 'text', content: [formatError("Usage: share project [project-name]")] };
+    }
+    const proj = portfolioData.projects.find(p => p.name.toLowerCase() === name.toLowerCase() || p.id.toLowerCase() === name.toLowerCase());
+    if (!proj) {
+      return { type: 'text', content: [formatError(`Project '${name}' not found.`)] };
+    }
+    const text = `Check out this project by Raza Ali Murtaza: ${proj.name} - ${proj.description} (${proj.repoUrl})`;
+    return {
+      type: 'text',
+      content: [
+        ...formatSection(`SHARE PROJECT: ${proj.name.toUpperCase()}`),
+        `Repo Link: ${formatLink(proj.name, proj.repoUrl)}`,
+        '',
+        formatWarning('Pre-filled Share Message:'),
+        formatCode(text)
+      ]
+    };
+  } else {
+    return { type: 'text', content: [formatError(`Unknown share type '${type}'. Use: share [resume|portfolio|project]`)] };
+  }
+};
+
+const secretHandler = () => {
+  return {
+    type: 'text',
+    content: [
+      ...formatSection('SECRET ARCHIVES'),
+      "🕵️ There are 10 hidden easter egg commands in this terminal.",
+      "Try typing some of these hidden keywords to unlock cheat codes and joke responses:",
+      "  • hack",
+      "  • coffee",
+      "  • halo",
+      "  • life",
+      "  • sudo make-me-a-sandwich",
+      "  • konami-code",
+      "",
+      formatInfo("Good luck finding them all!")
+    ]
+  };
+};
+
 // Will hold the full commands registry
 export const commands = [
   {
@@ -1086,6 +1204,34 @@ export const commands = [
     usage: 'info',
     examples: ['info'],
     handler: systemInfoHandler
+  },
+  {
+    name: 'download',
+    description: 'Download resume, portfolio JSON, or text CV details',
+    usage: 'download [resume.pdf|portfolio.json|cv.txt]',
+    examples: ['download resume.pdf'],
+    handler: downloadHandler
+  },
+  {
+    name: 'share',
+    description: 'Generate copyable link and pre-filled social messages',
+    usage: 'share [resume|portfolio|project [name]]',
+    examples: ['share portfolio', 'share project Enterprise-RAG-Pipeline'],
+    handler: shareHandler
+  },
+  {
+    name: 'easter-egg',
+    description: 'Provide hint logs for discovering hidden easter eggs',
+    usage: 'easter-egg',
+    examples: ['easter-egg'],
+    handler: secretHandler
+  },
+  {
+    name: 'secret',
+    description: 'Alias for easter-egg',
+    usage: 'secret',
+    examples: ['secret'],
+    handler: secretHandler
   }
 ];
 
@@ -1105,6 +1251,21 @@ export function handleCommand(rawInput, context = {}) {
   const args = trimmed.split(/\s+/);
   const cmdName = args[0].toLowerCase();
   const cmdArgs = args.slice(1);
+
+  // Intercept hidden easter eggs first
+  const fullLower = trimmed.toLowerCase();
+  if (easterEggs[fullLower]) {
+    return {
+      type: 'text',
+      content: easterEggs[fullLower]
+    };
+  }
+  if (easterEggs[cmdName]) {
+    return {
+      type: 'text',
+      content: easterEggs[cmdName]
+    };
+  }
 
   // Look up command in registry
   const cmd = commands.find(c => c.name === cmdName);
