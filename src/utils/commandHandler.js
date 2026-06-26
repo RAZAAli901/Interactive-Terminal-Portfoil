@@ -1232,6 +1232,40 @@ export const commands = [
     usage: 'secret',
     examples: ['secret'],
     handler: secretHandler
+  },
+  {
+    name: 'clear',
+    description: 'Clear the terminal output screen with optional keep or confirm flags',
+    usage: 'clear [--confirm|--keep N]',
+    examples: ['clear', 'clear --confirm', 'clear --keep 5'],
+    handler: (args) => {
+      if (args.includes('--confirm')) {
+        return {
+          type: 'action',
+          action: 'clear',
+          option: 'confirm'
+        };
+      }
+      
+      const keepIdx = args.indexOf('--keep');
+      if (keepIdx !== -1 && args[keepIdx + 1]) {
+        const parsed = parseInt(args[keepIdx + 1], 10);
+        if (!isNaN(parsed)) {
+          return {
+            type: 'action',
+            action: 'clear',
+            option: 'keep',
+            count: parsed
+          };
+        }
+      }
+      
+      return {
+        type: 'action',
+        action: 'clear',
+        option: 'all'
+      };
+    }
   }
 ];
 
