@@ -632,6 +632,49 @@ export const commands = [
     usage: 'software',
     examples: ['software'],
     handler: toolsHandler
+  },
+  {
+    name: 'ask',
+    description: "Ask Raza's AI assistant a question authentically answered in the first person",
+    usage: 'ask [question]',
+    examples: ['ask what is your RAG stack?', 'ask why should I hire you?'],
+    handler: (args) => {
+      const query = args.join(' ');
+      if (!query) {
+        return {
+          type: 'text',
+          content: [
+            formatWarning("Usage: ask [your question]"),
+            '',
+            "Example:",
+            "  ask what makes you different as an engineer?"
+          ]
+        };
+      }
+      return {
+        type: 'ai-assistant',
+        query: query
+      };
+    }
+  },
+  {
+    name: 'chat',
+    description: "Start an interactive chat session with Raza's AI assistant",
+    usage: 'chat [optional_question]',
+    examples: ['chat', 'chat tell me about your projects'],
+    handler: (args) => {
+      const query = args.join(' ');
+      if (query) {
+        return {
+          type: 'ai-assistant',
+          query: query
+        };
+      }
+      return {
+        type: 'action',
+        action: 'chat-interactive'
+      };
+    }
   }
 ];
 
