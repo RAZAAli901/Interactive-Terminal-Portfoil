@@ -60,6 +60,10 @@ body {
   --terminal-bg: #282a36;
   --terminal-text: #f8f8f2;
   --phosphor-color: #bd93f9;
+  --color-success: #50fa7b;
+  --color-error: #ff5555;
+  --color-info: #8be9fd;
+  --color-warning: #f1fa8c;
 }
 
 .theme-nord {
@@ -70,6 +74,10 @@ body {
   --terminal-bg: #2e3440;
   --terminal-text: #eceff4;
   --phosphor-color: #88c0d0;
+  --color-success: #a3be8c;
+  --color-error: #bf616a;
+  --color-info: #88c0d0;
+  --color-warning: #ebcb8b;
 }
 
 .theme-monokai {
@@ -80,6 +88,10 @@ body {
   --terminal-bg: #272822;
   --terminal-text: #f8f8f2;
   --phosphor-color: #66d9ef;
+  --color-success: #a6e22e;
+  --color-error: #f92672;
+  --color-info: #66d9ef;
+  --color-warning: #f4bf75;
 }
 
 .theme-retro {
@@ -90,6 +102,78 @@ body {
   --terminal-bg: #0c0c0c;
   --terminal-text: #00ff00;
   --phosphor-color: #00ff00;
+  --color-success: #00ff00;
+  --color-error: #ff3333;
+  --color-info: #33ccff;
+  --color-warning: #ffff33;
+}
+
+.theme-matrix {
+  --bg-color: #000000;
+  --text-color: #00ff00;
+  --prompt-color: #00ff00;
+  --admin-color: #00ff00;
+  --terminal-bg: #000000;
+  --terminal-text: #00ff00;
+  --phosphor-color: #00ff00;
+  --color-success: #00ff00;
+  --color-error: #ff3333;
+  --color-info: #00ff00;
+  --color-warning: #00ff00;
+}
+
+.theme-cyberpunk {
+  --bg-color: #0f051d;
+  --text-color: #ff007f;
+  --prompt-color: #00f0ff;
+  --admin-color: #faed27;
+  --terminal-bg: #120458;
+  --terminal-text: #ff007f;
+  --phosphor-color: #00f0ff;
+  --color-success: #00ff66;
+  --color-error: #ff0055;
+  --color-info: #00f0ff;
+  --color-warning: #faed27;
+}
+
+/* Custom Output Formatting Classes */
+.text-success {
+  color: var(--color-success, #10b981) !important;
+  font-weight: 500;
+}
+
+.text-error {
+  color: var(--color-error, #f43f5e) !important;
+  font-weight: 500;
+}
+
+.text-info {
+  color: var(--color-info, #3b82f6) !important;
+  font-weight: 500;
+}
+
+.text-warning {
+  color: var(--color-warning, #f59e0b) !important;
+  font-weight: 500;
+}
+
+.terminal-code {
+  background-color: rgba(128, 128, 128, 0.2);
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-family: var(--font-family);
+  font-size: 0.9em;
+}
+
+.terminal-link {
+  color: var(--phosphor-color, #3b82f6);
+  text-decoration: underline;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.terminal-link:hover {
+  filter: brightness(1.2);
 }
 
 @media (max-width: 768px) {
