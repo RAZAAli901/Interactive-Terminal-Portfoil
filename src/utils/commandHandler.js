@@ -78,6 +78,52 @@ const educationHandler = () => {
   };
 };
 
+const skillsHandler = (args) => {
+  const isDetailed = args.includes('--detailed');
+  const lines = [...formatSection('TECHNICAL SKILLS & STACK')];
+  
+  Object.entries(portfolioData.skills).forEach(([category, list]) => {
+    const catName = category.replace('_', '/').toUpperCase();
+    lines.push(formatWarning(`[ ${catName} ]`));
+    
+    list.forEach(skill => {
+      const namePart = skill.name.padEnd(15, ' ');
+      const barWidth = 15;
+      const filled = Math.round((skill.level / 100) * barWidth);
+      const bar = '▓'.repeat(filled) + '░'.repeat(barWidth - filled);
+      
+      let line = `  ${namePart} [${bar}] ${skill.level}%`;
+      if (isDetailed && skill.project) {
+        line += ` (Project: ${skill.project})`;
+      }
+      lines.push(line);
+    });
+    lines.push('');
+  });
+  
+  if (!isDetailed) {
+    lines.push(formatInfo("Tip: Type 'skills --detailed' to see associated projects for key skills."));
+  }
+  
+  return { type: 'text', content: lines };
+};
+
+const techHandler = () => {
+  return {
+    type: 'text',
+    content: [
+      ...formatSection('CURRENT TECH STACK DETAILS'),
+      `• ${formatInfo('Frontend')}: React 19, Vite, CSS Modules`,
+      `• ${formatInfo('Backend ')}: Node.js, Express, LangChain`,
+      `• ${formatInfo('Data    ')}: FAISS, Vector Embeddings, RAG`,
+      `• ${formatInfo('Vision  ')}: YOLO, OpenCV, Python`,
+      '',
+      formatSuccess(`Current focus: ${portfolioData.bio.currentFocus}`),
+      ''
+    ]
+  };
+};
+
 // Will hold the full commands registry
 export const commands = [
   {
@@ -208,6 +254,34 @@ export const commands = [
     usage: 'edu',
     examples: ['edu'],
     handler: educationHandler
+  },
+  {
+    name: 'skills',
+    description: 'Display technical skills as ASCII bar chart or grouped categories',
+    usage: 'skills [--detailed]',
+    examples: ['skills', 'skills --detailed'],
+    handler: skillsHandler
+  },
+  {
+    name: 'stack',
+    description: 'Alias for skills',
+    usage: 'stack [--detailed]',
+    examples: ['stack'],
+    handler: skillsHandler
+  },
+  {
+    name: 'tech',
+    description: 'Detailed breakdown of current technical stack and focus',
+    usage: 'tech',
+    examples: ['tech'],
+    handler: techHandler
+  },
+  {
+    name: 'stack-details',
+    description: 'Alias for tech',
+    usage: 'stack-details',
+    examples: ['stack-details'],
+    handler: techHandler
   }
 ];
 
