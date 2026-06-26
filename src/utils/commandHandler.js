@@ -3,6 +3,7 @@ import { getFuzzyMatches } from './fuzzyMatch';
 import { getHistory } from './localStorage';
 import portfolioData from '../data/portfolio.json';
 import { funFacts } from '../data/funFacts';
+import { resolveAbsolutePath, getFsItem } from './fileSystem';
 
 // Helper handlers to reuse between aliases
 const resumeHandler = () => {
@@ -384,6 +385,65 @@ const asciiArtHandler = () => {
   };
 };
 
+const lsHandler = (args, context) => {
+  const isLa = args.includes('-la') || args.includes('-a');
+  const pathArg = args.filter(a => !a.startsWith('-'))[0];
+  const current = context.currentPath || '/portfolio';
+  const target = pathArg ? resolveAbsolutePath(current, pathArg) : current;
+  
+  const item = getFsItem(target);
+  if (!item) {
+    return {
+      type: 'text',
+      content: [formatError(`ls: cannot access '${pathArg || ''}': No such file or directory`)]
+    };
+  }
+  
+  if (item.type !== 'dir') {
+    return {
+      type: 'text',
+      content: [item.name]
+    };
+  }
+  
+  const lines = [];
+  item.children.forEach(childName => {
+    const childPath = target === '/' ? `/${childName}` : `${target}/${childName}`;
+    const child = getFsItem(childPath);
+    if (!child) return;
+    if (child.hidden && !isLa) return;
+    
+    if (isLa) {
+      const typeChar = child.type === 'dir' ? 'd' : '-';
+      const sizeStr = (child.size || 0).toString().padStart(8, ' ');
+      const nameStr = child.type === 'dir' ? formatInfo(child.name + '/') : child.name;
+      lines.push(`${typeChar}r-xr-xr-x visitor staff ${sizeStr} Jun 26 12:00 ${nameStr}`);
+    } else {
+      const nameStr = child.type === 'dir' ? formatInfo(child.name + '/') : child.name;
+      lines.push(nameStr);
+    }
+  });
+  
+  return { type: 'text', content: lines };
+};
+
+const catHandler = (args, context) => {
+  const filename = args[0];
+  if (!filename) {
+    return { type: 'text', content: [formatError("Usage: cat [filename]")] };
+  }
+  const current = context.currentPath || '/portfolio';
+  const target = resolveAbsolutePath(current, filename);
+  const item = getFsItem(target);
+  if (!item || item.type !== 'file') {
+    return {
+      type: 'text',
+      content: [formatError(`cat: ${filename}: No such file or directory`)]
+    };
+  }
+  return { type: 'text', content: item.content };
+};
+
 // Will hold the full commands registry
 export const commands = [
   {
@@ -742,6 +802,74 @@ export const commands = [
     usage: 'banner',
     examples: ['banner'],
     handler: asciiArtHandler
+  },
+  {
+    name: 'ls',
+    description: 'List simulated directory contents',
+    usage: 'ls [-la] [directory_path]',
+    examples: ['ls', 'ls -la', 'ls projects'],
+    handler: lsHandler
+  },
+  {
+    name: 'dir',
+    description: 'Alias for ls',
+    usage: 'dir',
+    examples: ['dir'],
+    handler: lsHandler
+  },
+  {
+    name: 'cd',
+    description: 'Change simulated working directory',
+    usage: 'cd [directory_path]',
+    examples: ['cd projects', 'cd ..', 'cd /'],
+    handler: (args, context) => {
+      const pathArg = args[0];
+      const current = context.currentPath || '/portfolio';
+      const target = resolveAbsolutePath(current, pathArg);
+      const item = getFsItem(target);
+      if (!item || item.type !== 'dir') {
+        return {
+          type: 'text',
+          content: [formatError(`cd: ${pathArg || ''}: Directory not found`)]
+        };
+      }
+      return {
+        type: 'action',
+        action: 'cd',
+        path: target
+      };
+    }
+  },
+  {
+    name: 'cat',
+    description: 'Concatenate and display the content of simulated files',
+    usage: 'cat [file_name]',
+    examples: ['cat resume.pdf', 'cat about/about.txt'],
+    handler: catHandler
+  },
+  {
+    name: 'pwd',
+    description: 'Print simulated working directory',
+    usage: 'pwd',
+    examples: ['pwd'],
+    handler: (args, context) => {
+      return {
+        type: 'text',
+        content: [context.currentPath || '/portfolio']
+      };
+    }
+  },
+  {
+    name: 'path',
+    description: 'Alias for pwd',
+    usage: 'path',
+    examples: ['path'],
+    handler: (args, context) => {
+      return {
+        type: 'text',
+        content: [context.currentPath || '/portfolio']
+      };
+    }
   }
 ];
 
