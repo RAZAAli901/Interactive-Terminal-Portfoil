@@ -322,6 +322,43 @@ const connectHandler = (args) => {
   }
 };
 
+const blogHandler = () => {
+  return {
+    type: 'text',
+    content: [
+      ...formatSection("RAZA'S BLOG ARTICLES"),
+      `• ${formatSuccess('Building Scalable RAG Pipelines with FAISS and LangChain')}`,
+      `  A detailed guide to chunking strategies, semantic overlays, and similarity search indexing.`,
+      `  Read: ${formatLink('Read Article', 'https://medium.com')}`,
+      '',
+      `• ${formatSuccess('Fine-Tuning YOLOv8 for Multi-Object Tracking')}`,
+      `  How to train models on custom video datasets using PyTorch and optimize for real-time OpenCV threads.`,
+      `  Read: ${formatLink('Read Article', 'https://medium.com')}`,
+      '',
+      `• ${formatSuccess('Modern Retro UI States in React 19')}`,
+      `  An inside look at dragging, multitasking window architectures inside single-page web portfolios.`,
+      `  Read: ${formatLink('Read Article', 'https://medium.com')}`,
+      ''
+    ]
+  };
+};
+
+const toolsHandler = () => {
+  return {
+    type: 'text',
+    content: [
+      ...formatSection('DEVELOPMENT TOOLS & SOFTWARE'),
+      `• Code Editors  : VS Code, Cursor, JetBrains PyCharm`,
+      `• Versioning    : Git, GitHub, GitLab CI/CD`,
+      `• Design        : Figma (UI designs, wireframes)`,
+      `• Productivity  : Windows Terminal, Zsh, Vim`,
+      `• ML Tools      : Jupyter Notebooks, Google Colab, TensorBoard`,
+      `• Virtualization: Docker, Docker Compose, AWS EC2/S3`,
+      `• APIs/Testing  : Postman, FastAPI docs, Swagger`
+    ]
+  };
+};
+
 // Will hold the full commands registry
 export const commands = [
   {
@@ -553,6 +590,48 @@ export const commands = [
     usage: 'connect [linkedin|github|twitter|email]',
     examples: ['connect linkedin', 'connect email'],
     handler: connectHandler
+  },
+  {
+    name: 'blog',
+    description: 'List recent blog posts and articles written by Raza',
+    usage: 'blog',
+    examples: ['blog'],
+    handler: blogHandler
+  },
+  {
+    name: 'articles',
+    description: 'Alias for blog',
+    usage: 'articles',
+    examples: ['articles'],
+    handler: blogHandler
+  },
+  {
+    name: 'stats',
+    description: 'Show real-time GitHub contributions and account metrics',
+    usage: 'stats',
+    examples: ['stats'],
+    handler: () => ({ type: 'github-api', option: 'stats' })
+  },
+  {
+    name: 'metrics',
+    description: 'Alias for stats',
+    usage: 'metrics',
+    examples: ['metrics'],
+    handler: () => ({ type: 'github-api', option: 'stats' })
+  },
+  {
+    name: 'tools',
+    description: 'List development tools, editors, and utilities regularly used',
+    usage: 'tools',
+    examples: ['tools'],
+    handler: toolsHandler
+  },
+  {
+    name: 'software',
+    description: 'Alias for tools',
+    usage: 'software',
+    examples: ['software'],
+    handler: toolsHandler
   }
 ];
 
