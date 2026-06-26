@@ -1,5 +1,6 @@
 import { formatTable, formatSuccess, formatError, formatInfo, formatWarning, formatSection } from './terminalFormatting';
 import { getFuzzyMatches } from './fuzzyMatch';
+import { getHistory } from './localStorage';
 
 // Will hold the full commands registry
 export const commands = [
@@ -50,6 +51,44 @@ export const commands = [
           ]
         };
       }
+    }
+  },
+  {
+    name: 'history',
+    description: 'Display recently typed commands',
+    usage: 'history [--limit N]',
+    examples: ['history', 'history --limit 15'],
+    handler: (args) => {
+      let limit = 20;
+      const limitIdx = args.indexOf('--limit');
+      if (limitIdx !== -1 && args[limitIdx + 1]) {
+        const parsed = parseInt(args[limitIdx + 1], 10);
+        if (!isNaN(parsed)) limit = parsed;
+      }
+      
+      const historyList = getHistory();
+      if (historyList.length === 0) {
+        return {
+          type: 'text',
+          content: [formatInfo('No command history found.')]
+        };
+      }
+      
+      const displayed = historyList.slice(-limit);
+      const outputLines = displayed.map((cmd, i) => {
+        const index = (historyList.length - displayed.length + i + 1).toString().padStart(3, ' ');
+        return `  ${index}  ${cmd}`;
+      });
+      
+      return {
+        type: 'text',
+        content: [
+          ...formatSection('COMMAND HISTORY'),
+          ...outputLines,
+          '',
+          formatInfo(`Showing last ${displayed.length} commands. Total stored: ${historyList.length}`)
+        ]
+      };
     }
   }
 ];
