@@ -1,16 +1,17 @@
 import { useState, useEffect, useRef } from 'react';
 import styles from './CommandInput.module.css';
 
+import { commands } from '../utils/commandHandler';
+
 export default function CommandInput({ onSubmit, mode = 'command', history = [], isAdmin = false }) {
     const [input, setInput] = useState('');
     const [historyIndex, setHistoryIndex] = useState(-1);
     const [suggestion, setSuggestion] = useState('');
+    const [prefix, setPrefix] = useState('');
+    const [filteredHistory, setFilteredHistory] = useState([]);
     const inputRef = useRef(null);
 
-    const availableCommands = [
-        'about', 'projects', 'contact', 'clear', 'help', 'fastfetch', 
-        'sudo', 'wallpaper', 'exit', 'ask', 'chat', 'github', 'skills', 'theme'
-    ];
+    const availableCommands = commands.map(c => c.name);
 
     useEffect(() => {
         if (inputRef.current) {
@@ -18,33 +19,47 @@ export default function CommandInput({ onSubmit, mode = 'command', history = [],
         }
     }, [history]);
 
-    const [tempInput, setTempInput] = useState('');
-
     const handleKeyDown = (e) => {
         if (e.key === 'Enter') {
             onSubmit(input);
             setInput('');
             setHistoryIndex(-1);
-            setTempInput('');
+            setPrefix('');
+            setFilteredHistory([]);
         } else if (e.key === 'ArrowUp') {
             e.preventDefault();
             if (history.length > 0) {
+                let currentPrefix = prefix;
+                let currentFiltered = filteredHistory;
+                
                 if (historyIndex === -1) {
-                    setTempInput(input);
+                    currentPrefix = input;
+                    setPrefix(input);
+                    // Filter history starting with the prefix, keeping uniqueness
+                    const uniqueHistory = Array.from(new Set(history));
+                    currentFiltered = uniqueHistory.filter(cmd => 
+                        cmd.toLowerCase().startsWith(input.toLowerCase())
+                    );
+                    setFilteredHistory(currentFiltered);
                 }
-                const newIndex = historyIndex < history.length - 1 ? historyIndex + 1 : historyIndex;
-                setHistoryIndex(newIndex);
-                setInput(history[history.length - 1 - newIndex]);
+                
+                if (currentFiltered.length > 0) {
+                    const newIndex = historyIndex < currentFiltered.length - 1 ? historyIndex + 1 : historyIndex;
+                    setHistoryIndex(newIndex);
+                    setInput(currentFiltered[currentFiltered.length - 1 - newIndex]);
+                }
             }
         } else if (e.key === 'ArrowDown') {
             e.preventDefault();
             if (historyIndex > 0) {
                 const newIndex = historyIndex - 1;
                 setHistoryIndex(newIndex);
-                setInput(history[history.length - 1 - newIndex]);
+                setInput(filteredHistory[filteredHistory.length - 1 - newIndex]);
             } else if (historyIndex === 0) {
                 setHistoryIndex(-1);
-                setInput(tempInput);
+                setInput(prefix);
+                setPrefix('');
+                setFilteredHistory([]);
             }
         } else if (e.key === 'Tab') {
             e.preventDefault();
@@ -53,6 +68,13 @@ export default function CommandInput({ onSubmit, mode = 'command', history = [],
                 setSuggestion('');
             }
         }
+    };
+
+    const handleInputChange = (e) => {
+        setInput(e.target.value);
+        setHistoryIndex(-1);
+        setPrefix('');
+        setFilteredHistory([]);
     };
 
     useEffect(() => {
@@ -88,7 +110,7 @@ export default function CommandInput({ onSubmit, mode = 'command', history = [],
                     ref={inputRef}
                     type={mode === 'password' ? 'password' : 'text'}
                     value={input}
-                    onChange={(e) => setInput(e.target.value)}
+                    onChange={handleInputChange}
                     onKeyDown={handleKeyDown}
                     className={styles.hiddenInput}
                     autoFocus
