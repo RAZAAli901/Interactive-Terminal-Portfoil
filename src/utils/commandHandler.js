@@ -444,6 +444,105 @@ const catHandler = (args, context) => {
   return { type: 'text', content: item.content };
 };
 
+const searchHandler = (args) => {
+  const keyword = args.join(' ').toLowerCase().trim();
+  if (!keyword) {
+    return { type: 'text', content: [formatError("Usage: find [keyword]")] };
+  }
+  
+  const results = [...formatSection(`SEARCH RESULTS FOR '${keyword.toUpperCase()}'`)];
+  let found = false;
+
+  const highlight = (text) => {
+    if (typeof text !== 'string') return text;
+    const regex = new RegExp(`(${keyword})`, 'gi');
+    return text.replace(regex, `<strong class="text-success">$1</strong>`);
+  };
+
+  const matchingProj = portfolioData.projects.filter(p => 
+    p.name.toLowerCase().includes(keyword) || 
+    p.description.toLowerCase().includes(keyword) || 
+    p.longDescription.toLowerCase().includes(keyword) || 
+    p.tech.toLowerCase().includes(keyword)
+  );
+  if (matchingProj.length > 0) {
+    found = true;
+    results.push(formatWarning("[ PROJECTS ]"));
+    matchingProj.forEach(p => {
+      results.push(`  • Project: ${highlight(p.name)}`);
+      results.push(`    Tech   : ${highlight(p.tech)}`);
+      results.push(`    Desc   : ${highlight(p.description)}`);
+      results.push('');
+    });
+  }
+
+  const matchingSkills = [];
+  Object.entries(portfolioData.skills).forEach(([cat, list]) => {
+    list.forEach(s => {
+      if (s.name.toLowerCase().includes(keyword)) {
+        matchingSkills.push({ name: s.name, cat: cat.replace('_', '/') });
+      }
+    });
+  });
+  if (matchingSkills.length > 0) {
+    found = true;
+    results.push(formatWarning("[ SKILLS ]"));
+    matchingSkills.forEach(s => {
+      results.push(`  • Skill: ${highlight(s.name)} (Category: ${s.cat})`);
+    });
+    results.push('');
+  }
+
+  const matchingExp = portfolioData.experience.filter(job => 
+    job.role.toLowerCase().includes(keyword) || 
+    job.company.toLowerCase().includes(keyword) || 
+    job.details.some(d => d.toLowerCase().includes(keyword))
+  );
+  if (matchingExp.length > 0) {
+    found = true;
+    results.push(formatWarning("[ EXPERIENCE ]"));
+    matchingExp.forEach(job => {
+      results.push(`  • Position: ${highlight(job.role)} at ${highlight(job.company)} (${job.period})`);
+      job.details.forEach(d => {
+        if (d.toLowerCase().includes(keyword)) {
+          results.push(`    - ${highlight(d)}`);
+        }
+      });
+      results.push('');
+    });
+  }
+
+  if (!found) {
+    results.push(formatInfo(`No matches found for '${keyword}'.`));
+  }
+
+  return { type: 'text', content: results };
+};
+
+const commandsListHandler = () => {
+  const sorted = [...commands].sort((a, b) => a.name.localeCompare(b.name));
+  const lines = [...formatSection('COMMANDS REGISTRY')];
+  
+  const getCatLabel = (name) => {
+    const system = ['clear', 'ls', 'dir', 'cd', 'pwd', 'path', 'cat', 'history', 'theme', 'color-scheme', 'system-info', 'info', 'download', 'help'];
+    const portfolio = ['resume', 'cv', 'experience', 'exp', 'education', 'edu', 'skills', 'stack', 'tech', 'stack-details', 'projects', 'portfolio', 'open-project', 'github'];
+    const info = ['contact', 'email', 'hire-me', 'available', 'connect', 'blog', 'articles', 'stats', 'metrics', 'tools', 'software', 'share'];
+    
+    if (system.includes(name)) return formatInfo('[System]   ');
+    if (portfolio.includes(name)) return formatSuccess('[Portfolio]');
+    if (info.includes(name)) return formatWarning('[Info]     ');
+    return `<span class="text-error">[Fun]      </span>`;
+  };
+
+  sorted.forEach(c => {
+    lines.push(`  ${getCatLabel(c.name)}  ${c.name.padEnd(16)} - ${c.description}`);
+  });
+  
+  lines.push('');
+  lines.push(formatSuccess(`Total commands registered: ${commands.length}`));
+  return { type: 'text', content: lines };
+};
+
 // Will hold the full commands registry
 export const commands = [
   {
@@ -870,6 +969,34 @@ export const commands = [
         content: [context.currentPath || '/portfolio']
       };
     }
+  },
+  {
+    name: 'find',
+    description: 'Search across all portfolio content (projects, experience, skills)',
+    usage: 'find [keyword]',
+    examples: ['find ml', 'find react'],
+    handler: searchHandler
+  },
+  {
+    name: 'search',
+    description: 'Alias for find',
+    usage: 'search [keyword]',
+    examples: ['search backend'],
+    handler: searchHandler
+  },
+  {
+    name: 'ls-commands',
+    description: 'List all commands grouped by category with a clean registry grid',
+    usage: 'ls-commands',
+    examples: ['ls-commands'],
+    handler: commandsListHandler
+  },
+  {
+    name: 'commands',
+    description: 'Alias for ls-commands',
+    usage: 'commands',
+    examples: ['commands'],
+    handler: commandsListHandler
   }
 ];
 
