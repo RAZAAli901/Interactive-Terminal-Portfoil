@@ -2,6 +2,7 @@ import { formatTable, formatSuccess, formatError, formatInfo, formatWarning, for
 import { getFuzzyMatches } from './fuzzyMatch';
 import { getHistory } from './localStorage';
 import portfolioData from '../data/portfolio.json';
+import { funFacts } from '../data/funFacts';
 
 // Helper handlers to reuse between aliases
 const resumeHandler = () => {
@@ -359,6 +360,30 @@ const toolsHandler = () => {
   };
 };
 
+const funFactHandler = () => {
+  const idx = Math.floor(Math.random() * funFacts.length);
+  return {
+    type: 'text',
+    content: [
+      ...formatSection('RANDOM FACT'),
+      formatSuccess(funFacts[idx]),
+      ''
+    ]
+  };
+};
+
+const asciiArtHandler = () => {
+  return {
+    type: 'text',
+    content: [
+      "    ╔═══════════════════════════════════╗",
+      "    ║   RAZA ALI - AI/ML ENGINEER       ║",
+      "    ║   Making terminals interactive    ║",
+      "    ╚═══════════════════════════════════╝"
+    ]
+  };
+};
+
 // Will hold the full commands registry
 export const commands = [
   {
@@ -675,6 +700,48 @@ export const commands = [
         action: 'chat-interactive'
       };
     }
+  },
+  {
+    name: 'random-fact',
+    description: 'Display a random technology or personal fact about Raza',
+    usage: 'random-fact',
+    examples: ['random-fact'],
+    handler: funFactHandler
+  },
+  {
+    name: 'fun-fact',
+    description: 'Alias for random-fact',
+    usage: 'fun-fact',
+    examples: ['fun-fact'],
+    handler: funFactHandler
+  },
+  {
+    name: 'matrix',
+    description: 'Display falling green Matrix character rain screensaver',
+    usage: 'matrix',
+    examples: ['matrix'],
+    handler: () => ({ type: 'action', action: 'matrix' })
+  },
+  {
+    name: 'screensaver',
+    description: 'Alias for matrix',
+    usage: 'screensaver',
+    examples: ['screensaver'],
+    handler: () => ({ type: 'action', action: 'matrix' })
+  },
+  {
+    name: 'ascii-art',
+    description: 'Display an ASCII art header banner of my brand name',
+    usage: 'ascii-art',
+    examples: ['ascii-art'],
+    handler: asciiArtHandler
+  },
+  {
+    name: 'banner',
+    description: 'Alias for ascii-art',
+    usage: 'banner',
+    examples: ['banner'],
+    handler: asciiArtHandler
   }
 ];
 
