@@ -21,18 +21,19 @@ import Store from "./components/Store";
 import SnippingTool from "./components/SnippingTool";
 import Vscode from "./components/Vscode";
 import Minesweeper from "./components/Minesweeper";
+import { getThemePreference, saveThemePreference } from './utils/localStorage';
 
 import styles from './App.module.css';
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [wallpaper, setWallpaper] = useState(4); // Default wallpaper ID
-  const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'retro');
+  const [theme, setTheme] = useState(getThemePreference);
 
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    localStorage.setItem('theme', theme);
+    saveThemePreference(theme);
   }, [theme]);
 
   useEffect(() => {
