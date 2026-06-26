@@ -219,6 +219,109 @@ const openProjectHandler = (args) => {
   };
 };
 
+const contactHandler = (args) => {
+  if (args.includes('--send')) {
+    return {
+      type: 'action',
+      action: 'contact-send'
+    };
+  }
+  
+  const { email, linkedin, github, twitter, location, timezone } = portfolioData.bio;
+  // Mask email: razaalymurtaza@gmail.com -> r***a@gmail.com
+  const maskedEmail = email.replace(/^(.)(.*)(.@.*)$/, (_, first, middle, last) => {
+    return `${first}${'*'.repeat(middle.length)}${last}`;
+  });
+  
+  return {
+    type: 'text',
+    content: [
+      ...formatSection('CONTACT INFORMATION'),
+      `• Email    : ${maskedEmail} (use 'contact --send' to send a message)`,
+      `• LinkedIn : ${linkedin}`,
+      `• GitHub   : ${github}`,
+      `• Twitter  : ${twitter}`,
+      `• Location : ${location}`,
+      `• Timezone : ${timezone}`,
+      '',
+      formatInfo("To send an email directly, type: 'contact --send'")
+    ]
+  };
+};
+
+const hireMeHandler = () => {
+  const { availability, rate, responseTime, relocation } = portfolioData.bio;
+  return {
+    type: 'text',
+    content: [
+      ...formatSection('HIRING STATUS & AVAILABILITY'),
+      `• Status       : ${formatSuccess(availability)}`,
+      `• Hourly Rate  : ${rate}`,
+      `• Response Time: ${responseTime}`,
+      `• Relocation   : ${relocation}`,
+      `• Best Reach   : run 'contact --send'`,
+      '',
+      formatSuccess("Open for contract, full-time AI/ML, and full-stack opportunities.")
+    ]
+  };
+};
+
+const connectHandler = (args) => {
+  const platform = args[0] ? args[0].toLowerCase() : null;
+  const { linkedin, github, twitter, email } = portfolioData.bio;
+  
+  if (!platform) {
+    return {
+      type: 'text',
+      content: [
+        formatWarning("Usage: connect [linkedin|github|twitter|email]"),
+        '',
+        "Available platforms:",
+        `  • linkedin  : ${linkedin}`,
+        `  • github    : ${github}`,
+        `  • twitter   : ${twitter}`,
+        `  • email     : Send a message`
+      ]
+    };
+  }
+  
+  if (platform === 'linkedin') {
+    return {
+      type: 'text',
+      content: [
+        formatSuccess("LinkedIn Profile:"),
+        formatLink("Raza Ali Murtaza on LinkedIn", `https://${linkedin}`)
+      ]
+    };
+  } else if (platform === 'github') {
+    return {
+      type: 'text',
+      content: [
+        formatSuccess("GitHub Profile:"),
+        formatLink("Raza Ali Murtaza on GitHub", `https://${github}`)
+      ]
+    };
+  } else if (platform === 'twitter' || platform === 'x') {
+    return {
+      type: 'text',
+      content: [
+        formatSuccess("Twitter Profile:"),
+        formatLink("Raza Ali Murtaza on Twitter", `https://twitter.com/${twitter.replace('@', '')}`)
+      ]
+    };
+  } else if (platform === 'email') {
+    return {
+      type: 'action',
+      action: 'contact-send'
+    };
+  } else {
+    return {
+      type: 'text',
+      content: [formatError(`Unknown platform '${platform}'. Use: connect [linkedin|github|twitter|email]`)]
+    };
+  }
+};
+
 // Will hold the full commands registry
 export const commands = [
   {
@@ -415,6 +518,41 @@ export const commands = [
         option: option
       };
     }
+  },
+  {
+    name: 'contact',
+    description: 'Display contact details (email, LinkedIn, GitHub, Location) or send a message',
+    usage: 'contact [--send]',
+    examples: ['contact', 'contact --send'],
+    handler: contactHandler
+  },
+  {
+    name: 'email',
+    description: 'Alias for contact',
+    usage: 'email [--send]',
+    examples: ['email'],
+    handler: contactHandler
+  },
+  {
+    name: 'hire-me',
+    description: 'Show availability, rates, and engagement options',
+    usage: 'hire-me',
+    examples: ['hire-me'],
+    handler: hireMeHandler
+  },
+  {
+    name: 'available',
+    description: 'Alias for hire-me',
+    usage: 'available',
+    examples: ['available'],
+    handler: hireMeHandler
+  },
+  {
+    name: 'connect',
+    description: 'Provides profiles links or direct message flow for platforms',
+    usage: 'connect [linkedin|github|twitter|email]',
+    examples: ['connect linkedin', 'connect email'],
+    handler: connectHandler
   }
 ];
 
