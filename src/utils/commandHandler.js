@@ -543,6 +543,67 @@ const commandsListHandler = () => {
   return { type: 'text', content: lines };
 };
 
+const themeHandler = (args) => {
+  const target = args[0] ? args[0].toLowerCase() : null;
+  const themes = ['dracula', 'nord', 'monokai', 'matrix', 'cyberpunk', 'retro'];
+  if (!target) {
+    return {
+      type: 'text',
+      content: [
+        ...formatSection('THEME SCHEMES'),
+        "Usage: theme [theme-name]",
+        "",
+        "Available themes:",
+        ...themes.map(t => `  • ${t}`)
+      ]
+    };
+  }
+  if (!themes.includes(target)) {
+    return {
+      type: 'text',
+      content: [
+        formatError(`Unknown theme '${target}'.`),
+        `Available themes: ${themes.join(', ')}`
+      ]
+    };
+  }
+  return {
+    type: 'action',
+    action: 'theme',
+    theme: target
+  };
+};
+
+const systemInfoHandler = (args, context) => {
+  let uptime = '1m 24s';
+  if (window.performance && window.performance.now) {
+    const ms = window.performance.now();
+    const secs = Math.floor(ms / 1000) % 60;
+    const mins = Math.floor(ms / 60000) % 60;
+    const hrs = Math.floor(ms / 3600000);
+    uptime = `${hrs > 0 ? hrs + 'h ' : ''}${mins > 0 ? mins + 'm ' : ''}${secs}s`;
+  }
+  return {
+    type: 'text',
+    content: [
+      "       .---.",
+      "      /     \\",
+      "      | O_O |",
+      "      |  _  |",
+      "      \\_____/",
+      "",
+      `OS       : Interactive Terminal Portfolio v1.0`,
+      `Kernel   : React 19 + Vite`,
+      `Uptime   : ${uptime}`,
+      `Terminal : xterm-256color`,
+      `Shell    : /bin/portfolio`,
+      `User     : Raza Ali`,
+      `CPU      : 100% Brain Power`,
+      `Memory   : Infinite Creativity`
+    ]
+  };
+};
+
 // Will hold the full commands registry
 export const commands = [
   {
@@ -997,6 +1058,34 @@ export const commands = [
     usage: 'commands',
     examples: ['commands'],
     handler: commandsListHandler
+  },
+  {
+    name: 'theme',
+    description: 'Switch terminal color scheme and persist preference',
+    usage: 'theme [dracula|nord|monokai|matrix|cyberpunk|retro]',
+    examples: ['theme matrix', 'theme'],
+    handler: themeHandler
+  },
+  {
+    name: 'color-scheme',
+    description: 'Alias for theme',
+    usage: 'color-scheme [theme_name]',
+    examples: ['color-scheme dracula'],
+    handler: themeHandler
+  },
+  {
+    name: 'system-info',
+    description: 'Display simulated system-like parameters and uptime metrics',
+    usage: 'system-info',
+    examples: ['system-info'],
+    handler: systemInfoHandler
+  },
+  {
+    name: 'info',
+    description: 'Alias for system-info',
+    usage: 'info',
+    examples: ['info'],
+    handler: systemInfoHandler
   }
 ];
 
