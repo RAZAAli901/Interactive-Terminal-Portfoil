@@ -745,6 +745,37 @@ const weatherHandler = (args) => {
   };
 };
 
+
+const dateHandler = () => {
+  const now = new Date();
+  const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const firstDay = new Date(now.getFullYear(), now.getMonth(), 1).getDay();
+  const totalDays = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+  const calendarLines = [' S  M  T  W  T  F  S'];
+  let currentWeek = ' '.repeat(firstDay * 3);
+  for (let day = 1; day <= totalDays; day++) {
+    const isToday = day === now.getDate();
+    const dayStr = day.toString().padStart(2, ' ');
+    currentWeek += isToday ? `<span class="text-success">${dayStr}</span> ` : `${dayStr} `;
+    if ((day + firstDay) % 7 === 0 || day === totalDays) {
+      calendarLines.push(currentWeek);
+      currentWeek = '';
+    }
+  }
+  return {
+    type: 'text',
+    content: [
+      ...formatSection('SYSTEM DATE & CALENDAR'),
+      `Local Time : ${now.toString()}`,
+      `Month      : ${months[now.getMonth()]} ${now.getFullYear()}`,
+      ``,
+      ...calendarLines,
+      ``
+    ]
+  };
+};
+
 export const commands = [
   {
     name: 'weather',
@@ -752,6 +783,20 @@ export const commands = [
     usage: 'weather [location]',
     examples: ['weather', 'weather Lahore'],
     handler: weatherHandler
+  },
+  {
+    name: 'date',
+    description: 'Display current system date and calendar grid',
+    usage: 'date',
+    examples: ['date', 'cal'],
+    handler: dateHandler
+  },
+  {
+    name: 'cal',
+    description: 'Alias for date',
+    usage: 'cal',
+    examples: ['cal'],
+    handler: dateHandler
   },
   {
     name: 'help',
