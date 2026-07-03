@@ -133,8 +133,23 @@ export default function Chat() {
 
             {/* Chat Area */}
             <div className={styles.chatWindow}>
-                <div className={styles.chatHeader}>
-                    {threads[activeThread].avatar} {threads[activeThread].name}
+                <div className={styles.chatHeader} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span>{threads[activeThread].avatar} {threads[activeThread].name}</span>
+                    <button 
+                        onClick={() => {
+                            const formatted = activeMessages.map(m => `[${m.time}] ${m.sender === 'me' ? 'User' : 'Assistant'}: ${m.text}`).join('\n');
+                            const blob = new Blob([formatted], { type: 'text/plain' });
+                            const url = URL.createObjectURL(blob);
+                            const a = document.createElement('a');
+                            a.href = url;
+                            a.download = `${activeThread}_transcript.txt`;
+                            a.click();
+                            URL.revokeObjectURL(url);
+                        }}
+                        style={{ background: '#0078d4', color: '#fff', border: 'none', padding: '4px 8px', borderRadius: '4px', fontSize: '11px', cursor: 'pointer' }}
+                    >
+                        💾 Export Chat
+                    </button>
                 </div>
                 <div className={styles.messageArea}>
                     {activeMessages.map((msg) => (
