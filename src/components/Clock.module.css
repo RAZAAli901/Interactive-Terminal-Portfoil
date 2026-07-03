@@ -164,3 +164,29 @@
     font-size: 24px;
     font-family: monospace;
 }
+.worldClocks {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 12px;
+    padding: 10px;
+}
+.worldClockItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #2b2b2b;
+    padding: 12px 20px;
+    border-radius: 6px;
+    border: 1px solid #444;
+}
+.worldClockInfo {
+    display: flex;
+    flex-direction: column;
+}
+.worldClockTime {
+    font-size: 20px;
+    font-weight: bold;
+    font-family: monospace;
+    color: #0078d4;
+}

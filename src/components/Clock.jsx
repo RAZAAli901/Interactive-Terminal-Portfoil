@@ -2,6 +2,12 @@ import { useState, useEffect, useRef } from 'react';
 import styles from './Clock.module.css';
 
 export default function Clock() {
+    const formatTimeZone = (offset) => {
+        const utc = time.getTime() + (time.getTimezoneOffset() * 60000);
+        const nd = new Date(utc + (3600000 * offset));
+        return nd.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    };
+
     const [activeTab, setActiveTab] = useState('clock');
     
     // World Clock state
@@ -142,6 +148,7 @@ export default function Clock() {
                 <div className={`${styles.tab} ${activeTab === 'clock' ? styles.activeTab : ''}`} onClick={() => setActiveTab('clock')}>Clock</div>
                 <div className={`${styles.tab} ${activeTab === 'stopwatch' ? styles.activeTab : ''}`} onClick={() => setActiveTab('stopwatch')}>Stopwatch</div>
                 <div className={`${styles.tab} ${activeTab === 'timer' ? styles.activeTab : ''}`} onClick={() => setActiveTab('timer')}>Timer</div>
+                <div className={`${styles.tab} ${activeTab === 'world' ? styles.activeTab : ''}`} onClick={() => setActiveTab('world')}>World Clock</div>
             </div>
 
             <div className={styles.tabContent}>
@@ -203,6 +210,38 @@ export default function Clock() {
                     </>
                 )}
 
+                {activeTab === 'world' && (
+                    <div className={styles.worldClocks}>
+                        <div className={styles.worldClockItem}>
+                            <div className={styles.worldClockInfo}>
+                                <span style={{ fontWeight: 'bold' }}>Lahore, Pakistan</span>
+                                <span style={{ fontSize: '12px', color: '#a0a0a0' }}>GMT +5</span>
+                            </div>
+                            <span className={styles.worldClockTime}>{formatTimeZone(5)}</span>
+                        </div>
+                        <div className={styles.worldClockItem}>
+                            <div className={styles.worldClockInfo}>
+                                <span style={{ fontWeight: 'bold' }}>Silicon Valley, USA</span>
+                                <span style={{ fontSize: '12px', color: '#a0a0a0' }}>GMT -7 (PDT)</span>
+                            </div>
+                            <span className={styles.worldClockTime}>{formatTimeZone(-7)}</span>
+                        </div>
+                        <div className={styles.worldClockItem}>
+                            <div className={styles.worldClockInfo}>
+                                <span style={{ fontWeight: 'bold' }}>London, UK</span>
+                                <span style={{ fontSize: '12px', color: '#a0a0a0' }}>GMT +1 (BST)</span>
+                            </div>
+                            <span className={styles.worldClockTime}>{formatTimeZone(1)}</span>
+                        </div>
+                        <div className={styles.worldClockItem}>
+                            <div className={styles.worldClockInfo}>
+                                <span style={{ fontWeight: 'bold' }}>Tokyo, Japan</span>
+                                <span style={{ fontSize: '12px', color: '#a0a0a0' }}>GMT +9</span>
+                            </div>
+                            <span className={styles.worldClockTime}>{formatTimeZone(9)}</span>
+                        </div>
+                    </div>
+                )}
                 {activeTab === 'timer' && (
                     <>
                         {!timerRunning && timerRemaining === timerTotal && (
