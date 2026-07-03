@@ -118,6 +118,11 @@ export default function Notepad() {
                 onChange={(e) => setContent(e.target.value)}
                 spellCheck="false"
             />
+            <div className={styles.statusBar}>
+                <span>Lines: {content.split('\n').length}</span>
+                <span>Words: {content.trim().split(/\s+/).filter(Boolean).length}</span>
+                <span>Chars: {content.length}</span>
+            </div>
         </div>
     );
 }
