@@ -1,4 +1,4 @@
-import { formatTable, formatSuccess, formatError, formatInfo, formatWarning, formatSection } from './terminalFormatting';
+import { formatTable, formatSuccess, formatError, formatInfo, formatWarning, formatSection, formatBadge } from './terminalFormatting';
 import { getFuzzyMatches } from './fuzzyMatch';
 import { getHistory } from './localStorage';
 import portfolioData from '../data/portfolio.json';
@@ -723,7 +723,36 @@ const secretHandler = () => {
 };
 
 // Will hold the full commands registry
+
+const weatherHandler = (args) => {
+  const loc = args.join(' ') || 'Lahore, PK';
+  return {
+    type: 'text',
+    content: [
+      ...formatSection(`WEATHER REPORT: ${loc.toUpperCase()}`),
+      `Status     : ${formatBadge('success', 'current')} Mostly Clear / Cyber-haze`,
+      `Temperature: 28°C (Feels like 31°C)`,
+      `Wind       : 12 km/h North-East | Humidity: 65%`,
+      ``,
+      `3-Day Forecast:`,
+      `  ┌────────────┬────────────┬────────────┐`,
+      `  │ Tomorrow   │ Day After  │ Next Day   │`,
+      `  ├────────────┼────────────┼────────────┤`,
+      `  │ 🌤️ 29°C    │ ⛈️ 24°C     │ ☀️ 31°C     │`,
+      `  │ Sunny      │ Rainstorm  │ Hot        │`,
+      `  └────────────┴────────────┴────────────┘`
+    ]
+  };
+};
+
 export const commands = [
+  {
+    name: 'weather',
+    description: 'Display mock current weather and forecast for Lahore or your location',
+    usage: 'weather [location]',
+    examples: ['weather', 'weather Lahore'],
+    handler: weatherHandler
+  },
   {
     name: 'help',
     description: 'Display help information for all commands or a specific command',
