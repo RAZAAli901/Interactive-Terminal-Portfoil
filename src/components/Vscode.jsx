@@ -154,6 +154,7 @@ export const handleCommand = (command, { setTheme, setWallpaper } = {}) => {
             {/* Sidebar */}
             <div className={styles.sidebar}>
                 <div className={styles.sidebarTitle}>Explorer: Workspace</div>
+                <div style={{ fontSize: '11px', color: '#6a737d', paddingLeft: '8px', marginBottom: '4px', textTransform: 'uppercase', fontWeight: 'bold' }}>📁 src</div>
                 <div className={styles.fileList}>
                     {Object.keys(files).map(fileName => (
                         <div 
