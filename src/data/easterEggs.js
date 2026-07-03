@@ -50,5 +50,20 @@ export const easterEggs = {
   ],
   "hello": [
     "👋 Hello Visitor! Welcome to Raza's terminal. Type 'help' to begin your journey."
+  ],
+  "doom": [
+    "😈 E1M1: Hangar initialized. 😈",
+    "Loading DOOM... [▓▓▓▓▓▓▓▓▓▓] 100%",
+    "Press Ctrl+Alt+Doom to shoot. (Just kidding, try opening the Store app!)"
+  ],
+  "sudo rm -rf": [
+    "⚠️ WARNING: Root filesystem deletion requested.",
+    "Bypassing safe limits... [▓▓▓▓▓▓▓▓▓▓] 100%",
+    "Deleting /portfolio... Access Denied! Nice try."
+  ],
+  "matrix": [
+    "🕶️ Wake up, Neo... The Matrix has you.",
+    "Follow the white rabbit. 🐇",
+    "Hint: Try typing 'matrix' or opening the Matrix Screensaver!"
   ]
 };
