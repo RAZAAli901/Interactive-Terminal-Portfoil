@@ -798,6 +798,32 @@ const quoteHandler = () => {
   };
 };
 
+
+const ipconfigHandler = () => {
+  return {
+    type: 'text',
+    content: [
+      ...formatSection('WINDOWS IP CONFIGURATION'),
+      ``,
+      `Ethernet adapter Ethernet0:`,
+      `   Connection-specific DNS Suffix  . : dynamic.fiber.net`,
+      `   IPv6 Address. . . . . . . . . . . : fe80::a1b2:c3d4:e5f6:7890%4`,
+      `   IPv4 Address. . . . . . . . . . . : 192.168.1.105`,
+      `   Subnet Mask . . . . . . . . . . . : 255.255.255.0`,
+      `   Default Gateway . . . . . . . . . : 192.168.1.1`,
+      ``,
+      `Wireless LAN adapter Wi-Fi:`,
+      `   Media State . . . . . . . . . . . : Media disconnected`,
+      `   Connection-specific DNS Suffix  . : `,
+      ``,
+      `Tunnel adapter isolated-con:`,
+      `   Connection-specific DNS Suffix  . : `,
+      `   IPv4 Address. . . . . . . . . . . : 10.0.75.1`,
+      `   Subnet Mask . . . . . . . . . . . : 255.255.255.0`
+    ]
+  };
+};
+
 export const commands = [
   {
     name: 'weather',
@@ -826,6 +852,20 @@ export const commands = [
     usage: 'quote',
     examples: ['quote'],
     handler: quoteHandler
+  },
+  {
+    name: 'ipconfig',
+    description: 'Display simulated network interface addresses and gateway settings',
+    usage: 'ipconfig',
+    examples: ['ipconfig', 'ifconfig'],
+    handler: ipconfigHandler
+  },
+  {
+    name: 'ifconfig',
+    description: 'Alias for ipconfig',
+    usage: 'ifconfig',
+    examples: ['ifconfig'],
+    handler: ipconfigHandler
   },
   {
     name: 'help',
