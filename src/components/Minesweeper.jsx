@@ -143,6 +143,11 @@ export default function Minesweeper() {
         if (revealedCount === size * size - count) {
             setGameWon(true);
             setTimerActive(false);
+            const lsKey = `mines_best_${size}_${count}`;
+            const currentBest = localStorage.getItem(lsKey);
+            if (!currentBest || seconds < parseInt(currentBest)) {
+                localStorage.setItem(lsKey, seconds.toString());
+            }
             // Flag remaining mines
             newGrid.forEach(row => {
                 row.forEach(cl => {
@@ -191,6 +196,7 @@ export default function Minesweeper() {
                 <button onClick={() => { setGridSize(12); setMineCount(18); initGrid(12, 12); }} style={{ fontSize: '11px', padding: '3px 8px' }}>Hard (12x12)</button>
             </div>
             <div className={styles.headerBar}>
+                <div style={{ fontSize: '11px', color: '#ffaa00' }}>Best: {localStorage.getItem(`mines_best_${gridSize}_${mineCount}`) || 'N/A'}s</div>
                 <div className={styles.counter}>{flagsCount.toString().padStart(3, '0')}</div>
                 <button className={styles.smiley} onClick={initGrid}>
                     {getSmiley()}
