@@ -100,6 +100,8 @@ export default function Browser() {
                 <div className={styles.bookmark} onClick={() => navigateTo('linkedin', 'linkedin.com/in/developer')}>💼 LinkedIn</div>
                 <div className={styles.bookmark} onClick={() => navigateTo('portfolio', 'developerportfolio.dev')}>📁 Portfolio Site</div>
                 <div className={styles.bookmark} onClick={() => navigateTo('dino', 'chrome://dino')}>🦖 Dino Game</div>
+                <div className={styles.bookmark} onClick={() => { setUrl('stackoverflow.com'); alert("Visiting simulated StackOverflow..."); }}>💬 StackOverflow</div>
+                <div className={styles.bookmark} onClick={() => { setUrl('dev.to'); alert("Visiting simulated Dev.to..."); }}>✍️ Dev.to</div>
             </div>
 
             {/* Content Window */}
