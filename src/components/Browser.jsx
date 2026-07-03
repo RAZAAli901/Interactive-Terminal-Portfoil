@@ -7,6 +7,7 @@ export default function Browser() {
     const [searchQuery, setSearchQuery] = useState('');
     const [history, setHistory] = useState(['google']);
     const [historyIndex, setHistoryIndex] = useState(0);
+    const [showHistoryPanel, setShowHistoryPanel] = useState(false);
 
     const navigateTo = (tabName, destinationUrl) => {
         const newHistory = history.slice(0, historyIndex + 1);
@@ -83,6 +84,7 @@ export default function Browser() {
                 <button className={styles.navBtn} onClick={handleBack} disabled={historyIndex === 0}>⬅</button>
                 <button className={styles.navBtn} onClick={handleForward} disabled={historyIndex === history.length - 1}>➡</button>
                 <button className={styles.navBtn} onClick={() => navigateTo('google', 'google.com')}>🏠</button>
+                <button className={styles.navBtn} style={{ fontSize: '11px', padding: '0 8px' }} onClick={() => setShowHistoryPanel(!showHistoryPanel)}>📜 History</button>
                 <form onSubmit={handleAddressSubmit} style={{ display: 'flex', flex: 1 }}>
                     <input 
                         type="text" 
@@ -105,6 +107,16 @@ export default function Browser() {
             </div>
 
             {/* Content Window */}
+            {showHistoryPanel && (
+                <div style={{ background: '#252525', color: '#fff', borderBottom: '1px solid #333', padding: '10px 15px', maxHeight: '100px', overflowY: 'auto' }}>
+                    <div style={{ fontWeight: 'bold', fontSize: '12px', marginBottom: '5px' }}>Session History Log:</div>
+                    {history.map((hItem, idx) => (
+                        <div key={idx} style={{ fontSize: '12px', padding: '2px 0', color: idx === historyIndex ? '#0078d4' : '#ccc', textDecoration: idx === historyIndex ? 'underline' : 'none' }}>
+                            {idx + 1}. {hItem}
+                        </div>
+                    ))}
+                </div>
+            )}
             <div className={styles.content}>
                 {currentTab === 'google' && (
                     <div className={styles.googleContainer}>
