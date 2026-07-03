@@ -20,6 +20,7 @@ export default function Solitaire() {
     const [seconds, setSeconds] = useState(0);
     const [isWon, setIsWon] = useState(false);
     const [timerActive, setTimerActive] = useState(false);
+    const [deckStyle, setDeckStyle] = useState('tech');
 
     // Initial shuffle
     const initGame = () => {
@@ -124,6 +125,9 @@ export default function Solitaire() {
     return (
         <div className={styles.solitaireContainer}>
             <div className={styles.dashboard}>
+                <button onClick={() => setDeckStyle(deckStyle === 'tech' ? 'symbols' : 'tech')} className={styles.restartBtn} style={{ fontSize: '11px', padding: '3px 8px' }}>
+                    Style: {deckStyle.toUpperCase()}
+                </button>
                 <div>Time: <strong>{formatTime(seconds)}</strong></div>
                 <div>Moves: <strong>{moves}</strong></div>
                 <button className={styles.restartBtn} onClick={initGame}>Restart</button>
@@ -132,6 +136,7 @@ export default function Solitaire() {
             <div className={styles.grid}>
                 {cards.map(card => {
                     const isFlipped = flippedCards.includes(card) || matchedCards.includes(card.id);
+                    const cardSymbol = deckStyle === 'symbols' ? ['♠️', '♥️', '♦️', '♣️', '⭐', '🔔', '☀️', '🌙'][card.id % 8] : card.icon;
                     const isMatched = matchedCards.includes(card.id);
 
                     return (
@@ -142,7 +147,7 @@ export default function Solitaire() {
                         >
                             <div className={styles.cardInner}>
                                 <div className={styles.cardBack}>♠️</div>
-                                <div className={styles.cardFront}>{card.icon}</div>
+                                <div className={styles.cardFront}>{cardSymbol}</div>
                             </div>
                         </div>
                     );
