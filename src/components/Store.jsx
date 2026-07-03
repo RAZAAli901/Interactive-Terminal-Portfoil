@@ -75,6 +75,9 @@ export default function Store({ installedApps = {}, onInstallApp, onOpenApp }) {
                                 <div className={styles.appIcon}>{app.icon}</div>
                                 <div className={styles.appName}>{app.name}</div>
                                 <div className={styles.appDesc}>{app.desc}</div>
+                                <div style={{ fontSize: '12px', color: '#ffaa00', margin: '4px 0', userSelect: 'none' }}>
+                                    ★★★★★ <span style={{ color: '#8c92ac' }}>(4.9/5)</span>
+                                </div>
                                 
                                 {isDownloading ? (
                                     <div style={{ width: '100%' }}>
