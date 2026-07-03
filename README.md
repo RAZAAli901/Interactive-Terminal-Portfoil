@@ -47,3 +47,4 @@ npm run dev
 * **Mobile Terminal Mode**: Responsive styling that defaults to fullscreen terminal environment on smaller screen widths.
 * **Window Drag & Maximize Transitions**: Supports double-click header resizing and minimize animations.
 * **Live System clock**: Real-time clock in the tray panel.
+* **Retro Applications Suite**: Interactive tools including a world clock/stopwatch, scientific keyboard calculator, notepad editor with text metrics, browser history/bookmarks, chat transcripts, and custom Minesweeper/Solitaire game settings.
