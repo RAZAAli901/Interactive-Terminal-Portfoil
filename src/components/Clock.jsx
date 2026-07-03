@@ -189,6 +189,9 @@ export default function Clock() {
                         </div>
                         {laps.length > 0 && (
                             <div className={styles.lapsList}>
+                                <div style={{ padding: '4px 10px', color: '#0078d4', fontSize: '12px' }}>
+                                    Average Lap: {formatStopwatch(laps.reduce((a, b) => a + b, 0) / laps.length)}
+                                </div>
                                 {laps.map((lap, i) => (
                                     <div key={i} className={styles.lapItem}>
                                         <span>Lap {laps.length - i}</span>
