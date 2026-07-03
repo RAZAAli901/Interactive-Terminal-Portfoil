@@ -63,6 +63,20 @@ export default function Settings({ setWallpaper, currentWallpaper }) {
                                 <span className={styles.specLabel}>Edition</span>
                                 <span className={styles.specValue}>PortfolioOS Enterprise v1.0</span>
                             </div>
+                            <div className={styles.specRow}>
+                                <span className={styles.specLabel}>Power Battery Status</span>
+                                <span className={styles.specValue}>🔋 87% (Plugged in, charging)</span>
+                            </div>
+                            <div className={styles.specRow}>
+                                <span className={styles.specLabel}>Performance Mode</span>
+                                <span className={styles.specValue}>
+                                    <select style={{ background: '#333', color: '#fff', border: '1px solid #555', padding: '2px 4px', borderRadius: '3px', fontSize: '12px' }}>
+                                        <option>Best Power Efficiency</option>
+                                        <option>Balanced Mode</option>
+                                        <option>Best Performance</option>
+                                    </select>
+                                </span>
+                            </div>
                         </div>
                     </div>
                 )}
