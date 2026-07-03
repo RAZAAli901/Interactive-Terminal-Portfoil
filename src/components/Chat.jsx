@@ -163,6 +163,20 @@ export default function Chat() {
                     ))}
                     <div ref={bottomRef} />
                 </div>
+                <div style={{ display: 'flex', gap: '8px', padding: '6px 12px', background: '#1c1c1c', borderTop: '1px solid #333', flexWrap: 'wrap' }}>
+                    {['skills', 'projects', 'commands', 'contact'].map(term => (
+                        <button 
+                            key={term}
+                            type="button"
+                            onClick={() => {
+                                setInputText(term);
+                            }}
+                            style={{ background: '#2b2b2b', color: '#0078d4', border: '1px solid #444', borderRadius: '12px', padding: '4px 10px', fontSize: '11px', cursor: 'pointer' }}
+                        >
+                            Ask about "{term}"
+                        </button>
+                    ))}
+                </div>
                 <form onSubmit={handleSend} className={styles.inputArea}>
                     <input 
                         type="text" 
