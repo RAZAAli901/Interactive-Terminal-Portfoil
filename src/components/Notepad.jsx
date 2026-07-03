@@ -52,6 +52,8 @@ terminal to cycle through your command history.
 
 export default function Notepad() {
     const [content, setContent] = useState(CHEATSHEET);
+    const [fontSize, setFontSize] = useState('14px');
+    const [fontFamily, setFontFamily] = useState('monospace');
     const textareaRef = useRef(null);
 
     const handleMenuClick = (action) => {
@@ -93,6 +95,16 @@ export default function Notepad() {
                     </div>
                 </div>
                 <div className={styles.menuItem}>
+                    Format
+                    <div className={styles.dropdown}>
+                        <div onClick={() => setFontSize('12px')}>Small Text</div>
+                        <div onClick={() => setFontSize('14px')}>Medium Text</div>
+                        <div onClick={() => setFontSize('18px')}>Large Text</div>
+                        <div onClick={() => setFontFamily('monospace')}>Monospace</div>
+                        <div onClick={() => setFontFamily('sans-serif')}>Sans-Serif</div>
+                    </div>
+                </div>
+                <div className={styles.menuItem}>
                     Help
                     <div className={styles.dropdown}>
                         <div onClick={() => handleMenuClick('commands')}>Show Commands</div>
@@ -101,7 +113,7 @@ export default function Notepad() {
             </div>
             <textarea
                 ref={textareaRef}
-                className={styles.textArea}
+                className={styles.textArea} style={{ fontSize: fontSize, fontFamily: fontFamily }}
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
                 spellCheck="false"
