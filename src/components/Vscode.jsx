@@ -114,6 +114,12 @@ export const handleCommand = (command, { setTheme, setWallpaper } = {}) => {
     };
 
     const [activeFile, setActiveFile] = useState('App.jsx');
+    const [terminalLogs, setTerminalLogs] = useState([]);
+    const [showTerminal, setShowTerminal] = useState(false);
+    const runCode = () => {
+        setShowTerminal(true);
+        setTerminalLogs(['$ npm run build', '⚙️ Bundling modules using rolldown-vite...', '✓ 24 modules transformed successfully.', '✨ Build completed in 241ms!', '🚀 Preview server listening at http://localhost:5173/']);
+    };
 
     useEffect(() => {
         if (!monacoLoaded) return;
@@ -170,15 +176,27 @@ export const handleCommand = (command, { setTheme, setWallpaper } = {}) => {
 
             {/* Code Area */}
             <div className={styles.editorArea}>
+                {showTerminal && (
+                    <div style={{ height: '115px', background: '#0d1117', borderTop: '2px solid #30363d', color: '#c9d1d9', padding: '10px', fontFamily: 'monospace', fontSize: '12px', overflowY: 'auto', position: 'absolute', bottom: 0, left: '200px', right: 0, zIndex: 100 }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #30363d', paddingBottom: '4px', marginBottom: '6px' }}>
+                            <span style={{ color: '#58a6ff', fontWeight: 'bold' }}>Terminal Console Output</span>
+                            <button onClick={() => setShowTerminal(false)} style={{ background: 'none', border: 'none', color: '#8b949e', cursor: 'pointer' }}>✕</button>
+                        </div>
+                        {terminalLogs.map((log, i) => <div key={i}>{log}</div>)}
+                    </div>
+                )}
                 <div className={styles.tabHeader}>
                     <div className={`${styles.tab} ${styles.activeTab}`}>
                         ⚛️ {activeFile}
                     </div>
+                    <button onClick={runCode} style={{ background: '#107c41', color: '#fff', border: 'none', borderRadius: '3px', padding: '3px 8px', fontSize: '11px', marginLeft: 'auto', marginRight: '10px', cursor: 'pointer' }}>
+                        ▶ Run Build
+                    </button>
                 </div>
                 <div 
                     ref={containerRef} 
                     className={styles.monacoContainer} 
-                    style={{ width: '100%', height: 'calc(100% - 35px)', background: '#1e1e1e' }}
+                    style={{ width: '100%', height: showTerminal ? 'calc(100% - 150px)' : 'calc(100% - 35px)', background: '#1e1e1e' }}
                 />
             </div>
         </div>
