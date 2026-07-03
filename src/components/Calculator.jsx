@@ -5,6 +5,7 @@ export default function Calculator() {
     const [display, setDisplay] = useState('0');
     const [equation, setEquation] = useState('');
     const [shouldReset, setShouldReset] = useState(false);
+    const [isScientific, setIsScientific] = useState(false);
 
     const handleNumber = (num) => {
         if (display === '0' || shouldReset) {
@@ -78,6 +79,25 @@ export default function Calculator() {
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, [display, equation, shouldReset]);
 
+    const handleScientific = (op) => {
+        try {
+            const val = parseFloat(display);
+            if (isNaN(val)) return;
+            let result;
+            if (op === 'sin') result = Math.sin((val * Math.PI) / 180);
+            else if (op === 'cos') result = Math.cos((val * Math.PI) / 180);
+            else if (op === 'tan') result = Math.tan((val * Math.PI) / 180);
+            else if (op === 'log') result = Math.log10(val);
+            else if (op === 'sqrt') result = Math.sqrt(val);
+            
+            setDisplay(Number(result.toFixed(6)).toString());
+            setShouldReset(true);
+        } catch (e) {
+            setDisplay('Error');
+            setShouldReset(true);
+        }
+    };
+
     const handleDecimal = () => {
         if (shouldReset) {
             setDisplay('0.');
@@ -96,6 +116,17 @@ export default function Calculator() {
                 <div className={styles.current}>{display}</div>
             </div>
             <div className={styles.buttons}>
+                <button className={styles.btn} style={{ gridColumn: 'span 2', background: '#555', color: '#fff' }} onClick={() => setIsScientific(!isScientific)}>
+                    {isScientific ? 'Standard' : 'Scientific'}
+                </button>
+                {isScientific && (
+                    <>
+                        <button className={styles.btn} style={{ background: '#252525', color: '#0078d4' }} onClick={() => handleScientific('sin')}>sin</button>
+                        <button className={styles.btn} style={{ background: '#252525', color: '#0078d4' }} onClick={() => handleScientific('cos')}>cos</button>
+                        <button className={styles.btn} style={{ background: '#252525', color: '#0078d4' }} onClick={() => handleScientific('tan')}>tan</button>
+                        <button className={styles.btn} style={{ background: '#252525', color: '#0078d4' }} onClick={() => handleScientific('sqrt')}>√</button>
+                    </>
+                )}
                 <button className={`${styles.btn} ${styles.clear}`} onClick={handleClear}>C</button>
                 <button className={`${styles.btn} ${styles.operator}`} onClick={handleBackspace}>⌫</button>
                 <button className={`${styles.btn} ${styles.operator}`} onClick={() => handleOperator('/')}>÷</button>
