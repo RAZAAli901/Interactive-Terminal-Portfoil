@@ -59,3 +59,19 @@
     50% { transform: scale(0.85); }
     100% { transform: scale(1); }
 }
+.tooltip {
+    position: absolute;
+    bottom: -32px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.85);
+    color: #fff;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    white-space: nowrap;
+    z-index: 1000;
+    pointer-events: none;
+    border: 1px solid #444;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}

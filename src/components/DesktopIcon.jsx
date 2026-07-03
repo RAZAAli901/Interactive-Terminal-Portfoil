@@ -3,6 +3,7 @@ import styles from './DesktopIcon.module.css';
 
 export default function DesktopIcon({ label, icon, onDoubleClick }) {
     const [isClicked, setIsClicked] = useState(false);
+    const [hovered, setHovered] = useState(false);
 
     const handleDoubleClick = (e) => {
         setIsClicked(true);
@@ -108,8 +109,14 @@ export default function DesktopIcon({ label, icon, onDoubleClick }) {
         <div 
             className={`${styles.desktopIcon} ${isClicked ? styles.clicked : ''}`} 
             onDoubleClick={handleDoubleClick}
-            title={label}
+            onMouseEnter={() => setHovered(true)}
+            onMouseLeave={() => setHovered(false)}
         >
+            {hovered && (
+                <div className={styles.tooltip}>
+                    Launch {label} shortcut
+                </div>
+            )}
             <div className={styles.iconImg}>{renderIcon()}</div>
             <div className={styles.iconLabel}>{label}</div>
         </div>
