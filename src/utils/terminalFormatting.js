@@ -88,3 +88,11 @@ export function formatTable(headers, rows) {
 
   return lines;
 }
+
+export function formatBadge(type, text) {
+  let colorClass = 'text-info';
+  if (type === 'success') colorClass = 'text-success';
+  if (type === 'error') colorClass = 'text-error';
+  if (type === 'warning') colorClass = 'text-warning';
+  return `<span class="${colorClass}" style="border: 1px solid currentColor; padding: 0 4px; border-radius: 2px; font-weight: bold; font-size: 0.9em;">[${text.toUpperCase()}]</span>`;
+}
