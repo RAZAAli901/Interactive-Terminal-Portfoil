@@ -13,5 +13,10 @@ export const funFacts = [
   "Dracula theme was created originally by Zeno Rocha in 2013 and has been ported to hundreds of apps.",
   "FAST-NUCES, where Raza studied, is one of Pakistan's premier computing universities.",
   "Raza's favorite developer tool after VS Code is Git, because clean histories are satisfying.",
-  "Did you know? Pressing Tab in this terminal will autocomplete your commands!"
+  "Did you know? Pressing Tab in this terminal will autocomplete your commands!",
+  "Fun fact: The Konami Code (↑↑↓↓←→←→BA) was first used in the 1986 game Gradius.",
+  "Did you know? The first computer bug was a real moth found trapped in a relay by Grace Hopper in 1947.",
+  "Vaporwave design features neon grids, retro computer UI elements, and a distinct pink/teal color palette.",
+  "React 19 introduces Server Components, Action hooks, and the new use() API natively.",
+  "Vite is the French word for 'quick' or 'fast', which perfectly describes its hot module replacement speed."
 ];
