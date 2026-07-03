@@ -776,6 +776,28 @@ const dateHandler = () => {
   };
 };
 
+
+const quotes = [
+  "Any fool can write code that a computer can understand. Good programmers write code that humans can understand. - Martin Fowler",
+  "First, solve the problem. Then, write the code. - John Johnson",
+  "Experience is the name everyone gives to their mistakes. - Oscar Wilde",
+  "In order to be irreplaceable one must always be different. - Coco Chanel",
+  "Java is to JavaScript what car is to Carpet. - Chris Heilmann",
+  "Code is like humor. When you have to explain it, it’s bad. - Cory House",
+  "Simplicity is the soul of efficiency. - Austin Freeman"
+];
+const quoteHandler = () => {
+  const idx = Math.floor(Math.random() * quotes.length);
+  return {
+    type: 'text',
+    content: [
+      ...formatSection('DAILY PROGRAMMING QUOTE'),
+      `"${quotes[idx]}"`,
+      ``
+    ]
+  };
+};
+
 export const commands = [
   {
     name: 'weather',
@@ -797,6 +819,13 @@ export const commands = [
     usage: 'cal',
     examples: ['cal'],
     handler: dateHandler
+  },
+  {
+    name: 'quote',
+    description: 'Output a random inspiring software engineering quote',
+    usage: 'quote',
+    examples: ['quote'],
+    handler: quoteHandler
   },
   {
     name: 'help',
