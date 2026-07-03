@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styles from './Calculator.module.css';
 
 export default function Calculator() {
@@ -56,6 +56,27 @@ export default function Calculator() {
             setDisplay('0');
         }
     };
+
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            const key = e.key;
+            if (/[0-9]/.test(key)) {
+                handleNumber(key);
+            } else if (key === '+' || key === '-' || key === '*' || key === '/') {
+                handleOperator(key);
+            } else if (key === 'Enter' || key === '=') {
+                handleEqual();
+            } else if (key === 'Backspace') {
+                handleBackspace();
+            } else if (key === 'Escape') {
+                handleClear();
+            } else if (key === '.') {
+                handleDecimal();
+            }
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [display, equation, shouldReset]);
 
     const handleDecimal = () => {
         if (shouldReset) {
