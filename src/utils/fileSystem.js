@@ -1,3 +1,34 @@
+export const fileSystem = {
+  name: 'My Computer',
+  type: 'drive',
+  children: [
+    {
+      name: 'Local Disk (C:)',
+      type: 'drive',
+      children: [
+        {
+          name: 'Portfolio',
+          type: 'folder',
+          children: [
+            {
+              name: 'Projects',
+              type: 'folder',
+              children: [
+                { name: 'Interactive-Terminal-Portfolio', type: 'project', projectId: 'interactive-terminal-portfolio' },
+                { name: 'Enterprise-RAG-Pipeline', type: 'project', projectId: 'enterprise-rag-pipeline' },
+                { name: 'Typing-Speed-Tester', type: 'project', projectId: 'typing-speed-tester' }
+              ]
+            },
+            { name: 'resume.pdf', type: 'file' },
+            { name: 'about.txt', type: 'file' },
+            { name: 'contact.txt', type: 'file' }
+          ]
+        }
+      ]
+    }
+  ]
+};
+
 export const fsData = {
   "/": {
     type: "dir",
