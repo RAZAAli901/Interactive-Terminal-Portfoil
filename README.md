@@ -46,5 +46,7 @@ npm run dev
 * **Monaco Code Editor Showcase**: Integrates Visual Studio Code window utilizing CDN-loaded Monaco environment for read-only project files.
 * **Mobile Terminal Mode**: Responsive styling that defaults to fullscreen terminal environment on smaller screen widths.
 * **Window Drag & Maximize Transitions**: Supports double-click header resizing and minimize animations.
-* **Live System clock**: Real-time clock in the tray panel.
+* **Live System clock**: Real-time clock with Stopwatch, Timer, and World Clock tabs.
+* **Scientific Calculator**: Standard + scientific mode (sin/cos/tan/sqrt/log) with keyboard bindings.
+* **Enhanced Notepad**: Font size/family picker and live line, word, and character counter.
 * **Retro Applications Suite**: Interactive tools including a world clock/stopwatch, scientific keyboard calculator, notepad editor with text metrics, browser history/bookmarks, chat transcripts, and custom Minesweeper/Solitaire game settings.
