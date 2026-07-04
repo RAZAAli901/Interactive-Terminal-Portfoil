@@ -58,6 +58,17 @@ export default function Calculator() {
         }
     };
 
+    const handleDecimal = () => {
+        if (shouldReset) {
+            setDisplay('0.');
+            setShouldReset(false);
+            return;
+        }
+        if (!display.includes('.')) {
+            setDisplay(display + '.');
+        }
+    };
+
     useEffect(() => {
         const handleKeyDown = (e) => {
             const key = e.key;
@@ -95,17 +106,6 @@ export default function Calculator() {
         } catch (e) {
             setDisplay('Error');
             setShouldReset(true);
-        }
-    };
-
-    const handleDecimal = () => {
-        if (shouldReset) {
-            setDisplay('0.');
-            setShouldReset(false);
-            return;
-        }
-        if (!display.includes('.')) {
-            setDisplay(display + '.');
         }
     };
 

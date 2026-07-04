@@ -2,16 +2,16 @@ import { useState, useEffect, useRef } from 'react';
 import styles from './Clock.module.css';
 
 export default function Clock() {
+    const [activeTab, setActiveTab] = useState('clock');
+    
+    // World Clock state
+    const [time, setTime] = useState(new Date());
+
     const formatTimeZone = (offset) => {
         const utc = time.getTime() + (time.getTimezoneOffset() * 60000);
         const nd = new Date(utc + (3600000 * offset));
         return nd.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
     };
-
-    const [activeTab, setActiveTab] = useState('clock');
-    
-    // World Clock state
-    const [time, setTime] = useState(new Date());
 
     useEffect(() => {
         const timer = setInterval(() => setTime(new Date()), 1000);

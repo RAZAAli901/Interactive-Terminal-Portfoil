@@ -9,7 +9,7 @@ export default function Minesweeper() {
     const [grid, setGrid] = useState([]);
     const [gameOver, setGameOver] = useState(false);
     const [gameWon, setGameWon] = useState(false);
-    const [flagsCount, setFlagsCount] = useState(MINE_COUNT);
+    const [flagsCount, setFlagsCount] = useState(10);
     const [seconds, setSeconds] = useState(0);
     const [timerActive, setTimerActive] = useState(false);
 
@@ -140,10 +140,10 @@ export default function Minesweeper() {
             });
         });
 
-        if (revealedCount === size * size - count) {
+        if (revealedCount === gridSize * gridSize - mineCount) {
             setGameWon(true);
             setTimerActive(false);
-            const lsKey = `mines_best_${size}_${count}`;
+            const lsKey = `mines_best_${gridSize}_${mineCount}`;
             const currentBest = localStorage.getItem(lsKey);
             if (!currentBest || seconds < parseInt(currentBest)) {
                 localStorage.setItem(lsKey, seconds.toString());
