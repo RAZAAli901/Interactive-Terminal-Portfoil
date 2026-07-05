@@ -87,6 +87,44 @@
   border: 1px solid rgba(0,120,212,0.4);
 }
 
+.shieldBadge {
+  margin-left: 6px;
+  font-size: 14px;
+  animation: pulse 0.8s ease-in-out infinite;
+}
+
+/* ── Shield Power-Up ──────────────────────────────────────────── */
+.shieldItem {
+  position: absolute;
+  font-size: 20px;
+  z-index: 11;
+  animation: shieldFloat 1s ease-in-out infinite;
+  cursor: default;
+  filter: drop-shadow(0 0 6px rgba(255,215,0,0.8));
+}
+
+@keyframes shieldFloat {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-5px) scale(1.1); }
+}
+
+.dinoShield {
+  position: absolute;
+  width: 52px;
+  height: 56px;
+  border: 2px solid rgba(255, 215, 0, 0.8);
+  border-radius: 50%;
+  z-index: 12;
+  animation: shieldPulse 0.6s ease-in-out infinite;
+  pointer-events: none;
+  transform: translate(-7px, 7px);
+}
+
+@keyframes shieldPulse {
+  0%, 100% { box-shadow: 0 0 8px rgba(255,215,0,0.6); }
+  50% { box-shadow: 0 0 16px rgba(255,215,0,1); }
+}
+
 /* ── Stars ───────────────────────────────────────────────────── */
 .star {
   position: absolute;

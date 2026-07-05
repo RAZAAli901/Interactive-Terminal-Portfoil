@@ -67,6 +67,10 @@ export default function DinoGame({ onScoreReach999 }) {
   const lastMilestoneRef = useRef(0);
   const [speedUpFlash, setSpeedUpFlash] = useState(false);
   const lastSpeedLevelRef = useRef(0);
+  const [hasShield, setHasShield] = useState(false);
+  const hasShieldRef = useRef(false);
+  const [shieldItem, setShieldItem] = useState(null); // {x, y} position
+  const shieldItemRef = useRef(null);
 
   // Dino physics
   const [dinoY, setDinoY] = useState(GROUND_Y);
@@ -202,6 +206,37 @@ export default function DinoGame({ onScoreReach999 }) {
 
       // ── Move obstacle ─────────────────────────────────────────────────
       let newX = obstacleXRef.current - speed;
+
+      // ── Move shield item ──────────────────────────────────────────────
+      if (shieldItemRef.current) {
+        const sx = shieldItemRef.current.x - speed;
+        const sy = shieldItemRef.current.y;
+        if (sx < -40) {
+          shieldItemRef.current = null;
+          setShieldItem(null);
+        } else {
+          // Check if dino collected it
+          const dinoRight2 = DINO_LEFT + DINO_W;
+          const dinoLeft2 = DINO_LEFT;
+          const shieldRight = sx + 24;
+          const shieldLeft = sx;
+          const shieldTop = sy + 24;
+          const shieldBottom = sy;
+          const dinoTop2 = dinoYRef.current + DINO_H;
+          const hOverlap = dinoRight2 > shieldLeft && dinoLeft2 < shieldRight;
+          const vOverlap = dinoYRef.current < shieldTop && dinoTop2 > shieldBottom;
+          if (hOverlap && vOverlap) {
+            hasShieldRef.current = true;
+            setHasShield(true);
+            shieldItemRef.current = null;
+            setShieldItem(null);
+          } else {
+            shieldItemRef.current = { x: sx, y: sy };
+            setShieldItem({ x: sx, y: sy });
+          }
+        }
+      }
+
       if (newX < -80) {
         // Passed! Add points
         const pts = obstacleRef.current?.points || 10;
@@ -229,6 +264,13 @@ export default function DinoGame({ onScoreReach999 }) {
         if (nextScore >= 999 && !secretUnlocked) {
           setSecretUnlocked(true);
           if (onScoreReach999) onScoreReach999();
+        }
+
+        // Randomly spawn shield power-up after 200 pts (5% chance each obstacle pass)
+        if (nextScore >= 200 && !shieldItemRef.current && !hasShieldRef.current && Math.random() < 0.05) {
+          const shield = { x: GAME_WIDTH + 100, y: 50 + Math.random() * 50 };
+          setShieldItem(shield);
+          shieldItemRef.current = shield;
         }
 
         // Spawn next obstacle
@@ -288,6 +330,20 @@ export default function DinoGame({ onScoreReach999 }) {
         const vertOverlap = dinoYRef.current < obsTop && dinoTop > obsY;
 
         if (horizOverlap && vertOverlap) {
+          // Shield absorbs first hit
+          if (hasShieldRef.current) {
+            hasShieldRef.current = false;
+            setHasShield(false);
+            setSpeedUpFlash(true); // visual feedback - brief flash
+            setTimeout(() => setSpeedUpFlash(false), 300);
+            // Reset obstacle position to give recovery time
+            const nextObs2 = pickObstacle(scoreRef.current);
+            setObstacle(nextObs2);
+            setObstacleX(GAME_WIDTH + 200);
+            obstacleXRef.current = GAME_WIDTH + 200;
+            return; // don't continue to game over
+          }
+
           // Spawn death particles
           const newParticles = Array.from({ length: 12 }, (_, i) => ({
             id: i,
@@ -352,6 +408,10 @@ export default function DinoGame({ onScoreReach999 }) {
     lastMilestoneRef.current = 0;
     lastSpeedLevelRef.current = 0;
     setSpeedUpFlash(false);
+    setHasShield(false);
+    hasShieldRef.current = false;
+    setShieldItem(null);
+    shieldItemRef.current = null;
   }, []);
 
   // ── Compute sky colour based on day/night cycle ───────────────────────────
@@ -421,6 +481,9 @@ export default function DinoGame({ onScoreReach999 }) {
               LVL {Math.floor(score / 100) + 1}
             </span>
           )}
+          {hasShield && (
+            <span className={styles.shieldBadge} title="Shield active! Absorbs 1 hit">⭐</span>
+          )}
         </div>
 
         {/* Stars (night) */}
@@ -464,6 +527,24 @@ export default function DinoGame({ onScoreReach999 }) {
           >
             {obstacle.emoji}
           </div>
+        )}
+
+        {/* Shield power-up item */}
+        {shieldItem && (
+          <div
+            className={styles.shieldItem}
+            style={{ left: shieldItem.x, bottom: shieldItem.y }}
+          >
+            ⭐
+          </div>
+        )}
+
+        {/* Dino shield glow overlay */}
+        {hasShield && (
+          <div
+            className={styles.dinoShield}
+            style={{ bottom: dinoY + GROUND_Y, left: DINO_LEFT }}
+          />
         )}
 
         {/* Death particles */}
