@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import styles from './Browser.module.css';
+import DinoGame from './DinoGame';
 
 export default function Browser() {
     const [url, setUrl] = useState('google.com');
@@ -8,6 +9,7 @@ export default function Browser() {
     const [history, setHistory] = useState(['google']);
     const [historyIndex, setHistoryIndex] = useState(0);
     const [showHistoryPanel, setShowHistoryPanel] = useState(false);
+    const [dinoSecretEarned, setDinoSecretEarned] = useState(false);
 
     const navigateTo = (tabName, destinationUrl) => {
         const newHistory = history.slice(0, historyIndex + 1);
@@ -250,129 +252,25 @@ export default function Browser() {
                     </div>
                 )}
 
-                {currentTab === 'dino' && <DinoGame />}
-            </div>
-        </div>
-    );
-}
-
-function DinoGame() {
-    const [isPlaying, setIsPlaying] = useState(false);
-    const [isJumping, setIsJumping] = useState(false);
-    const [dinoY, setDinoY] = useState(0);
-    const [cactusX, setCactusX] = useState(480);
-    const [score, setScore] = useState(0);
-    const [highScore, setHighScore] = useState(0);
-    const [gameOver, setGameOver] = useState(false);
-
-    useEffect(() => {
-        if (!isPlaying || gameOver) return;
-
-        const interval = setInterval(() => {
-            // Move cactus
-            setCactusX((prev) => {
-                if (prev <= -20) {
-                    setScore((s) => s + 10);
-                    return 480;
-                }
-                return prev - 6;
-            });
-
-            // Handle gravity/jumping
-            setDinoY((y) => {
-                if (y > 0) {
-                    return Math.max(0, y - 5);
-                } else {
-                    setIsJumping(false);
-                    return 0;
-                }
-            });
-        }, 15);
-
-        return () => clearInterval(interval);
-    }, [isPlaying, gameOver]);
-
-    // Check collision
-    useEffect(() => {
-        if (!isPlaying || gameOver) return;
-
-        // Dino is at left = 40px, width = 30px -> occupies 40px to 70px
-        // Cactus is at left = cactusX, width = 18px -> occupies cactusX to cactusX + 18px
-        // Collision if overlapping horizontally and dinoY is low
-        if (cactusX > 22 && cactusX < 65 && dinoY < 25) {
-            setGameOver(true);
-            setIsPlaying(false);
-            setHighScore((prev) => Math.max(prev, score));
-        }
-    }, [cactusX, dinoY, isPlaying, gameOver, score]);
-
-    const jump = () => {
-        if (gameOver) {
-            setScore(0);
-            setGameOver(false);
-            setCactusX(480);
-            setDinoY(0);
-            setIsPlaying(true);
-            return;
-        }
-        if (!isPlaying) {
-            setIsPlaying(true);
-            return;
-        }
-        if (!isJumping) {
-            setIsJumping(true);
-            setDinoY(65);
-        }
-    };
-
-    useEffect(() => {
-        const handleKeyDown = (e) => {
-            if (e.code === 'Space' || e.code === 'ArrowUp') {
-                e.preventDefault();
-                jump();
-            }
-        };
-        window.addEventListener('keydown', handleKeyDown);
-        return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [isPlaying, isJumping, dinoY, gameOver]);
-
-    return (
-        <div className={styles.dinoGame} onClick={jump}>
-            <div className={styles.offlineMessage}>
-                <div className={styles.offlineTitle}>🦖 Chrome Dino Game</div>
-                <div className={styles.offlineDetails}>
-                    No internet connection is simulated. Press Spacebar or Arrow Up to jump over obstacles.
-                </div>
-            </div>
-
-            <div className={styles.gameArea}>
-                <div className={styles.scoreBoard}>
-                    HI {highScore.toString().padStart(5, '0')} {score.toString().padStart(5, '0')}
-                </div>
-                
-                {/* Dino character (emoji) */}
-                <div 
-                    className={styles.dino} 
-                    style={{ bottom: `${dinoY}px` }}
-                >
-                    🦖
-                </div>
-
-                {/* Cactus obstacle (emoji) */}
-                <div 
-                    className={styles.cactus} 
-                    style={{ left: `${cactusX}px` }}
-                >
-                    🌵
-                </div>
-
-                {(!isPlaying || gameOver) && (
-                    <div className={styles.gamePrompt}>
-                        {gameOver ? '💥 GAME OVER 💥' : 'Press SPACE or Click to Play'}
-                        <div style={{ fontSize: '11px', marginTop: '6px', color: '#666' }}>Click here to restart</div>
+                {currentTab === 'dino' && (
+                    <DinoGame
+                        onScoreReach999={() => setDinoSecretEarned(true)}
+                    />
+                )}
+                {dinoSecretEarned && (
+                    <div style={{
+                        position: 'fixed', bottom: 16, right: 16, zIndex: 9999,
+                        background: 'linear-gradient(135deg,#ffd700,#ff8c00)',
+                        color: '#000', padding: '10px 18px', borderRadius: 12,
+                        fontWeight: 'bold', fontSize: 13, boxShadow: '0 4px 16px rgba(0,0,0,0.3)',
+                        fontFamily: 'monospace'
+                    }}>
+                        🏆 Secret unlocked! Type <code style={{background:'rgba(0,0,0,0.15)',padding:'1px 5px',borderRadius:4}}>dino-master</code> in the terminal!
                     </div>
                 )}
             </div>
         </div>
     );
 }
+
+// ─── Old inline DinoGame removed — now lives in DinoGame.jsx ─────────────────
