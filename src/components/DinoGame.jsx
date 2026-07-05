@@ -65,6 +65,8 @@ export default function DinoGame({ onScoreReach999 }) {
   const [secretUnlocked, setSecretUnlocked] = useState(false);
   const [milestoneFlash, setMilestoneFlash] = useState(null);
   const lastMilestoneRef = useRef(0);
+  const [speedUpFlash, setSpeedUpFlash] = useState(false);
+  const lastSpeedLevelRef = useRef(0);
 
   // Dino physics
   const [dinoY, setDinoY] = useState(GROUND_Y);
@@ -215,6 +217,14 @@ export default function DinoGame({ onScoreReach999 }) {
           setTimeout(() => setMilestoneFlash(null), 1500);
         }
 
+        // Speed up flash
+        const newSpeedLevel = Math.floor(nextScore / 100);
+        if (newSpeedLevel > lastSpeedLevelRef.current) {
+          lastSpeedLevelRef.current = newSpeedLevel;
+          setSpeedUpFlash(true);
+          setTimeout(() => setSpeedUpFlash(false), 400);
+        }
+
         // Check 999+
         if (nextScore >= 999 && !secretUnlocked) {
           setSecretUnlocked(true);
@@ -340,6 +350,8 @@ export default function DinoGame({ onScoreReach999 }) {
     setIsNight(false);
     setGroundOffset(0);
     lastMilestoneRef.current = 0;
+    lastSpeedLevelRef.current = 0;
+    setSpeedUpFlash(false);
   }, []);
 
   // ── Compute sky colour based on day/night cycle ───────────────────────────
@@ -399,7 +411,7 @@ export default function DinoGame({ onScoreReach999 }) {
       {/* Game Area */}
       <div
         className={styles.gameArea}
-        style={{ background: skyBg }}
+        style={{ background: skyBg, boxShadow: speedUpFlash ? '0 0 0 3px #ff4444 inset, 0 4px 20px rgba(0,0,0,0.15)' : '0 4px 20px rgba(0,0,0,0.15)' }}
       >
         {/* Score */}
         <div className={styles.scoreBoard} style={{ color: textColor }}>
