@@ -724,6 +724,41 @@ const secretHandler = () => {
 
 // Will hold the full commands registry
 
+// ─── Dino Master: secret command unlocked by reaching 999 in the Dino game ───
+const dinoMasterHandler = () => {
+  return {
+    type: 'text',
+    content: [
+      ...formatSection('🦖 DINO MASTER — CLASSIFIED'),
+      formatSuccess('🏆 Congratulations, LEGEND! You survived the prehistoric gauntlet!'),
+      '',
+      '┌────────────────────────────────────────────────────────┐',
+      '│             *** TOP SECRET CLEARANCE ***               │',
+      '│  You have unlocked the Dino Master achievement by      │',
+      '│  reaching 999 points in the Chrome Dino Game.         │',
+      '│                                                        │',
+      '│  ACCESS CODE: DINO-T-REX-999-LEGEND                   │',
+      '│  RANK: ★★★★★ APEX PREDATOR                           │',
+      '└────────────────────────────────────────────────────────┘',
+      '',
+      formatWarning('Unlocked hidden knowledge:'),
+      '  🦕 Fun Fact: The T-Rex\'s tiny arms were actually incredibly strong',
+      '      — they could lift up to 430 lbs each!',
+      '',
+      '  🧬 Fun Fact: Dinosaurs ruled Earth for 165 million years.',
+      '      Humans? Just 0.003% of that. You out-survived everything.',
+      '',
+      '  🌋 Fun Fact: The asteroid that killed the dinos was only',
+      '      ~10km wide — but released 10 billion Hiroshima bombs of energy.',
+      '',
+      formatSuccess('Secret portfolio note: Raza builds things that survive extinction events. 🚀'),
+      '',
+      formatInfo('Try: open-project Enterprise-RAG-Pipeline | skills --detailed | ask'),
+    ]
+  };
+};
+
+
 const weatherHandler = (args) => {
   const loc = args.join(' ') || 'Lahore, PK';
   return {
@@ -826,12 +861,20 @@ const ipconfigHandler = () => {
 
 export const commands = [
   {
+    name: 'dino-master',
+    description: '🦖 [SECRET] Unlocked by reaching 999 score in the Dino game inside the Browser app',
+    usage: 'dino-master',
+    examples: ['dino-master'],
+    handler: dinoMasterHandler
+  },
+  {
     name: 'weather',
     description: 'Display mock current weather and forecast for Lahore or your location',
     usage: 'weather [location]',
     examples: ['weather', 'weather Lahore'],
     handler: weatherHandler
   },
+
   {
     name: 'date',
     description: 'Display current system date and calendar grid',
