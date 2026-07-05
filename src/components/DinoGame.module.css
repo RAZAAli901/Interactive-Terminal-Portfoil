@@ -302,14 +302,38 @@
 }
 
 .overlayTitle {
-  font-size: 22px;
+  font-size: 20px;
   font-weight: bold;
   margin-bottom: 4px;
+}
+
+.overlayDino {
+  font-size: 30px;
+  margin-bottom: 6px;
+  animation: dinoIdle 1.5s ease-in-out infinite;
+}
+
+@keyframes dinoIdle {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  30% { transform: translateY(-6px) rotate(-3deg); }
+  60% { transform: translateY(-3px) rotate(2deg); }
 }
 
 .overlayMsg {
   font-size: 14px;
   color: #444;
+}
+
+.overlayScore {
+  font-size: 15px;
+  font-weight: bold;
+  margin: 3px 0;
+}
+
+.overlayBest {
+  font-size: 11px;
+  color: #888;
+  margin-top: 4px;
 }
 
 .overlayHint {
@@ -318,9 +342,18 @@
   margin-top: 4px;
 }
 
+.overlayHint kbd {
+  background: rgba(0,0,0,0.08);
+  border: 1px solid rgba(0,0,0,0.2);
+  border-radius: 3px;
+  padding: 1px 4px;
+  font-size: 10px;
+  font-family: monospace;
+}
+
 .newRecord {
   color: #d4a017;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: bold;
   animation: pulse 0.8s ease-in-out infinite;
   margin-bottom: 4px;

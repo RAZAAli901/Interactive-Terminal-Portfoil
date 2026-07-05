@@ -578,18 +578,23 @@ export default function DinoGame({ onScoreReach999 }) {
 
         {/* Overlay messages */}
         {phase === 'idle' && (
-          <div className={styles.overlay}>
-            <div className={styles.overlayTitle}>🦖</div>
-            <div className={styles.overlayMsg}>Press SPACE or Tap to Start</div>
-            <div className={styles.overlayHint}>↓ Duck under birds · ↑ Jump over obstacles</div>
+          <div className={styles.overlay} style={{ background: isNight ? 'rgba(10,10,30,0.85)' : 'rgba(255,255,255,0.9)' }}>
+            <div className={styles.overlayDino}>🦖</div>
+            <div className={styles.overlayTitle} style={{ color: isNight ? '#ccc' : '#333' }}>Chrome Dino</div>
+            <div className={styles.overlayMsg} style={{ color: isNight ? '#aaa' : '#555' }}>Press <kbd>SPACE</kbd> or Tap to Start</div>
+            <div className={styles.overlayHint}>↓ Duck under birds &nbsp;·&nbsp; ↑ Jump over obstacles</div>
+            {highScore > 0 && <div className={styles.overlayBest}>Best: {highScore}</div>}
           </div>
         )}
         {phase === 'dead' && (
-          <div className={styles.overlay}>
-            <div className={styles.overlayTitle}>💥 GAME OVER</div>
-            {newRecord && <div className={styles.newRecord}>🏆 NEW RECORD! {score}</div>}
-            <div className={styles.overlayMsg}>Score: {score}</div>
-            <div className={styles.overlayHint}>Click / Space to Restart</div>
+          <div className={styles.overlay} style={{ background: isNight ? 'rgba(10,10,30,0.85)' : 'rgba(255,255,255,0.92)' }}>
+            <div className={styles.overlayTitle} style={{ color: isNight ? '#ff6b6b' : '#cc0000' }}>💥 GAME OVER</div>
+            {newRecord && <div className={styles.newRecord}>🏆 NEW RECORD!</div>}
+            <div className={styles.overlayScore} style={{ color: isNight ? '#fff' : '#222' }}>Score: <strong>{score}</strong></div>
+            <div className={styles.overlayScore} style={{ color: isNight ? '#aaa' : '#666', fontSize: '11px' }}>Best: {highScore}</div>
+            {score >= 500 && score < 999 && <div className={styles.overlayHint}>So close to 999! Try again 🙏</div>}
+            {score >= 999 && <div className={styles.overlayHint} style={{color:'#ffd700'}}>🏆 Type dino-master in terminal!</div>}
+            <div className={styles.overlayHint}>Click / <kbd>SPACE</kbd> to Restart</div>
           </div>
         )}
       </div>
