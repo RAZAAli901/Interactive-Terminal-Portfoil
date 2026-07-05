@@ -184,7 +184,23 @@
 }
 
 
-/* ── Ground ──────────────────────────────────────────────────── */
+/* ── Meteor / Shooting Star ──────────────────────────────────── */
+.meteor {
+  position: absolute;
+  top: 5px;
+  left: -50px;
+  font-size: 18px;
+  z-index: 4;
+  animation: meteorShoot 2s linear forwards;
+}
+
+@keyframes meteorShoot {
+  0%   { left: -50px; top: 5px; opacity: 0; }
+  10%  { opacity: 1; }
+  80%  { opacity: 1; }
+  100% { left: 110%; top: 60px; opacity: 0; }
+}
+
 .ground {
   position: absolute;
   bottom: 0;

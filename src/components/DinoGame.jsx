@@ -523,9 +523,16 @@ export default function DinoGame({ onScoreReach999 }) {
 
   // ── Stars (night only) ────────────────────────────────────────────────────
   const stars = isNight ? [
-    { x: 80, y: 30 }, { x: 150, y: 15 }, { x: 260, y: 40 },
-    { x: 340, y: 20 }, { x: 450, y: 35 }, { x: 520, y: 12 }, { x: 580, y: 28 }
+    { x: 30,  y: 25 }, { x: 80,  y: 10 }, { x: 130, y: 35 },
+    { x: 190, y: 15 }, { x: 250, y: 30 }, { x: 310, y: 8  },
+    { x: 370, y: 40 }, { x: 430, y: 18 }, { x: 490, y: 28 },
+    { x: 545, y: 12 }, { x: 590, y: 38 },
   ] : [];
+
+  // Shooting star appears mid-night
+  const totalCycleLocal = DAY_DURATION + NIGHT_DURATION;
+  const nightProgress = isNight ? (dayNightFrame % totalCycleLocal - DAY_DURATION) / NIGHT_DURATION : -1;
+  const showMeteor = nightProgress > 0.35 && nightProgress < 0.55;
 
   return (
     <div
@@ -575,6 +582,11 @@ export default function DinoGame({ onScoreReach999 }) {
         {stars.map((s, i) => (
           <div key={i} className={styles.star} style={{ left: s.x, top: s.y }} />
         ))}
+
+        {/* Shooting star / meteor */}
+        {showMeteor && (
+          <div className={styles.meteor}>☄️</div>
+        )}
 
         {/* Sun or Moon */}
         {!isNight && (
