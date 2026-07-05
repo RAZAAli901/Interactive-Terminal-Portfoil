@@ -71,6 +71,8 @@ export default function DinoGame({ onScoreReach999 }) {
   const hasShieldRef = useRef(false);
   const [shieldItem, setShieldItem] = useState(null); // {x, y} position
   const shieldItemRef = useRef(null);
+  const [combo, setCombo] = useState(0);
+  const comboRef = useRef(0);
 
   // Dino physics
   const [dinoY, setDinoY] = useState(GROUND_Y);
@@ -269,9 +271,14 @@ export default function DinoGame({ onScoreReach999 }) {
       if (newX < -80) {
         // Passed! Add points
         const pts = obstacleRef.current?.points || 10;
-        const nextScore = scoreRef.current + pts;
+        const multiplier = Math.max(1, Math.floor(comboRef.current / 5));
+        const nextScore = scoreRef.current + pts * multiplier;
         setScore(nextScore);
         scoreRef.current = nextScore;
+
+        // Update combo
+        comboRef.current += 1;
+        setCombo(comboRef.current);
 
         // Milestone flash every 100 points
         const milestone = Math.floor(nextScore / 100);
@@ -441,6 +448,8 @@ export default function DinoGame({ onScoreReach999 }) {
     hasShieldRef.current = false;
     setShieldItem(null);
     shieldItemRef.current = null;
+    setCombo(0);
+    comboRef.current = 0;
   }, []);
 
   // ── Compute sky colour based on day/night cycle ───────────────────────────
@@ -508,6 +517,11 @@ export default function DinoGame({ onScoreReach999 }) {
           {phase === 'playing' && score > 0 && (
             <span className={styles.speedBadge}>
               LVL {Math.floor(score / 100) + 1}
+            </span>
+          )}
+          {combo >= 5 && (
+            <span className={styles.comboBadge} title={`${combo} combo! x${Math.floor(combo/5)} multiplier`}>
+              🔥×{Math.max(1, Math.floor(combo / 5))}
             </span>
           )}
           {hasShield && (

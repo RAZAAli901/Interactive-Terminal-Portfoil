@@ -87,6 +87,17 @@
   border: 1px solid rgba(0,120,212,0.4);
 }
 
+.comboBadge {
+  margin-left: 6px;
+  font-size: 11px;
+  background: linear-gradient(90deg, #ff4500, #ff8c00);
+  color: #fff;
+  padding: 1px 7px;
+  border-radius: 8px;
+  font-weight: bold;
+  animation: pulse 0.6s ease-in-out infinite;
+}
+
 .shieldBadge {
   margin-left: 6px;
   font-size: 14px;
