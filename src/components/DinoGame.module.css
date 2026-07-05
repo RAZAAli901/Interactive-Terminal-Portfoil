@@ -418,6 +418,32 @@
   transition: color 1s;
 }
 
+/* ── How To Play Guide ────────────────────────────────────────── */
+.howToPlay {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 6px;
+  font-size: 10px;
+  opacity: 0.55;
+}
+
+.howToPlay span {
+  background: rgba(0,0,0,0.07);
+  border: 1px solid rgba(0,0,0,0.12);
+  border-radius: 10px;
+  padding: 2px 8px;
+  white-space: nowrap;
+}
+
+.secretHint {
+  color: #b8860b;
+  font-weight: bold;
+  background: rgba(255, 215, 0, 0.1) !important;
+  border-color: rgba(255,215,0,0.3) !important;
+}
+
 /* ── Animations ──────────────────────────────────────────────── */
 @keyframes pulse {
   0%, 100% { opacity: 1; transform: scale(1); }

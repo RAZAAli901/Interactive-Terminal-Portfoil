@@ -711,14 +711,25 @@ export default function DinoGame({ onScoreReach999 }) {
         )}
       </div>
 
-      {/* Milestone hints */}
+      {/* Milestone / Progress hints */}
       <div className={styles.milestones} style={{ color: textColor }}>
-        {score < 50  && '🌵 More obstacles unlock at 50+ score'}
-        {score >= 50  && score < 100 && '🪨 Rocks unlock at 100 · Birds at 150+'}
-        {score >= 100 && score < 200 && '🐦 Watch out for birds!'}
-        {score >= 200 && score < 500 && '🍄 Mushrooms incoming at 300!'}
-        {score >= 500 && score < 999 && '💀 Elite mode! Reach 999 for a secret!'}
-        {score >= 999 && '🎖️ LEGENDARY! Type dino-master in the terminal!'}
+        {score < 50   && '🌵 Survive! More obstacles unlock at 50+ score'}
+        {score >= 50  && score < 100 && '🪨 Rocks unlock at 100 · Hold ↑ longer to jump higher!'}
+        {score >= 100 && score < 200 && '🐦 Birds! Hold ↑ to jump higher · ↓ to duck under them · 💎 collect gems!'}
+        {score >= 200 && score < 300 && '⭐ Grab the star shield to survive one hit! · 🔥 Build combos for bonus pts!'}
+        {score >= 300 && score < 500 && '🍄 Mushrooms incoming! Night cycle coming soon 🌙'}
+        {score >= 500 && score < 999 && '💀 Elite mode! Combo ×' + Math.max(1, Math.floor(combo/5)) + ' active · Reach 999 for a secret!'}
+        {score >= 999 && '🎖️ LEGENDARY SCORE! Open the terminal and type: dino-master'}
+      </div>
+
+      {/* How to Play compact guide */}
+      <div className={styles.howToPlay}>
+        <span>⬆️ Jump</span>
+        <span>⬇️ Duck</span>
+        <span>💎 Gems +25pts</span>
+        <span>⭐ Shield</span>
+        <span>🔥 Combo x?</span>
+        <span className={styles.secretHint}>Score 999 → unlock terminal secret 🔐</span>
       </div>
     </div>
   );
