@@ -63,6 +63,8 @@ export default function DinoGame({ onScoreReach999 }) {
   });
   const [newRecord, setNewRecord] = useState(false);
   const [secretUnlocked, setSecretUnlocked] = useState(false);
+  const [milestoneFlash, setMilestoneFlash] = useState(null);
+  const lastMilestoneRef = useRef(0);
 
   // Dino physics
   const [dinoY, setDinoY] = useState(GROUND_Y);
@@ -205,6 +207,14 @@ export default function DinoGame({ onScoreReach999 }) {
         setScore(nextScore);
         scoreRef.current = nextScore;
 
+        // Milestone flash every 100 points
+        const milestone = Math.floor(nextScore / 100);
+        if (milestone > lastMilestoneRef.current) {
+          lastMilestoneRef.current = milestone;
+          setMilestoneFlash(`🎯 ${nextScore} POINTS!`);
+          setTimeout(() => setMilestoneFlash(null), 1500);
+        }
+
         // Check 999+
         if (nextScore >= 999 && !secretUnlocked) {
           setSecretUnlocked(true);
@@ -329,6 +339,7 @@ export default function DinoGame({ onScoreReach999 }) {
     dayNightRef.current = 0;
     setIsNight(false);
     setGroundOffset(0);
+    lastMilestoneRef.current = 0;
   }, []);
 
   // ── Compute sky colour based on day/night cycle ───────────────────────────
@@ -466,6 +477,11 @@ export default function DinoGame({ onScoreReach999 }) {
             backgroundPositionX: `-${groundOffset}px`,
           }}
         />
+
+        {/* Milestone Flash */}
+        {milestoneFlash && (
+          <div className={styles.milestoneFlash}>{milestoneFlash}</div>
+        )}
 
         {/* Overlay messages */}
         {phase === 'idle' && (

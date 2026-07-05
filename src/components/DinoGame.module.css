@@ -213,6 +213,31 @@
   to { transform: scale(0.4); }
 }
 
+/* ── Milestone Flash ─────────────────────────────────────────── */
+.milestoneFlash {
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(90deg, #ff6b35, #ffd700);
+  color: #000;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 4px 14px;
+  border-radius: 20px;
+  z-index: 30;
+  animation: flashSlide 1.5s ease forwards;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(255,107,53,0.5);
+}
+
+@keyframes flashSlide {
+  0%   { opacity: 0; transform: translateX(-50%) translateY(-10px) scale(0.8); }
+  15%  { opacity: 1; transform: translateX(-50%) translateY(0)     scale(1.05); }
+  70%  { opacity: 1; transform: translateX(-50%) translateY(0)     scale(1); }
+  100% { opacity: 0; transform: translateX(-50%) translateY(-8px)  scale(0.9); }
+}
+
 /* ── Overlay ─────────────────────────────────────────────────── */
 .overlay {
   position: absolute;
