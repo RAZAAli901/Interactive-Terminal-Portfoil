@@ -405,6 +405,18 @@ export default function DinoGame({ onScoreReach999 }) {
           <div key={i} className={styles.star} style={{ left: s.x, top: s.y }} />
         ))}
 
+        {/* Sun or Moon */}
+        {!isNight && (
+          <div className={styles.sun} style={{ opacity: dayNightFrame > DAY_DURATION * 0.85 ? 0.3 : 1 }}>
+            ☀️
+          </div>
+        )}
+        {isNight && (
+          <div className={styles.moon}>
+            🌙
+          </div>
+        )}
+
         {/* Clouds */}
         {clouds.map(c => <Cloud key={c.id} x={c.x} y={c.y} />)}
 
