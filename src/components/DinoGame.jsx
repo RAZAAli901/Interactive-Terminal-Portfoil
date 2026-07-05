@@ -170,6 +170,35 @@ export default function DinoGame({ onScoreReach999 }) {
     };
   }, [doJump]);
 
+  // ── Touch swipe handlers (mobile) ──────────────────────────────────────────
+  useEffect(() => {
+    let touchStartY = 0;
+    const onTouchStart = (e) => {
+      touchStartY = e.touches[0].clientY;
+    };
+    const onTouchEnd = (e) => {
+      const dy = touchStartY - e.changedTouches[0].clientY;
+      if (dy > 20) {
+        // Swipe up → jump
+        doJump();
+      } else if (dy < -20) {
+        // Swipe down → duck (brief)
+        isDuckingRef.current = true;
+        setIsDucking(true);
+        setTimeout(() => {
+          isDuckingRef.current = false;
+          setIsDucking(false);
+        }, 500);
+      }
+    };
+    window.addEventListener('touchstart', onTouchStart, { passive: true });
+    window.addEventListener('touchend', onTouchEnd, { passive: true });
+    return () => {
+      window.removeEventListener('touchstart', onTouchStart);
+      window.removeEventListener('touchend', onTouchEnd);
+    };
+  }, [doJump]);
+
   // ── Game loop ─────────────────────────────────────────────────────────────
   useEffect(() => {
     if (phase !== 'playing') return;
