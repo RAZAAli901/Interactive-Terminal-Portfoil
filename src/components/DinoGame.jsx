@@ -71,6 +71,7 @@ export default function DinoGame({ onScoreReach999 }) {
   const velRef = useRef(0);
   const isJumpingRef = useRef(false);
   const holdRef = useRef(0);     // frames key held
+  const isDuckingRef = useRef(false);
 
   // Obstacle
   const [obstacle, setObstacle] = useState(null);
@@ -139,6 +140,7 @@ export default function DinoGame({ onScoreReach999 }) {
       }
       if (e.code === 'ArrowDown') {
         keysRef.current.down = true;
+        isDuckingRef.current = true;
         setIsDucking(true);
       }
     };
@@ -148,6 +150,7 @@ export default function DinoGame({ onScoreReach999 }) {
       }
       if (e.code === 'ArrowDown') {
         keysRef.current.down = false;
+        isDuckingRef.current = false;
         setIsDucking(false);
       }
     };
@@ -250,9 +253,18 @@ export default function DinoGame({ onScoreReach999 }) {
 
         const dinoRight = DINO_LEFT + DINO_W - 8; // slight inset for fairness
         const dinoLeft = DINO_LEFT + 8;
-        const dinoTop = dinoYRef.current + (isDucking ? DINO_H / 2 : DINO_H);
+        const dinoHeight = isDuckingRef.current ? DINO_H / 2 : DINO_H;
+        const dinoTop = dinoYRef.current + dinoHeight;
 
-        const horizOverlap = dinoRight > obsLeft && dinoLeft < obsRight;
+        // Birds need to be jumped over (if low bird) or ducked under (if high bird)
+        const isBird = obs.id.includes('bird');
+        const horizMargin = isBird ? 4 : 8;  // birds have tighter box
+        const birdDinoLeft = DINO_LEFT + horizMargin;
+        const birdDinoRight = DINO_LEFT + DINO_W - horizMargin;
+        const adjDinoLeft = isBird ? birdDinoLeft : dinoLeft;
+        const adjDinoRight = isBird ? birdDinoRight : dinoRight;
+
+        const horizOverlap = adjDinoRight > obsLeft && adjDinoLeft < obsRight;
         const vertOverlap = dinoYRef.current < obsTop && dinoTop > obsY;
 
         if (horizOverlap && vertOverlap) {
