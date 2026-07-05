@@ -232,6 +232,28 @@
   50% { transform: scaleX(0.95) scaleY(1.05); }
 }
 
+/* ── Coin ─────────────────────────────────────────────────────── */
+.coin {
+  position: absolute;
+  font-size: 18px;
+  z-index: 11;
+  animation: shieldFloat 0.8s ease-in-out infinite;
+  filter: drop-shadow(0 0 5px rgba(0, 180, 255, 0.7));
+}
+
+.coinFlash {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #00bfff;
+  font-size: 18px;
+  font-weight: bold;
+  z-index: 30;
+  animation: flashSlide 0.6s ease forwards;
+  text-shadow: 0 0 8px rgba(0,191,255,0.8);
+}
+
 /* ── Obstacle ────────────────────────────────────────────────── */
 .obstacle {
   position: absolute;

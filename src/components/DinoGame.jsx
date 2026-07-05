@@ -73,6 +73,9 @@ export default function DinoGame({ onScoreReach999 }) {
   const shieldItemRef = useRef(null);
   const [combo, setCombo] = useState(0);
   const comboRef = useRef(0);
+  const [coin, setCoin] = useState(null); // {x, y}
+  const coinRef = useRef(null);
+  const [coinCollectFlash, setCoinCollectFlash] = useState(false);
 
   // Dino physics
   const [dinoY, setDinoY] = useState(GROUND_Y);
@@ -309,6 +312,13 @@ export default function DinoGame({ onScoreReach999 }) {
           shieldItemRef.current = shield;
         }
 
+        // Randomly spawn coin after 100 pts (8% chance each obstacle pass)
+        if (nextScore >= 100 && !coinRef.current && Math.random() < 0.08) {
+          const c = { x: GAME_WIDTH + 150, y: 30 + Math.random() * 70 };
+          setCoin(c);
+          coinRef.current = c;
+        }
+
         // Spawn next obstacle
         const nextObs = pickObstacle(nextScore);
         setObstacle(nextObs);
@@ -316,6 +326,35 @@ export default function DinoGame({ onScoreReach999 }) {
       }
       setObstacleX(newX);
       obstacleXRef.current = newX;
+
+      // ── Move coin ─────────────────────────────────────────────────────
+      if (coinRef.current) {
+        const cx = coinRef.current.x - speed;
+        const cy = coinRef.current.y;
+        if (cx < -40) {
+          coinRef.current = null;
+          setCoin(null);
+        } else {
+          // Collect check
+          const coinLeft = cx, coinRight = cx + 20, coinBottom = cy, coinTop = cy + 20;
+          const dL = DINO_LEFT + 6, dR = DINO_LEFT + DINO_W - 6;
+          const dTop = dinoYRef.current + DINO_H;
+          if (dR > coinLeft && dL < coinRight && dinoYRef.current < coinTop && dTop > coinBottom) {
+            // Collected!
+            const bonus = 25;
+            const newS = scoreRef.current + bonus;
+            setScore(newS);
+            scoreRef.current = newS;
+            coinRef.current = null;
+            setCoin(null);
+            setCoinCollectFlash(true);
+            setTimeout(() => setCoinCollectFlash(false), 600);
+          } else {
+            coinRef.current = { x: cx, y: cy };
+            setCoin({ x: cx, y: cy });
+          }
+        }
+      }
 
       // ── Ground scroll ─────────────────────────────────────────────────
       setGroundOffset(prev => (prev + speed) % 60);
@@ -450,6 +489,9 @@ export default function DinoGame({ onScoreReach999 }) {
     shieldItemRef.current = null;
     setCombo(0);
     comboRef.current = 0;
+    setCoin(null);
+    coinRef.current = null;
+    setCoinCollectFlash(false);
   }, []);
 
   // ── Compute sky colour based on day/night cycle ───────────────────────────
@@ -588,6 +630,21 @@ export default function DinoGame({ onScoreReach999 }) {
             className={styles.dinoShield}
             style={{ bottom: dinoY + GROUND_Y, left: DINO_LEFT }}
           />
+        )}
+
+        {/* Coin collectible */}
+        {coin && (
+          <div
+            className={styles.coin}
+            style={{ left: coin.x, bottom: coin.y }}
+          >
+            💎
+          </div>
+        )}
+
+        {/* Coin collect flash */}
+        {coinCollectFlash && (
+          <div className={styles.coinFlash}>+25!</div>
         )}
 
         {/* Death particles */}
