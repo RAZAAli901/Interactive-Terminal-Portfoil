@@ -89,6 +89,9 @@ export default function Window({ children, title = "Terminal", icon = "🖥️",
     return (
         <div
             ref={windowRef}
+            role="dialog"
+            aria-label={`${title} window`}
+            aria-labelledby={`win-title-${title.replace(/\s+/g, '-').toLowerCase()}`}
             className={`${styles.windowFrame} ${isMaximized ? styles.maximized : ''} ${isDragging ? styles.dragging : ''} ${isResizing ? styles.resizing : ''} ${isMinimized ? styles.minimized : ''}`}
             onMouseDown={() => onFocus && onFocus()}
             style={{
@@ -113,7 +116,7 @@ export default function Window({ children, title = "Terminal", icon = "🖥️",
                                     <path d="M8 10H12" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
                                 </svg>
                             </span>
-                            <span className={styles.tabTitle}>{title}</span>
+                            <span id={`win-title-${title.replace(/\s+/g, '-').toLowerCase()}`} className={styles.tabTitle}>{title}</span>
                             <span className={styles.tabCloseBtn} onClick={onClose}>×</span>
                         </div>
                         <div className={styles.newTabBtn}>+</div>
@@ -121,7 +124,7 @@ export default function Window({ children, title = "Terminal", icon = "🖥️",
                 ) : (
                     <div className={styles.simpleTitleBar}>
                         <span className={styles.simpleIcon}>{icon}</span>
-                        <span className={styles.simpleTitle}>{title}</span>
+                        <span id={`win-title-${title.replace(/\s+/g, '-').toLowerCase()}`} className={styles.simpleTitle}>{title}</span>
                     </div>
                 )}
                 <div className={`${styles.windowControls} ${!isTerminal ? styles.lightControls : ''}`}>
