@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import ErrorBoundary from './components/ErrorBoundary';
 import Terminal from "./components/Terminal";
 import LoadingScreen from "./components/LoadingScreen";
 import Window from "./components/Window";
@@ -289,22 +290,23 @@ export default function App() {
           {Object.values(windows).map(win => {
             if (!win.isOpen) return null;
             return (
-              <Window
-                key={win.id}
-                title={win.title}
-                icon={win.icon}
-                onClose={() => closeWindow(win.id)}
-                onMinimize={() => minimizeWindow(win.id)}
-                isMinimized={win.isMinimized}
-                defaultWidth={win.defaultWidth}
-                defaultHeight={win.defaultHeight}
-                offsetX={win.offsetX}
-                offsetY={win.offsetY}
-                zIndex={win.zIndex}
-                onFocus={() => focusWindow(win.id)}
-              >
-                {renderWindowContent(win.id)}
-              </Window>
+              <ErrorBoundary key={win.id}>
+                <Window
+                  title={win.title}
+                  icon={win.icon}
+                  onClose={() => closeWindow(win.id)}
+                  onMinimize={() => minimizeWindow(win.id)}
+                  isMinimized={win.isMinimized}
+                  defaultWidth={win.defaultWidth}
+                  defaultHeight={win.defaultHeight}
+                  offsetX={win.offsetX}
+                  offsetY={win.offsetY}
+                  zIndex={win.zIndex}
+                  onFocus={() => focusWindow(win.id)}
+                >
+                  {renderWindowContent(win.id)}
+                </Window>
+              </ErrorBoundary>
             );
           })}
 
