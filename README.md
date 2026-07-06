@@ -1,4 +1,4 @@
-
+# Interactive Terminal OS Portfolio
 
 <p align="center">
   <a href="https://razaali901.github.io/Interactive-Terminal-Portfoil/" target="_blank">
@@ -7,46 +7,91 @@
 </p>
 
 <p align="center">
-  <i>A fully interactive terminal experience featuring a Windows-style UI, file explorer, and custom commands.</i>
+  <i>A fully interactive, web-based operating system portfolio featuring a Windows-style UI, terminal, and custom applications.</i>
 </p>
+
 ---
 
+## 📸 Screenshots
+*(Add screenshots here)*
+- `Desktop View` - Showing the main desktop environment with taskbar and widgets.
+- `Terminal Experience` - Highlighting the custom interactive terminal.
+- `App Suite` - Displaying the Office suite, VS Code emulator, and games.
 
+## ✨ Features
+
+- **Custom Interactive Terminal**: Full command-line experience with auto-complete, history navigation (up/down arrows), and a rich set of commands (`about`, `projects`, `skills`, `theme`, etc.).
+- **Window Management System**: Draggable, resizable, and minimizable windows with accurate z-index stacking.
+- **Rich Application Suite**:
+  - **VS Code Emulator**: View project files directly in a Monaco-based editor interface.
+  - **Office Suite**: Simulated Word, Excel, PowerPoint, and OneNote applications.
+  - **Web Browser & Chat**: Fully functional simulated browser and a mockup chat interface.
+  - **Games**: Classic Minesweeper, Solitaire, and a Chrome-style Dinosaur game.
+- **Dynamic Theming**: Support for multiple themes (Dracula, Nord, Monokai, Matrix, Cyberpunk, Retro) and 12 different wallpapers.
+- **AI Assistant & RAG Parser**: Interactively parses queries regarding project implementations.
+- **Responsive Design**: Adapts beautifully to mobile devices, defaulting to a focused terminal experience on small screens.
+- **Performance Optimized**: Uses React `lazy` and `Suspense` for bundle splitting and dynamic imports.
+
+## 🛠️ Technology Stack
+
+- **Core**: React 19, JavaScript (ES6+), HTML5, CSS3 (CSS Modules)
+- **Build Tool**: Vite
+- **Testing**: Vitest, React Testing Library
+- **Icons & UI**: Boxicons, Lucide React
+- **Deployment**: GitHub Pages (or Vercel/Netlify)
+
+## 🚀 Quick Setup
+
+To run this project locally, ensure you have Node.js installed, then follow these steps:
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/RAZAAli901/Interactive-Terminal-Portfoil.git
+   cd Interactive-Terminal-Portfoil
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+
+3. **Start the development server:**
+   ```bash
+   npm run dev
+   ```
+
+4. **Build for production:**
+   ```bash
+   npm run build
+   ```
+
+5. **Run tests:**
+   ```bash
+   npm run test
+   ```
 
 ## 🖥️ Terminal Commands    
 
-
-Interact with my portfolio using these built-in commands:
+Interact with the portfolio using these built-in commands inside the Terminal application:
 
 | Command | Description |
 | :--- | :--- |
-| `about` | Display info about me |
-| `projects` | View my portfolio projects |
+| `about` | Display info about the developer |
+| `projects` | View portfolio projects |
 | `contact` | View contact information |
-| `fastfetch` | Display simulated system specifications |
-| `ask [query]` | Query the integrated AI assistant (e.g. *ask what stack Raza uses*) |
-| `github` | Fetch live repository stats over the GitHub REST API |
 | `skills` | Render a styled ASCII bar chart of core technology skills |
-| `theme [name]`| Switch color schemes (`dracula`, `nord`, `monokai`, `retro`) |
-| `wallpaper [1-12]` | Change the desktop background (Admin only) |
+| `theme [name]`| Switch color schemes (`dracula`, `nord`, `monokai`, `retro`, etc.) |
+| `wallpaper [1-12]` | Change the desktop background |
+| `ask [query]` | Query the integrated AI assistant |
+| `github` | Fetch live repository stats over the GitHub API |
 | `sudo` | Elevate session to Admin mode |
 | `clear` | Clear the terminal screen |
 
-## 🚀 Quick Setup
-To run this project locally, clone the repository, install npm dependencies, and launch Vite dev server:
-```bash
-npm install
-npm run dev
-```
+## 🤝 Contributing
 
-## ✨ Features
-* **AI Assistant & RAG Parser**: Interactively parses query details regarding RAG pipeline implementations.
-* **Tab Autocomplete & Command History**: Shell-style tab Completion with ghost-text preview and arrow history traversal.
-* **Project Preview Carousel**: Displays responsive image sliders, tech badges, and repository targets inside File Explorer.
-* **Monaco Code Editor Showcase**: Integrates Visual Studio Code window utilizing CDN-loaded Monaco environment for read-only project files.
-* **Mobile Terminal Mode**: Responsive styling that defaults to fullscreen terminal environment on smaller screen widths.
-* **Window Drag & Maximize Transitions**: Supports double-click header resizing and minimize animations.
-* **Live System clock**: Real-time clock with Stopwatch, Timer, and World Clock tabs.
-* **Scientific Calculator**: Standard + scientific mode (sin/cos/tan/sqrt/log) with keyboard bindings.
-* **Enhanced Notepad**: Font size/family picker and live line, word, and character counter.
-* **Retro Applications Suite**: Interactive tools including a world clock/stopwatch, scientific keyboard calculator, notepad editor with text metrics, browser history/bookmarks, chat transcripts, and custom Minesweeper/Solitaire game settings.
+Contributions, issues, and feature requests are welcome! 
+Feel free to check the [issues page](https://github.com/RAZAAli901/Interactive-Terminal-Portfoil/issues).
+
+## 📝 License
+
+This project is open-source and available under the [MIT License](LICENSE).
