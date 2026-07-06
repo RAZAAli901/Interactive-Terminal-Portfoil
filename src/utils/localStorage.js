@@ -47,3 +47,42 @@ export function saveThemePreference(theme) {
     console.warn("Failed to save theme to localStorage", e);
   }
 }
+
+/**
+ * Caches data with an expiration timestamp
+ * @param {string} key - Cache key
+ * @param {any} data - Data to cache
+ * @param {number} ttlMs - Time to live in milliseconds
+ */
+export function setCachedData(key, data, ttlMs = 3600000 /* 1 hour */) {
+  try {
+    const item = {
+      data,
+      expiry: Date.now() + ttlMs
+    };
+    localStorage.setItem(key, JSON.stringify(item));
+  } catch (e) {
+    console.warn(`Failed to cache data for key ${key}`, e);
+  }
+}
+
+/**
+ * Retrieves cached data if it exists and hasn't expired
+ * @param {string} key - Cache key
+ * @returns {any|null} - The cached data or null if expired/missing
+ */
+export function getCachedData(key) {
+  try {
+    const itemStr = localStorage.getItem(key);
+    if (!itemStr) return null;
+    const item = JSON.parse(itemStr);
+    if (Date.now() > item.expiry) {
+      localStorage.removeItem(key);
+      return null;
+    }
+    return item.data;
+  } catch (e) {
+    console.warn(`Failed to read cached data for key ${key}`, e);
+    return null;
+  }
+}
