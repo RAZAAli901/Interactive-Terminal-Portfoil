@@ -1,5 +1,4 @@
 import { useEffect, useRef } from 'react';
-import styles from './Terminal.module.css'; // Reuse terminal styling if needed
 
 export default function MatrixScreensaver({ onClose }) {
   const canvasRef = useRef(null);

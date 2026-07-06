@@ -1,4 +1,4 @@
-import { formatTable, formatSuccess, formatError, formatInfo, formatWarning, formatSection, formatBadge } from './terminalFormatting';
+import { formatTable, formatSuccess, formatError, formatInfo, formatWarning, formatSection, formatBadge, formatLink, formatCode } from './terminalFormatting';
 import { getFuzzyMatches } from './fuzzyMatch';
 import { getHistory } from './localStorage';
 import portfolioData from '../data/portfolio.json';
@@ -271,7 +271,7 @@ const hireMeHandler = () => {
 
 const connectHandler = (args) => {
   const platform = args[0] ? args[0].toLowerCase() : null;
-  const { linkedin, github, twitter, email } = portfolioData.bio;
+  const { linkedin, github, twitter } = portfolioData.bio;
   
   if (!platform) {
     return {
@@ -575,7 +575,7 @@ const themeHandler = (args) => {
   };
 };
 
-const systemInfoHandler = (args, context) => {
+const systemInfoHandler = () => {
   let uptime = '1m 24s';
   if (window.performance && window.performance.now) {
     const ms = window.performance.now();
@@ -783,7 +783,6 @@ const weatherHandler = (args) => {
 
 const dateHandler = () => {
   const now = new Date();
-  const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   const firstDay = new Date(now.getFullYear(), now.getMonth(), 1).getDay();
   const totalDays = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();

@@ -41,7 +41,7 @@ export default function OfficeApp({ appType }) {
     });
 
     // Outlook State
-    const [outlookEmails, setOutlookEmails] = useState([
+    const [outlookEmails] = useState([
         {
             id: 1,
             sender: 'Hiring Team <hiring@techcorp.com>',

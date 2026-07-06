@@ -37,7 +37,7 @@ export default function Calculator() {
             setDisplay(Number(result.toFixed(8)).toString());
             setEquation('');
             setShouldReset(true);
-        } catch (e) {
+        } catch {
             setDisplay('Error');
             setEquation('');
             setShouldReset(true);
@@ -103,7 +103,7 @@ export default function Calculator() {
             
             setDisplay(Number(result.toFixed(6)).toString());
             setShouldReset(true);
-        } catch (e) {
+        } catch {
             setDisplay('Error');
             setShouldReset(true);
         }

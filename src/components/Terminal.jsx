@@ -28,8 +28,6 @@ export default function Terminal({ setTheme, setWallpaper, initialCommand, setIn
     const [currentPath, setCurrentPath] = useState('/portfolio');
     const [showScreensaver, setShowScreensaver] = useState(false);
     
-    // For chat interaction context
-    const [chatMessages, setChatMessages] = useState([]);
 
     const bottomRef = useRef(null);
 

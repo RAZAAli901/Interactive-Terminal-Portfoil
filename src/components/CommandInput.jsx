@@ -29,11 +29,8 @@ export default function CommandInput({ onSubmit, mode = 'command', history = [],
         } else if (e.key === 'ArrowUp') {
             e.preventDefault();
             if (history.length > 0) {
-                let currentPrefix = prefix;
                 let currentFiltered = filteredHistory;
-                
                 if (historyIndex === -1) {
-                    currentPrefix = input;
                     setPrefix(input);
                     // Filter history starting with the prefix, keeping uniqueness
                     const uniqueHistory = Array.from(new Set(history));

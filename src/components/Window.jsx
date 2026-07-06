@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import styles from './Window.module.css';
 
-export default function Window({ children, title = "Terminal", icon = "🖥️", onClose, onMinimize, onMaximize, isMinimized, defaultWidth = 800, defaultHeight = 500, offsetX = 0, offsetY = 0, zIndex = 1, onFocus }) {
+export default function Window({ children, title = "Terminal", icon = "🖥️", onClose, onMinimize, isMinimized, defaultWidth = 800, defaultHeight = 500, offsetX = 0, offsetY = 0, zIndex = 1, onFocus }) {
     const [size, setSize] = useState({ width: defaultWidth, height: defaultHeight });
     const [position, setPosition] = useState(() => {
         if (typeof window !== 'undefined') {
