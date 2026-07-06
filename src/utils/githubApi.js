@@ -1,4 +1,10 @@
+import { getCachedData, setCachedData } from './localStorage';
+
 export async function fetchGithubStats() {
+    const CACHE_KEY = 'github_stats_cache';
+    const cached = getCachedData(CACHE_KEY);
+    if (cached) return cached;
+
     try {
         const userPromise = fetch('https://api.github.com/users/RAZAAli901', { headers: { 'Accept': 'application/vnd.github.v3+json' } });
         const reposPromise = fetch('https://api.github.com/users/RAZAAli901/repos?sort=updated', { headers: { 'Accept': 'application/vnd.github.v3+json' } });
@@ -12,7 +18,7 @@ export async function fetchGithubStats() {
         const userData = await userRes.json();
         const reposData = await reposRes.json();
 
-        return {
+        const result = {
             username: userData.login,
             name: userData.name || userData.login,
             publicRepos: userData.public_repos,
@@ -27,6 +33,8 @@ export async function fetchGithubStats() {
                 url: repo.html_url
             }))
         };
+        setCachedData(CACHE_KEY, result);
+        return result;
     } catch (err) {
         console.warn('Using fallback github data due to API error/rate-limit:', err);
         // Fallback cached stats of Raza's actual repo
