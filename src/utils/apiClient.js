@@ -2,6 +2,8 @@
  * Client for external API services (GitHub and Simulated AI Q&A)
  */
 
+import { getCachedData, setCachedData } from './localStorage';
+
 /**
  * Fetches data from GitHub REST API with modes or uses cached fallbacks
  * @param {string} mode - 'user' | 'repos' | 'stats' | 'activity'
@@ -9,15 +11,20 @@
  */
 export async function fetchGithubData(mode = 'user') {
   const username = "RAZAAli901";
+  const CACHE_KEY = `github_api_${mode}`;
   
+  const cached = getCachedData(CACHE_KEY);
+  if (cached) return cached;
+
   try {
+    let result;
     if (mode === 'user') {
       const res = await fetch(`https://api.github.com/users/${username}`, {
         headers: { 'Accept': 'application/vnd.github.v3+json' }
       });
       if (!res.ok) throw new Error("Rate limit or user not found");
       const data = await res.json();
-      return {
+      result = {
         username: data.login,
         name: data.name || "Raza Ali Murtaza",
         publicRepos: data.public_repos,
@@ -32,7 +39,7 @@ export async function fetchGithubData(mode = 'user') {
       if (!res.ok) throw new Error("Rate limit or repos not found");
       const data = await res.json();
       // Get top 6 sorted by stars
-      return data
+      result = data
         .sort((a, b) => b.stargazers_count - a.stargazers_count)
         .slice(0, 6)
         .map(r => ({
@@ -63,7 +70,7 @@ export async function fetchGithubData(mode = 'user') {
         .map(([lang, count]) => ({ lang, percentage: Math.round((count / data.length) * 100) }))
         .sort((a, b) => b.percentage - a.percentage);
 
-      return {
+      result = {
         totalRepos: data.length,
         totalStars,
         languages
@@ -76,7 +83,7 @@ export async function fetchGithubData(mode = 'user') {
       const data = await res.json();
       
       // Extract commit events
-      const pushEvents = data
+      result = data
         .filter(e => e.type === 'PushEvent')
         .slice(0, 5)
         .map(e => ({
@@ -84,9 +91,10 @@ export async function fetchGithubData(mode = 'user') {
           commits: e.payload.commits ? e.payload.commits.map(c => c.message) : [],
           date: new Date(e.created_at).toLocaleDateString()
         }));
-
-      return pushEvents;
     }
+    
+    setCachedData(CACHE_KEY, result);
+    return result;
   } catch (err) {
     console.warn(`GitHub API [${mode}] failed. Using local fallback cache.`, err);
     return getGithubFallback(mode);
