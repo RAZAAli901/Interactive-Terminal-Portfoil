@@ -47,29 +47,33 @@ export default function Photos() {
                         style={{ backgroundImage: `url(${img.url})` }}
                         onClick={() => openLightbox(index)}
                         title={img.title}
+                        role="img"
+                        aria-label={img.title}
+                        tabIndex={0}
+                        onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && openLightbox(index)}
                     />
                 ))}
             </div>
 
             {lightboxIndex !== null && (
-                <div className={styles.lightbox}>
+                <div className={styles.lightbox} role="dialog" aria-label={`Lightbox: ${images[lightboxIndex].title}`} aria-modal="true">
                     <div className={styles.lightboxHeader}>
                         <span>{images[lightboxIndex].title}</span>
                         <div style={{ display: 'flex', gap: '15px', alignItems: 'center' }}>
-                            <button className={styles.navBtn} style={{ padding: '4px 8px', fontSize: '14px' }} onClick={handleZoomOut}>Zoom Out</button>
-                            <button className={styles.navBtn} style={{ padding: '4px 8px', fontSize: '14px' }} onClick={handleZoomIn}>Zoom In</button>
-                            <span className={styles.closeBtn} onClick={() => setLightboxIndex(null)}>✕</span>
+                            <button className={styles.navBtn} style={{ padding: '4px 8px', fontSize: '14px' }} onClick={handleZoomOut} aria-label="Zoom out">Zoom Out</button>
+                            <button className={styles.navBtn} style={{ padding: '4px 8px', fontSize: '14px' }} onClick={handleZoomIn} aria-label="Zoom in">Zoom In</button>
+                            <span className={styles.closeBtn} onClick={() => setLightboxIndex(null)} role="button" tabIndex={0} aria-label="Close lightbox" onKeyDown={(e) => e.key === 'Enter' && setLightboxIndex(null)}>✕</span>
                         </div>
                     </div>
                     <div className={styles.lightboxContent}>
-                        <button className={styles.navBtn} onClick={handlePrev}>◀</button>
+                        <button className={styles.navBtn} onClick={handlePrev} aria-label="Previous image">◀</button>
                         <img 
                             className={styles.mainImage} 
                             src={images[lightboxIndex].url} 
                             alt={images[lightboxIndex].title}
                             style={{ transform: `scale(${zoom})` }}
                         />
-                        <button className={styles.navBtn} onClick={handleNext}>▶</button>
+                        <button className={styles.navBtn} onClick={handleNext} aria-label="Next image">▶</button>
                     </div>
                     <div className={styles.lightboxFooter}>
                         Image {lightboxIndex + 1} of {images.length}
