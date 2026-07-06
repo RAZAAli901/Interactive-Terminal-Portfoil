@@ -111,6 +111,15 @@ export default function DesktopIcon({ label, icon, onDoubleClick }) {
             onDoubleClick={handleDoubleClick}
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
+            role="button"
+            tabIndex={0}
+            aria-label={`${label} — double-click to open`}
+            onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    handleDoubleClick(e);
+                }
+            }}
         >
             {hovered && (
                 <div className={styles.tooltip}>
