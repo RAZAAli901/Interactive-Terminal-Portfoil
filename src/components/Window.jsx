@@ -125,17 +125,17 @@ export default function Window({ children, title = "Terminal", icon = "🖥️",
                     </div>
                 )}
                 <div className={`${styles.windowControls} ${!isTerminal ? styles.lightControls : ''}`}>
-                    <button className={`${styles.controlBtn} ${styles.minimize}`} onClick={onMinimize} title="Minimize">
+                    <button className={`${styles.controlBtn} ${styles.minimize}`} onClick={onMinimize} title="Minimize" aria-label="Minimize window">
                         <svg viewBox="0 0 10 1"><path d="M0 0h10v1H0z" /></svg>
                     </button>
-                    <button className={`${styles.controlBtn} ${styles.maximize}`} onClick={toggleMaximize} title={isMaximized ? "Restore Down" : "Maximize"}>
+                    <button className={`${styles.controlBtn} ${styles.maximize}`} onClick={toggleMaximize} title={isMaximized ? "Restore Down" : "Maximize"} aria-label={isMaximized ? "Restore window" : "Maximize window"}>
                         {isMaximized ? (
                             <svg viewBox="0 0 10 10"><path d="M2.1 0v2H0v8.1h8.2v-2h2V0H2.1zm6.1 2.1h-2v6h-6v-6h8v6z" /></svg>
                         ) : (
                             <svg viewBox="0 0 10 10"><path d="M0 0v10h10V0H0zm9 9H1V1h8v8z" /></svg>
                         )}
                     </button>
-                    <button className={`${styles.controlBtn} ${styles.close}`} onClick={onClose} title="Close">
+                    <button className={`${styles.controlBtn} ${styles.close}`} onClick={onClose} title="Close" aria-label="Close window">
                         <svg viewBox="0 0 10 10"><path d="M9.35 0L5 4.35 0.65 0 0 0.65 4.35 5 0 9.35 0.65 10 5 5.65 9.35 10 10 9.35 5.65 5 10 0.65z" /></svg>
                     </button>
                 </div>
