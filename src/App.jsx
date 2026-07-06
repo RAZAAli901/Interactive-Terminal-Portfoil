@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useWindowManager } from './hooks/useWindowManager';
 import ErrorBoundary from './components/ErrorBoundary';
 import Terminal from "./components/Terminal";
 import LoadingScreen from "./components/LoadingScreen";
@@ -52,11 +53,8 @@ export default function App() {
     minesweeper: false
   });
 
-  // Global zIndex coordinator
-  const [maxZIndex, setMaxZIndex] = useState(10);
-
   // Dynamic window list
-  const [windows, setWindows] = useState({
+  const initialWindows = {
     terminal: { id: 'terminal', title: 'Command Prompt', icon: '💻', isOpen: true, isMinimized: false, zIndex: 10, defaultWidth: 800, defaultHeight: 500, offsetX: 0, offsetY: 0 },
     explorer: { id: 'explorer', title: 'My Computer', icon: '🖥️', isOpen: false, isMinimized: false, zIndex: 1, defaultWidth: 800, defaultHeight: 500 },
     notepad: { id: 'notepad', title: 'Notepad', icon: '📝', isOpen: false, isMinimized: false, zIndex: 1, defaultWidth: 650, defaultHeight: 500, offsetX: 80, offsetY: 40 },
@@ -76,85 +74,26 @@ export default function App() {
     onenote: { id: 'onenote', title: 'OneNote', icon: '📓', isOpen: false, isMinimized: false, zIndex: 1, defaultWidth: 750, defaultHeight: 500 },
     vscode: { id: 'vscode', title: 'Visual Studio Code', icon: '💙', isOpen: false, isMinimized: false, zIndex: 1, defaultWidth: 900, defaultHeight: 600 },
     minesweeper: { id: 'minesweeper', title: 'MineSweeper', icon: '💣', isOpen: false, isMinimized: false, zIndex: 1, defaultWidth: 400, defaultHeight: 500 }
-  });
+  };
+  const { windows, openWindow, closeWindow, minimizeWindow, toggleWindow, focusWindow } = useWindowManager(initialWindows);
 
   const [isStartMenuOpen, setIsStartMenuOpen] = useState(false);
   const [contextMenu, setContextMenu] = useState({ visible: false, x: 0, y: 0 });
   const [terminalInitialCommand, setTerminalInitialCommand] = useState(null);
 
   const wallpapers = {
-    1: 'https://images.unsplash.com/photo-1496247749665-49cf5b1022e9?q=80&w=2073&auto=format&fit=crop', // Glitch/Broken Screen alternative
-    2: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?q=80&w=2070&auto=format&fit=crop', // Cyberpunk neon
-    3: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2064&auto=format&fit=crop', // Vaporwave grid
-    4: 'https://images.unsplash.com/photo-1607799279861-4dd421887fb3?q=80&w=2070&auto=format&fit=crop', // Abstract code
-    5: 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?q=80&w=2070&auto=format&fit=crop', // Minimalist background
-    6: 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?q=80&w=2070&auto=format&fit=crop', // Code
-    7: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=2071&auto=format&fit=crop', // Gaming
-    8: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop', // Space
-    9: 'https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2070&auto=format&fit=crop', // Circuit
-    10: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=2070&auto=format&fit=crop', // Landscape
-    11: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=2073&auto=format&fit=crop', // Beach
-    12: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=2070&auto=format&fit=crop', // Mountains
-  };
-
-  const openWindow = (id) => {
-    const nextZ = maxZIndex + 1;
-    setMaxZIndex(nextZ);
-    setWindows(prev => ({
-      ...prev,
-      [id]: { ...prev[id], isOpen: true, isMinimized: false, zIndex: nextZ }
-    }));
-    setIsStartMenuOpen(false);
-  };
-
-  const closeWindow = (id) => {
-    setWindows(prev => ({
-      ...prev,
-      [id]: { ...prev[id], isOpen: false, isMinimized: false }
-    }));
-  };
-
-  const minimizeWindow = (id) => {
-    setWindows(prev => ({
-      ...prev,
-      [id]: { ...prev[id], isMinimized: true }
-    }));
-  };
-
-  const toggleWindow = (id) => {
-    setWindows(prev => {
-      const win = prev[id];
-      if (!win) return prev;
-      if (!win.isOpen) {
-        const nextZ = maxZIndex + 1;
-        setMaxZIndex(nextZ);
-        return {
-          ...prev,
-          [id]: { ...win, isOpen: true, isMinimized: false, zIndex: nextZ }
-        };
-      } else if (win.isMinimized) {
-        const nextZ = maxZIndex + 1;
-        setMaxZIndex(nextZ);
-        return {
-          ...prev,
-          [id]: { ...win, isMinimized: false, zIndex: nextZ }
-        };
-      } else {
-        return {
-          ...prev,
-          [id]: { ...win, isMinimized: true }
-        };
-      }
-    });
-  };
-
-  const focusWindow = (id) => {
-    const nextZ = maxZIndex + 1;
-    setMaxZIndex(nextZ);
-    setWindows(prev => ({
-      ...prev,
-      [id]: { ...prev[id], zIndex: nextZ }
-    }));
+    1: 'https://images.unsplash.com/photo-1496247749665-49cf5b1022e9?q=80&w=2073&auto=format&fit=crop',
+    2: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?q=80&w=2070&auto=format&fit=crop',
+    3: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2064&auto=format&fit=crop',
+    4: 'https://images.unsplash.com/photo-1607799279861-4dd421887fb3?q=80&w=2070&auto=format&fit=crop',
+    5: 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?q=80&w=2070&auto=format&fit=crop',
+    6: 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?q=80&w=2070&auto=format&fit=crop',
+    7: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=2071&auto=format&fit=crop',
+    8: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop',
+    9: 'https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2070&auto=format&fit=crop',
+    10: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=2070&auto=format&fit=crop',
+    11: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=2073&auto=format&fit=crop',
+    12: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=2070&auto=format&fit=crop',
   };
 
   const openTerminalWithCommand = (cmd) => {
