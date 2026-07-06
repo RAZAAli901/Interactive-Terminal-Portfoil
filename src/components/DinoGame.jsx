@@ -436,7 +436,7 @@ export default function DinoGame({ onScoreReach999 }) {
             const newHigh = Math.max(prev, finalScore);
             if (finalScore > prev) {
               setNewRecord(true);
-              try { localStorage.setItem('dinoHighScore', String(newHigh)); } catch {}
+              try { localStorage.setItem('dinoHighScore', String(newHigh)); } catch (_err) { /* ignore */ }
             }
             return newHigh;
           });
@@ -495,7 +495,6 @@ export default function DinoGame({ onScoreReach999 }) {
   }, []);
 
   // ── Compute sky colour based on day/night cycle ───────────────────────────
-  const totalCycle = DAY_DURATION + NIGHT_DURATION;
   const cyclePos = dayNightFrame;
   let skyBg, groundColor, textColor;
   if (cyclePos < DAY_DURATION) {
