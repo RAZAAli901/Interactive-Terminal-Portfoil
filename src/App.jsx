@@ -7,8 +7,8 @@ import Window from "./components/Window";
 import Taskbar from "./components/Taskbar";
 import DesktopIcon from "./components/DesktopIcon";
 import StartMenu from "./components/StartMenu";
-import ExplorerWindow from "./components/ExplorerWindow";
-import Notepad from "./components/Notepad";
+const ExplorerWindow = lazy(() => import("./components/ExplorerWindow"));
+const Notepad = lazy(() => import("./components/Notepad"));
 
 // New dynamic apps
 const Calculator = lazy(() => import("./components/Calculator"));
