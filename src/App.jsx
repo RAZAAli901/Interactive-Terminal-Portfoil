@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense, lazy } from 'react';
 import { useWindowManager } from './hooks/useWindowManager';
 import ErrorBoundary from './components/ErrorBoundary';
 import Terminal from "./components/Terminal";
@@ -11,18 +11,18 @@ import ExplorerWindow from "./components/ExplorerWindow";
 import Notepad from "./components/Notepad";
 
 // New dynamic apps
-import Calculator from "./components/Calculator";
-import Clock from "./components/Clock";
-import Settings from "./components/Settings";
-import Browser from "./components/Browser";
-import Chat from "./components/Chat";
-import Photos from "./components/Photos";
-import Solitaire from "./components/Solitaire";
-import OfficeApp from "./components/OfficeApp";
-import Store from "./components/Store";
-import SnippingTool from "./components/SnippingTool";
-import Vscode from "./components/Vscode";
-import Minesweeper from "./components/Minesweeper";
+const Calculator = lazy(() => import("./components/Calculator"));
+const Clock = lazy(() => import("./components/Clock"));
+const Settings = lazy(() => import("./components/Settings"));
+const Browser = lazy(() => import("./components/Browser"));
+const Chat = lazy(() => import("./components/Chat"));
+const Photos = lazy(() => import("./components/Photos"));
+const Solitaire = lazy(() => import("./components/Solitaire"));
+const OfficeApp = lazy(() => import("./components/OfficeApp"));
+const Store = lazy(() => import("./components/Store"));
+const SnippingTool = lazy(() => import("./components/SnippingTool"));
+const Vscode = lazy(() => import("./components/Vscode"));
+const Minesweeper = lazy(() => import("./components/Minesweeper"));
 import { getThemePreference, saveThemePreference } from './utils/localStorage';
 
 import styles from './App.module.css';
@@ -243,7 +243,9 @@ export default function App() {
                   zIndex={win.zIndex}
                   onFocus={() => focusWindow(win.id)}
                 >
-                  {renderWindowContent(win.id)}
+                  <Suspense fallback={<div style={{ padding: '20px', color: 'var(--terminal-text)' }}>Loading app...</div>}>
+                    {renderWindowContent(win.id)}
+                  </Suspense>
                 </Window>
               </ErrorBoundary>
             );
