@@ -1,90 +1,152 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
+import { createDraggable } from 'animejs';
 import styles from './Window.module.css';
 
-export default function Window({ children, title = "Terminal", icon = "🖥️", onClose, onMinimize, isMinimized, defaultWidth = 800, defaultHeight = 500, offsetX = 0, offsetY = 0, zIndex = 1, onFocus }) {
+export default function Window({
+    children,
+    title = "Terminal",
+    icon = "🖥️",
+    onClose,
+    onMinimize,
+    isMinimized,
+    defaultWidth = 800,
+    defaultHeight = 500,
+    offsetX = 0,
+    offsetY = 0,
+    zIndex = 1,
+    onFocus,
+}) {
     const [size, setSize] = useState({ width: defaultWidth, height: defaultHeight });
-    const [position, setPosition] = useState(() => {
-        if (typeof window !== 'undefined') {
-            return {
-                x: Math.max(0, (window.innerWidth - defaultWidth) / 2) + offsetX,
-                y: Math.max(0, (window.innerHeight - defaultHeight) / 2) + offsetY,
-            };
-        }
-        return { x: 0, y: 0 };
-    });
-    const [isDragging, setIsDragging] = useState(false);
-    const [isResizing, setIsResizing] = useState(false);
-    const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
     const [isMaximized, setIsMaximized] = useState(false);
     const [preMaximizeState, setPreMaximizeState] = useState(null);
+    const [isResizing, setIsResizing] = useState(false);
+    const [resizeStart, setResizeStart] = useState(null);
 
     const windowRef = useRef(null);
+    const headerRef = useRef(null);   // ← direct ref to the drag handle element
+    const draggableRef = useRef(null);
+
     const isTerminal = title === "Terminal" || title === "Command Prompt";
-    const handleMouseDown = (e) => {
-        if (e.target.closest(`.${styles.windowControls}`) || e.target.closest(`.${styles.resizeHandle}`)) return;
-        setIsDragging(true);
-        setDragOffset({
-            x: e.clientX - position.x,
-            y: e.clientY - position.y,
-        });
-    };
 
-    const handleMouseMove = (e) => {
-        if (isDragging && !isMaximized) {
-            let newX = e.clientX - dragOffset.x;
-            let newY = e.clientY - dragOffset.y;
-            
-            // Edge snapping logic
-            const snapThreshold = 20;
-            if (newX < snapThreshold) newX = 0;
-            if (newY < snapThreshold) newY = 0;
-            if (newX + size.width > window.innerWidth - snapThreshold) newX = window.innerWidth - size.width;
-            if (newY + size.height > window.innerHeight - snapThreshold) newY = window.innerHeight - size.height;
-
-            setPosition({
-                x: newX,
-                y: newY,
-            });
-        }
-        if (isResizing && !isMaximized) {
-            setSize({
-                width: Math.max(400, e.clientX - position.x),
-                height: Math.max(300, e.clientY - position.y),
-            });
-        }
-    };
-
-    const handleMouseUp = () => {
-        setIsDragging(false);
-        setIsResizing(false);
-    };
-
+    // ── anime.js draggable ────────────────────────────────────────────────────
     useEffect(() => {
-        if (isDragging || isResizing) {
-            window.addEventListener('mousemove', handleMouseMove);
-            window.addEventListener('mouseup', handleMouseUp);
-        } else {
-            window.removeEventListener('mousemove', handleMouseMove);
-            window.removeEventListener('mouseup', handleMouseUp);
-        }
-        return () => {
-            window.removeEventListener('mousemove', handleMouseMove);
-            window.removeEventListener('mouseup', handleMouseUp);
-        };
-    }, [isDragging, isResizing, isMaximized]);
+        const el = windowRef.current;
+        const handle = headerRef.current;
+        if (!el || !handle || isMaximized) return;
 
+        const vw = window.innerWidth;
+        const vh = window.innerHeight;
+        const taskbar = 40;
+
+        // Centre the window (+ optional offset)
+        const startX = Math.max(0, (vw - defaultWidth) / 2) + offsetX;
+        const startY = Math.max(0, (vh - defaultHeight) / 2) + offsetY;
+
+        // Set transform BEFORE creating the draggable so anime.js reads it as origin
+        el.style.transform = `translate(${startX}px, ${startY}px)`;
+
+        draggableRef.current = createDraggable(el, {
+            // Pass the actual DOM node — avoids CSS-module hashed-selector mismatch
+            trigger: handle,
+
+            // Clamp translate values so the window can't go off-screen
+            x: {
+                modifier: (v) => Math.max(0, Math.min(v, vw - size.width)),
+            },
+            y: {
+                modifier: (v) => Math.max(0, Math.min(v, vh - taskbar - size.height)),
+            },
+
+            // Smooth physics on release
+            releaseEase: 'outExpo',
+            velocityMultiplier: 0.9,
+
+            onGrab() {
+                if (onFocus) onFocus();
+                el.classList.add(styles.dragging);
+            },
+            onRelease() {
+                el.classList.remove(styles.dragging);
+            },
+        });
+
+        return () => {
+            draggableRef.current?.revert();
+            draggableRef.current = null;
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isMaximized]);
+
+    // ── Maximize / Restore ────────────────────────────────────────────────────
     const toggleMaximize = () => {
+        const el = windowRef.current;
         if (isMaximized) {
-            setPosition(preMaximizeState.position);
-            setSize(preMaximizeState.size);
+            const { x, y, w, h } = preMaximizeState;
+            setSize({ width: w, height: h });
             setIsMaximized(false);
+            // useEffect will re-run and re-create the draggable, but we want the
+            // saved position — restore it right after the next paint
+            requestAnimationFrame(() => {
+                if (el) el.style.transform = `translate(${x}px, ${y}px)`;
+            });
         } else {
-            setPreMaximizeState({ position, size });
-            setPosition({ x: 0, y: 0 });
-            setSize({ width: window.innerWidth, height: window.innerHeight });
+            // Read the current translate from the element's computed style
+            const m = new DOMMatrix(getComputedStyle(el).transform);
+            setPreMaximizeState({ x: m.m41, y: m.m42, w: size.width, h: size.height });
             setIsMaximized(true);
         }
     };
+
+    // ── Resize (corner handle) ────────────────────────────────────────────────
+    const handleResizeMouseDown = useCallback((e) => {
+        e.stopPropagation();
+        setIsResizing(true);
+        const rect = windowRef.current?.getBoundingClientRect();
+        setResizeStart({
+            mouseX: e.clientX,
+            mouseY: e.clientY,
+            startW: rect?.width ?? size.width,
+            startH: rect?.height ?? size.height,
+        });
+    }, [size]);
+
+    useEffect(() => {
+        if (!isResizing) return;
+        const onMove = (e) => {
+            if (!resizeStart) return;
+            setSize({
+                width: Math.max(320, resizeStart.startW + (e.clientX - resizeStart.mouseX)),
+                height: Math.max(240, resizeStart.startH + (e.clientY - resizeStart.mouseY)),
+            });
+        };
+        const onUp = () => setIsResizing(false);
+        window.addEventListener('mousemove', onMove);
+        window.addEventListener('mouseup', onUp);
+        return () => {
+            window.removeEventListener('mousemove', onMove);
+            window.removeEventListener('mouseup', onUp);
+        };
+    }, [isResizing, resizeStart]);
+
+    // ── Styles ────────────────────────────────────────────────────────────────
+    const frameStyle = isMaximized
+        ? {
+            left: 0, top: 0,
+            transform: 'none',
+            width: '100%',
+            height: 'calc(100% - 40px)',
+            zIndex,
+            opacity: isMinimized ? 0 : 1,
+            pointerEvents: isMinimized ? 'none' : 'auto',
+        }
+        : {
+            left: 0, top: 0,          // anime.js owns the actual position via transform
+            width: size.width,
+            height: size.height,
+            zIndex,
+            opacity: isMinimized ? 0 : 1,
+            pointerEvents: isMinimized ? 'none' : 'auto',
+        };
 
     return (
         <div
@@ -92,20 +154,21 @@ export default function Window({ children, title = "Terminal", icon = "🖥️",
             role="dialog"
             aria-label={`${title} window`}
             aria-labelledby={`win-title-${title.replace(/\s+/g, '-').toLowerCase()}`}
-            className={`${styles.windowFrame} ${isMaximized ? styles.maximized : ''} ${isDragging ? styles.dragging : ''} ${isResizing ? styles.resizing : ''} ${isMinimized ? styles.minimized : ''}`}
+            className={[
+                styles.windowFrame,
+                isMaximized ? styles.maximized : '',
+                isResizing ? styles.resizing : '',
+                isMinimized ? styles.minimized : '',
+            ].join(' ')}
             onMouseDown={() => onFocus && onFocus()}
-            style={{
-                transform: isMinimized ? 'scale(0.8) translateY(300px)' : (isMaximized ? 'none' : `translate(${position.x}px, ${position.y}px)`),
-                width: isMaximized ? '100%' : size.width,
-                height: isMaximized ? 'calc(100% - 40px)' : size.height,
-                top: 0,
-                left: 0,
-                zIndex: zIndex,
-                opacity: isMinimized ? 0 : 1,
-                pointerEvents: isMinimized ? 'none' : 'auto',
-            }}
+            style={frameStyle}
         >
-            <div className={`${styles.windowHeader} ${!isTerminal ? styles.lightHeader : ''}`} onMouseDown={handleMouseDown} onDoubleClick={toggleMaximize}>
+            {/* ── Title bar — this element is the drag handle (headerRef) ── */}
+            <div
+                ref={headerRef}
+                className={`${styles.windowHeader} ${!isTerminal ? styles.lightHeader : ''}`}
+                onDoubleClick={toggleMaximize}
+            >
                 {isTerminal ? (
                     <div className={styles.tabBar}>
                         <div className={styles.windowTab}>
@@ -127,11 +190,12 @@ export default function Window({ children, title = "Terminal", icon = "🖥️",
                         <span id={`win-title-${title.replace(/\s+/g, '-').toLowerCase()}`} className={styles.simpleTitle}>{title}</span>
                     </div>
                 )}
+
                 <div className={`${styles.windowControls} ${!isTerminal ? styles.lightControls : ''}`}>
                     <button className={`${styles.controlBtn} ${styles.minimize}`} onClick={onMinimize} title="Minimize" aria-label="Minimize window">
                         <svg viewBox="0 0 10 1"><path d="M0 0h10v1H0z" /></svg>
                     </button>
-                    <button className={`${styles.controlBtn} ${styles.maximize}`} onClick={toggleMaximize} title={isMaximized ? "Restore Down" : "Maximize"} aria-label={isMaximized ? "Restore window" : "Maximize window"}>
+                    <button className={`${styles.controlBtn} ${styles.maximize}`} onClick={toggleMaximize} title={isMaximized ? 'Restore Down' : 'Maximize'} aria-label={isMaximized ? 'Restore window' : 'Maximize window'}>
                         {isMaximized ? (
                             <svg viewBox="0 0 10 10"><path d="M2.1 0v2H0v8.1h8.2v-2h2V0H2.1zm6.1 2.1h-2v6h-6v-6h8v6z" /></svg>
                         ) : (
@@ -143,17 +207,15 @@ export default function Window({ children, title = "Terminal", icon = "🖥️",
                     </button>
                 </div>
             </div>
+
+            {/* ── Content ── */}
             <div className={styles.windowContent} style={{ backgroundColor: isTerminal ? '#0c0c0c' : '#ffffff' }}>
                 {children}
             </div>
+
+            {/* ── Resize corner ── */}
             {!isMaximized && (
-                <div
-                    className={styles.resizeHandle}
-                    onMouseDown={(e) => {
-                        e.stopPropagation();
-                        setIsResizing(true);
-                    }}
-                />
+                <div className={styles.resizeHandle} onMouseDown={handleResizeMouseDown} />
             )}
         </div>
     );
