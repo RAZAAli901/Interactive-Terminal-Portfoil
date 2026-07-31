@@ -89,6 +89,26 @@ export function useHyprland(initialWindows) {
     });
   }, [topWindowId]);
 
+  /** Cycle focus through the open windows on the active workspace (+1 / -1). */
+  const cycleFocus = useCallback((dir = 1) => {
+    setWindows((prev) => {
+      setActiveWorkspace((ws) => {
+        const list = Object.values(prev)
+          .filter((w) => w.isOpen && !w.isMinimized && w.workspace === ws)
+          .sort((a, b) => a.zIndex - b.zIndex);
+        if (list.length > 1) {
+          setActiveId((cur) => {
+            const idx = list.findIndex((w) => w.id === cur);
+            const nextIdx = ((idx === -1 ? 0 : idx) + dir + list.length) % list.length;
+            return list[nextIdx].id;
+          });
+        }
+        return ws;
+      });
+      return prev;
+    });
+  }, []);
+
   /** Move a window to workspace n and follow it there. */
   const moveToWorkspace = useCallback((id, n) => {
     if (!id) return;
@@ -100,10 +120,10 @@ export function useHyprland(initialWindows) {
   return useMemo(() => ({
     windows, activeId, activeWorkspace,
     openWindow, closeWindow, minimizeWindow, focusWindow,
-    toggleFloating, switchWorkspace, moveToWorkspace,
+    toggleFloating, switchWorkspace, moveToWorkspace, cycleFocus,
   }), [
     windows, activeId, activeWorkspace,
     openWindow, closeWindow, minimizeWindow, focusWindow,
-    toggleFloating, switchWorkspace, moveToWorkspace,
+    toggleFloating, switchWorkspace, moveToWorkspace, cycleFocus,
   ]);
 }
