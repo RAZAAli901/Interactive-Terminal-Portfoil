@@ -496,6 +496,33 @@ const cavaHandler = () => {
   return { type: 'text', content: [line(0), line(2), line(5), formatInfo('(cava — a real terminal would animate these to your audio)')] };
 };
 
+const unameHandler = (args) => {
+  const all = args.includes('-a');
+  return { type: 'text', content: [
+    all
+      ? 'Linux razaali 6.9.7-arch1-1 #1 SMP PREEMPT_DYNAMIC x86_64 GNU/Linux'
+      : 'Linux',
+  ] };
+};
+
+const uptimeHandler = () => {
+  const yrs = new Date().getFullYear() - 2021;
+  return { type: 'text', content: [
+    ` ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} up ${yrs}y, 3 users, load average: 0.42, 0.35, 0.28`,
+  ] };
+};
+
+const freeHandler = () => {
+  return { type: 'text', content: [
+    ...formatTable(['', 'total', 'used', 'free', 'shared', 'buff/cache', 'available'], [
+      ['Mem:', '32Gi', '12Gi', '14Gi', '640Mi', '5.6Gi', '19Gi'],
+      ['Swap:', '8.0Gi', '0B', '8.0Gi', '', '', ''],
+    ]),
+  ] };
+};
+
+const whoamiHandler = () => ({ type: 'text', content: ['razaali'] });
+
 const lsHandler = (args, context) => {
   const isLa = args.includes('-la') || args.includes('-a');
   const pathArg = args.filter(a => !a.startsWith('-'))[0];
@@ -1406,6 +1433,34 @@ export const commands = [
     usage: 'cava',
     examples: ['cava'],
     handler: cavaHandler
+  },
+  {
+    name: 'uname',
+    description: 'Print system / kernel information',
+    usage: 'uname [-a]',
+    examples: ['uname', 'uname -a'],
+    handler: unameHandler
+  },
+  {
+    name: 'uptime',
+    description: 'Show how long the system has been running',
+    usage: 'uptime',
+    examples: ['uptime'],
+    handler: uptimeHandler
+  },
+  {
+    name: 'free',
+    description: 'Display memory usage',
+    usage: 'free [-h]',
+    examples: ['free', 'free -h'],
+    handler: freeHandler
+  },
+  {
+    name: 'whoami',
+    description: 'Print the current user',
+    usage: 'whoami',
+    examples: ['whoami'],
+    handler: whoamiHandler
   },
   {
     name: 'banner',
