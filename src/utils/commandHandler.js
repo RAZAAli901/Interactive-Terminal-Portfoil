@@ -438,6 +438,64 @@ const fastfetchHandler = () => {
   };
 };
 
+// hyprctl — query the (simulated) Hyprland compositor.
+const hyprctlHandler = (args) => {
+  const sub = (args[0] || '').toLowerCase();
+  const accent = (s) => `<span style="color:#cba6f7">${s}</span>`;
+  if (sub === 'monitors') {
+    return { type: 'text', content: [
+      accent('Monitor DP-1 (ID 0):'),
+      '  2560x1440@165.00000 at 0x0',
+      '  description: Portfolio Virtual Display',
+      '  make: Hyprland  model: WEB  scale: 1.00',
+      '  activeWorkspace: 1 (1)   focused: yes',
+    ] };
+  }
+  if (sub === 'workspaces') {
+    return { type: 'text', content: [1, 2, 3, 4, 5].flatMap((n) => [
+      accent(`workspace ID ${n} (${n}) on monitor DP-1:`),
+      '  monitor: DP-1',
+      '  windows: dynamic (dwindle)',
+      '',
+    ]) };
+  }
+  if (sub === 'version' || !sub) {
+    return { type: 'text', content: [
+      accent('Hyprland 0.41.2 (web build)'),
+      'Tag: v0.41.2, commit portfolio',
+      'flags: (built with anime.js + React 19)',
+      '',
+      formatInfo("usage: hyprctl [monitors | workspaces | version]"),
+    ] };
+  }
+  return { type: 'text', content: [formatError(`hyprctl: unknown request '${sub}'`), "Try: monitors, workspaces, version"] };
+};
+
+// htop — a snapshot of the (fake) process table.
+const htopHandler = () => {
+  const rows = [
+    ['1', 'razaali', 'Hyprland', '1.9', '212M', 'S'],
+    ['2', 'razaali', 'waybar', '0.6', '48M', 'S'],
+    ['3', 'razaali', 'kitty', '1.2', '96M', 'R'],
+    ['4', 'razaali', 'firefox', '4.8', '812M', 'S'],
+    ['5', 'razaali', 'code', '3.1', '540M', 'S'],
+    ['6', 'razaali', 'wofi', '0.2', '22M', 'S'],
+    ['7', 'razaali', 'pipewire', '0.3', '18M', 'S'],
+  ];
+  return { type: 'text', content: [
+    formatSuccess('  CPU[|||||||||       23%]   Mem[||||||||||     38%]'),
+    '',
+    ...formatTable(['PID', 'USER', 'COMMAND', 'CPU%', 'MEM', 'S'], rows),
+  ] };
+};
+
+// cava — a static frame of an audio visualiser.
+const cavaHandler = () => {
+  const bars = ['▂', '▄', '▆', '█', '▆', '▅', '▃', '▂', '▄', '▇', '█', '▆', '▄', '▂', '▁', '▃', '▅', '▇', '█', '▆'];
+  const line = (offset) => bars.map((b, i) => `<span style="color:#89b4fa">${bars[(i + offset) % bars.length]}</span>`).join('');
+  return { type: 'text', content: [line(0), line(2), line(5), formatInfo('(cava — a real terminal would animate these to your audio)')] };
+};
+
 const lsHandler = (args, context) => {
   const isLa = args.includes('-la') || args.includes('-a');
   const pathArg = args.filter(a => !a.startsWith('-'))[0];
@@ -1327,6 +1385,27 @@ export const commands = [
     usage: 'neofetch',
     examples: ['neofetch'],
     handler: fastfetchHandler
+  },
+  {
+    name: 'hyprctl',
+    description: 'Query the simulated Hyprland compositor (monitors, workspaces, version)',
+    usage: 'hyprctl [monitors|workspaces|version]',
+    examples: ['hyprctl version', 'hyprctl monitors', 'hyprctl workspaces'],
+    handler: hyprctlHandler
+  },
+  {
+    name: 'htop',
+    description: 'Show a snapshot of running processes',
+    usage: 'htop',
+    examples: ['htop'],
+    handler: htopHandler
+  },
+  {
+    name: 'cava',
+    description: 'Console audio visualiser (static frame)',
+    usage: 'cava',
+    examples: ['cava'],
+    handler: cavaHandler
   },
   {
     name: 'banner',
