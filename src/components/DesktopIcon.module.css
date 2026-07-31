@@ -11,13 +11,13 @@
 }
 
 .desktopIcon:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.2);
+    background: color-mix(in srgb, var(--hypr-accent, #cba6f7) 16%, transparent);
+    border-color: color-mix(in srgb, var(--hypr-accent, #cba6f7) 40%, transparent);
     transform: scale(1.05);
 }
 
 .desktopIcon:hover .iconImg svg {
-    filter: drop-shadow(0 0 6px #00ff4488);
+    filter: drop-shadow(0 0 6px color-mix(in srgb, var(--hypr-accent, #cba6f7) 60%, transparent));
 }
 
 .iconImg {
@@ -64,14 +64,14 @@
     bottom: -32px;
     left: 50%;
     transform: translateX(-50%);
-    background-color: rgba(0, 0, 0, 0.85);
-    color: #fff;
+    background-color: color-mix(in srgb, var(--hypr-mantle, #181825) 92%, transparent);
+    color: var(--hypr-text, #cdd6f4);
     padding: 4px 8px;
-    border-radius: 4px;
+    border-radius: 6px;
     font-size: 11px;
     white-space: nowrap;
     z-index: 1000;
     pointer-events: none;
-    border: 1px solid #444;
+    border: 1px solid var(--hypr-border, #45475a);
     box-shadow: 0 2px 5px rgba(0,0,0,0.3);
 }
