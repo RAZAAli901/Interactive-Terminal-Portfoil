@@ -2,15 +2,15 @@
     display: flex;
     flex-direction: column;
     height: 100%;
-    background-color: #1c1c1c;
-    color: #fff;
+    background-color: var(--hypr-mantle, #181825);
+    color: var(--hypr-text, #cdd6f4);
     font-family: 'Segoe UI', sans-serif;
 }
 
 .tabs {
     display: flex;
-    background-color: #252525;
-    border-bottom: 1px solid #333;
+    background-color: var(--hypr-surface, #313244);
+    border-bottom: 1px solid var(--hypr-border, #45475a);
 }
 
 .tab {
@@ -23,12 +23,12 @@
 }
 
 .tab:hover {
-    background-color: #2d2d2d;
+    background-color: var(--hypr-surface, #313244);
 }
 
 .activeTab {
-    background-color: #1c1c1c;
-    border-bottom: 2px solid #0078d4;
+    background-color: var(--hypr-mantle, #181825);
+    border-bottom: 2px solid var(--hypr-accent, #cba6f7);
     font-weight: 600;
 }
 
@@ -51,7 +51,7 @@
 
 .dateDisplay {
     font-size: 16px;
-    color: #a0a0a0;
+    color: var(--hypr-muted, #7f849c);
     margin-bottom: 20px;
 }
 
@@ -78,17 +78,17 @@
     border: none;
     border-radius: 4px;
     font-size: 14px;
-    background-color: #333;
-    color: #fff;
+    background-color: var(--hypr-border, #45475a);
+    color: var(--hypr-text, #cdd6f4);
     cursor: default;
 }
 
 .btn:hover {
-    background-color: #444;
+    background-color: var(--hypr-surface-alt, #45475a);
 }
 
 .btnPrimary {
-    background-color: #0078d4;
+    background-color: var(--hypr-accent, #cba6f7);
 }
 
 .btnPrimary:hover {
@@ -100,14 +100,14 @@
 }
 
 .btnDanger:hover {
-    background-color: #b81010;
+    background-color: var(--hypr-red, #f38ba8);
 }
 
 .lapsList {
     width: 100%;
     max-height: 120px;
     overflow-y: auto;
-    border-top: 1px solid #333;
+    border-top: 1px solid var(--hypr-border, #45475a);
     padding-top: 10px;
 }
 
@@ -134,17 +134,17 @@
 
 .inputGroup label {
     font-size: 11px;
-    color: #a0a0a0;
+    color: var(--hypr-muted, #7f849c);
     margin-bottom: 4px;
 }
 
 .inputGroup input {
     width: 50px;
     padding: 6px;
-    background-color: #2b2b2b;
-    border: 1px solid #444;
+    background-color: var(--hypr-surface, #313244);
+    border: 1px solid var(--hypr-surface-alt, #45475a);
     border-radius: 4px;
-    color: #fff;
+    color: var(--hypr-text, #cdd6f4);
     text-align: center;
     font-size: 16px;
 }
@@ -175,10 +175,10 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #2b2b2b;
+    background-color: var(--hypr-surface, #313244);
     padding: 12px 20px;
     border-radius: 6px;
-    border: 1px solid #444;
+    border: 1px solid var(--hypr-surface-alt, #45475a);
 }
 .worldClockInfo {
     display: flex;
@@ -188,5 +188,5 @@
     font-size: 20px;
     font-weight: bold;
     font-family: monospace;
-    color: #0078d4;
+    color: var(--hypr-accent, #cba6f7);
 }
