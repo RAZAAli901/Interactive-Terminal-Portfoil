@@ -2,9 +2,9 @@
     display: flex;
     flex-direction: column;
     height: 100%;
-    background-color: #1f1f1f;
-    color: #fff;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--hypr-bg, #1e1e2e);
+    color: var(--hypr-text, #cdd6f4);
+    font-family: 'JetBrains Mono', 'Segoe UI', sans-serif;
 }
 
 .display {
@@ -14,12 +14,12 @@
     justify-content: flex-end;
     align-items: flex-end;
     padding: 20px;
-    background-color: #1f1f1f;
+    background-color: var(--hypr-mantle, #181825);
 }
 
 .history {
     font-size: 14px;
-    color: #a0a0a0;
+    color: var(--hypr-muted, #7f849c);
     min-height: 20px;
 }
 
@@ -33,47 +33,50 @@
 .buttons {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 2px;
-    padding: 4px;
-    background-color: #1b1b1b;
+    gap: 4px;
+    padding: 6px;
+    background-color: var(--hypr-crust, #11111b);
 }
 
 .btn {
     border: none;
-    background-color: #2b2b2b;
-    color: #fff;
+    background-color: var(--hypr-surface, #313244);
+    color: var(--hypr-text, #cdd6f4);
     padding: 20px 0;
     font-size: 18px;
-    cursor: default;
-    border-radius: 4px;
+    cursor: pointer;
+    border-radius: 8px;
     transition: background-color 0.1s;
 }
 
 .btn:hover {
-    background-color: #3b3b3b;
+    background-color: var(--hypr-surface-alt, #45475a);
 }
 
 .btnActive {
-    background-color: #4b4b4b;
+    background-color: var(--hypr-overlay, #6c7086);
 }
 
 .operator {
-    background-color: #323232;
+    background-color: var(--hypr-surface-alt, #45475a);
+    color: var(--hypr-accent-2, #89b4fa);
 }
 
 .operator:hover {
-    background-color: #3c3c3c;
+    background-color: var(--hypr-overlay, #6c7086);
 }
 
 .equals {
-    background-color: #005a9e;
+    background-color: var(--hypr-accent, #cba6f7);
+    color: var(--hypr-crust, #11111b);
+    font-weight: 700;
 }
 
 .equals:hover {
-    background-color: #0078d4;
+    filter: brightness(1.1);
 }
 
 .clear {
-    background-color: #323232;
-    color: #ff9d00;
+    background-color: var(--hypr-surface-alt, #45475a);
+    color: var(--hypr-red, #f38ba8);
 }
