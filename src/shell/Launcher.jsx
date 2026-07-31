@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { CATEGORIES, enabledApps } from '../config/apps';
+import { useFocusTrap } from './useFocusTrap';
 import styles from './Launcher.module.css';
 
 /**
@@ -30,6 +31,8 @@ export default function Launcher({ isOpen, onLaunch, onClose }) {
   const [query, setQuery] = useState('');
   const [sel, setSel] = useState(0);
   const inputRef = useRef(null);
+  const panelRef = useRef(null);
+  useFocusTrap(isOpen, panelRef);
 
   const apps = useMemo(() => enabledApps(), []);
 
@@ -71,7 +74,7 @@ export default function Launcher({ isOpen, onLaunch, onClose }) {
 
   return (
     <div className={styles.overlay} onMouseDown={onClose} role="presentation">
-      <div className={styles.panel} onMouseDown={(e) => e.stopPropagation()} role="dialog" aria-label="Application launcher">
+      <div ref={panelRef} className={styles.panel} onMouseDown={(e) => e.stopPropagation()} role="dialog" aria-modal="true" aria-label="Application launcher">
         <div className={styles.searchRow}>
           <span className={styles.searchIcon} aria-hidden="true">⌕</span>
           <input

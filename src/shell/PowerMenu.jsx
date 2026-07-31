@@ -1,4 +1,5 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
+import { useFocusTrap } from './useFocusTrap';
 import styles from './PowerMenu.module.css';
 
 const ACTIONS = [
@@ -13,6 +14,9 @@ const ACTIONS = [
  * what each action does (reboot replays the boot sequence, etc.).
  */
 export default function PowerMenu({ isOpen, onClose, onAction }) {
+  const overlayRef = useRef(null);
+  useFocusTrap(isOpen, overlayRef);
+
   useEffect(() => {
     if (!isOpen) return undefined;
     const onKey = (e) => { if (e.key === 'Escape') onClose?.(); };
@@ -23,7 +27,7 @@ export default function PowerMenu({ isOpen, onClose, onAction }) {
   if (!isOpen) return null;
 
   return (
-    <div className={styles.overlay} onMouseDown={onClose} role="dialog" aria-label="Power menu">
+    <div ref={overlayRef} className={styles.overlay} onMouseDown={onClose} role="dialog" aria-modal="true" aria-label="Power menu">
       {ACTIONS.map((a) => (
         <button
           key={a.id}
