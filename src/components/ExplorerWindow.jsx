@@ -53,11 +53,12 @@ export default function ExplorerWindow() {
             </div>
             <div className={styles.explorerContent}>
                 <div className={styles.explorerSidebar}>
+                    <div className={styles.sidebarItem}>🏠 Home</div>
                     <div className={styles.sidebarItem}>Desktop</div>
                     <div className={styles.sidebarItem}>Downloads</div>
-                    <div className={styles.sidebarItem}>Recent Places</div>
-                    <div style={{ margin: '10px 0', borderBottom: '1px solid #3c3c3c' }}></div>
-                    <div className={styles.sidebarItem}>Local Disk (C:)</div>
+                    <div className={styles.sidebarItem}>Documents</div>
+                    <div style={{ margin: '10px 0', borderBottom: '1px solid var(--hypr-border, #45475a)' }}></div>
+                    <div className={styles.sidebarItem}>💾 File System (/)</div>
                 </div>
                 <div className={styles.explorerMain}>
                     {activeProject ? (
