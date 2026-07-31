@@ -165,6 +165,26 @@ const dracula = (() => {
   };
 })();
 
+const rosePine = (() => {
+  const p = {
+    base: '#191724', surface: '#1f1d2e', crust: '#16141f',
+    overlay: '#26233a', highlightMed: '#403d52', muted: '#6e6a86',
+    text: '#e0def4', subtle: '#908caa',
+    love: '#eb6f92', gold: '#f6c177', rose: '#ebbcba',
+    pine: '#31748f', foam: '#9ccfd8', iris: '#c4a7e7',
+  };
+  return {
+    id: 'rose-pine', label: 'Rosé Pine', dark: true, palette: p,
+    role: roles(p, {
+      bg: 'base', mantle: 'surface', crust: 'crust', surface: 'overlay',
+      surfaceAlt: 'highlightMed', overlay: 'muted', text: 'text',
+      subtext: 'subtle', muted: 'muted', border: 'highlightMed',
+      accent: 'iris', accent2: 'foam', success: 'pine', error: 'love',
+      warning: 'gold', info: 'foam',
+    }),
+  };
+})();
+
 export const THEMES = {
   'catppuccin-mocha': catppuccinMocha,
   'catppuccin-latte': catppuccinLatte,
@@ -172,6 +192,7 @@ export const THEMES = {
   gruvbox,
   nord,
   dracula,
+  'rose-pine': rosePine,
 };
 
 export const DEFAULT_THEME = 'catppuccin-mocha';
