@@ -1,12 +1,15 @@
 import { useState, useEffect, Suspense, lazy } from 'react';
 import { useHyprland } from './wm/useHyprland';
+import { useKeybindings } from './wm/useKeybindings';
 import ErrorBoundary from './components/ErrorBoundary';
 import Terminal from "./components/Terminal";
 import LoadingScreen from "./components/LoadingScreen";
 import WindowFrame from "./wm/WindowFrame";
-import Taskbar from "./components/Taskbar";
 import DesktopIcon from "./components/DesktopIcon";
-import StartMenu from "./components/StartMenu";
+import Waybar from "./shell/Waybar";
+import Launcher from "./shell/Launcher";
+import PowerMenu from "./shell/PowerMenu";
+import { APPS } from "./config/apps";
 const ExplorerWindow = lazy(() => import("./components/ExplorerWindow"));
 const Notepad = lazy(() => import("./components/Notepad"));
 
@@ -75,11 +78,38 @@ export default function App() {
     vscode: { id: 'vscode', title: 'Visual Studio Code', icon: '💙', isOpen: false, isMinimized: false, zIndex: 1, defaultWidth: 900, defaultHeight: 600 },
     minesweeper: { id: 'minesweeper', title: 'MineSweeper', icon: '💣', isOpen: false, isMinimized: false, zIndex: 1, defaultWidth: 400, defaultHeight: 500 }
   };
-  const { windows, activeId, openWindow, closeWindow, minimizeWindow, toggleWindow, focusWindow, toggleFloating } = useHyprland(initialWindows);
+  const { windows, activeId, openWindow, closeWindow, focusWindow, toggleFloating } = useHyprland(initialWindows);
 
-  const [isStartMenuOpen, setIsStartMenuOpen] = useState(false);
+  const [isLauncherOpen, setIsLauncherOpen] = useState(false);
+  const [isPowerOpen, setIsPowerOpen] = useState(false);
+  const [activeWorkspace, setActiveWorkspace] = useState(1);
   const [contextMenu, setContextMenu] = useState({ visible: false, x: 0, y: 0 });
   const [terminalInitialCommand, setTerminalInitialCommand] = useState(null);
+
+  // Launch a registry app by id, resolving to its underlying window id.
+  const launchApp = (id) => openWindow(APPS[id]?.legacyId || id);
+
+  const handlePower = (action) => {
+    setIsPowerOpen(false);
+    // Phase 4 wires these to the real boot/login/lock screens; for now reboot,
+    // shutdown and logout all restart the session.
+    if (action === 'reboot' || action === 'shutdown' || action === 'logout') {
+      window.location.reload();
+    }
+  };
+
+  // Hyprland-style Super-key shortcuts.
+  useKeybindings(
+    {
+      launcher: () => setIsLauncherOpen((o) => !o),
+      terminal: () => openWindow('terminal'),
+      closeActive: () => activeId && closeWindow(activeId),
+      toggleFloat: () => activeId && toggleFloating(activeId),
+      workspace: (n) => setActiveWorkspace(n),
+      powerMenu: () => setIsPowerOpen((o) => !o),
+    },
+    { enabled: !isLoading && !isMobile },
+  );
 
   const wallpapers = {
     1: 'https://images.unsplash.com/photo-1496247749665-49cf5b1022e9?q=80&w=2073&auto=format&fit=crop',
@@ -101,11 +131,8 @@ export default function App() {
     openWindow('terminal');
   };
 
-  const handleDesktopClick = (e) => {
+  const handleDesktopClick = () => {
     if (contextMenu.visible) setContextMenu({ visible: false, x: 0, y: 0 });
-    if (!e.target.closest('.start-menu') && !e.target.closest('.start-button')) {
-      setIsStartMenuOpen(false);
-    }
   };
 
   const handleContextMenu = (e) => {
@@ -235,7 +262,6 @@ export default function App() {
                   icon={win.icon}
                   isActive={win.id === activeId}
                   onClose={() => closeWindow(win.id)}
-                  onMinimize={() => minimizeWindow(win.id)}
                   onToggleFloating={() => toggleFloating(win.id)}
                   isMinimized={win.isMinimized}
                   defaultWidth={win.defaultWidth}
@@ -253,16 +279,25 @@ export default function App() {
             );
           })}
 
-          <StartMenu
-            isOpen={isStartMenuOpen}
-            onAppClick={(appId) => openWindow(appId)}
+          <Waybar
+            activeWorkspace={activeWorkspace}
+            occupied={new Set(Object.values(windows).some((w) => w.isOpen) ? [activeWorkspace] : [])}
+            onWorkspace={setActiveWorkspace}
+            focusedTitle={windows[activeId]?.title || ''}
+            onLauncher={() => setIsLauncherOpen((o) => !o)}
+            onPower={() => setIsPowerOpen(true)}
           />
 
-          <Taskbar
-            windows={Object.values(windows).filter(w => w.isOpen)}
-            onToggleWindow={(id) => toggleWindow(id)}
-            onToggleStartMenu={() => setIsStartMenuOpen(!isStartMenuOpen)}
-            isStartMenuOpen={isStartMenuOpen}
+          <Launcher
+            isOpen={isLauncherOpen}
+            onLaunch={launchApp}
+            onClose={() => setIsLauncherOpen(false)}
+          />
+
+          <PowerMenu
+            isOpen={isPowerOpen}
+            onClose={() => setIsPowerOpen(false)}
+            onAction={handlePower}
           />
 
           {contextMenu.visible && (
