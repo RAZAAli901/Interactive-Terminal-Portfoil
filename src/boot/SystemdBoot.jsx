@@ -41,7 +41,7 @@ export default function SystemdBoot({ onDone }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [count]);
 
-  useEffect(() => { bottomRef.current?.scrollIntoView(); }, [count]);
+  useEffect(() => { bottomRef.current?.scrollIntoView?.(); }, [count]);
 
   useEffect(() => {
     const skip = () => setCount(SERVICES.length);
