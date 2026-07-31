@@ -17,7 +17,10 @@ export function useFocusTrap(active, ref) {
     if (!container) return undefined;
 
     const previouslyFocused = document.activeElement;
-    const focusable = () => Array.from(container.querySelectorAll(FOCUSABLE)).filter((el) => el.offsetParent !== null);
+    // Exclude explicitly hidden nodes. (We avoid offsetParent so this also works
+    // under jsdom, which never computes layout.)
+    const focusable = () => Array.from(container.querySelectorAll(FOCUSABLE))
+      .filter((el) => !el.hasAttribute('hidden') && el.getAttribute('aria-hidden') !== 'true');
 
     // Focus the first focusable element (or the container itself).
     const first = focusable()[0];
