@@ -1,9 +1,9 @@
 import { useState, useEffect, Suspense, lazy } from 'react';
-import { useWindowManager } from './hooks/useWindowManager';
+import { useHyprland } from './wm/useHyprland';
 import ErrorBoundary from './components/ErrorBoundary';
 import Terminal from "./components/Terminal";
 import LoadingScreen from "./components/LoadingScreen";
-import Window from "./components/Window";
+import WindowFrame from "./wm/WindowFrame";
 import Taskbar from "./components/Taskbar";
 import DesktopIcon from "./components/DesktopIcon";
 import StartMenu from "./components/StartMenu";
@@ -75,7 +75,7 @@ export default function App() {
     vscode: { id: 'vscode', title: 'Visual Studio Code', icon: '💙', isOpen: false, isMinimized: false, zIndex: 1, defaultWidth: 900, defaultHeight: 600 },
     minesweeper: { id: 'minesweeper', title: 'MineSweeper', icon: '💣', isOpen: false, isMinimized: false, zIndex: 1, defaultWidth: 400, defaultHeight: 500 }
   };
-  const { windows, openWindow, closeWindow, minimizeWindow, toggleWindow, focusWindow } = useWindowManager(initialWindows);
+  const { windows, activeId, openWindow, closeWindow, minimizeWindow, toggleWindow, focusWindow, toggleFloating } = useHyprland(initialWindows);
 
   const [isStartMenuOpen, setIsStartMenuOpen] = useState(false);
   const [contextMenu, setContextMenu] = useState({ visible: false, x: 0, y: 0 });
@@ -230,11 +230,13 @@ export default function App() {
             if (!win.isOpen) return null;
             return (
               <ErrorBoundary key={win.id}>
-                <Window
+                <WindowFrame
                   title={win.title}
                   icon={win.icon}
+                  isActive={win.id === activeId}
                   onClose={() => closeWindow(win.id)}
                   onMinimize={() => minimizeWindow(win.id)}
+                  onToggleFloating={() => toggleFloating(win.id)}
                   isMinimized={win.isMinimized}
                   defaultWidth={win.defaultWidth}
                   defaultHeight={win.defaultHeight}
@@ -246,7 +248,7 @@ export default function App() {
                   <Suspense fallback={<div style={{ padding: '20px', color: 'var(--terminal-text)' }}>Loading app...</div>}>
                     {renderWindowContent(win.id)}
                   </Suspense>
-                </Window>
+                </WindowFrame>
               </ErrorBoundary>
             );
           })}
