@@ -32,6 +32,20 @@
   to { opacity: 0; }
 }
 
+/* grim-style screenshot flash. */
+.screenFlash {
+  position: fixed;
+  inset: 0;
+  z-index: 9997;
+  pointer-events: none;
+  background: #fff;
+  animation: screenFlash 260ms ease-out forwards;
+}
+@keyframes screenFlash {
+  0% { opacity: 0.85; }
+  100% { opacity: 0; }
+}
+
 .wsSlide {
   animation: wsSlide var(--hypr-dur) var(--hypr-ease-inout);
 }

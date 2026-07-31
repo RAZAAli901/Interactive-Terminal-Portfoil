@@ -90,6 +90,7 @@ export default function App() {
   const [isPowerOpen, setIsPowerOpen] = useState(false);
   const [isCheatsheetOpen, setIsCheatsheetOpen] = useState(false);
   const [fullscreenId, setFullscreenId] = useState(null);
+  const [flashing, setFlashing] = useState(false);
   const [showStartup, setShowStartup] = useState(false);
   const [viewport, setViewport] = useState({ w: 1280, h: 720 });
 
@@ -139,6 +140,11 @@ export default function App() {
       focusNext: () => cycleFocus(1),
       focusPrev: () => cycleFocus(-1),
       fullscreen: () => activeId && setFullscreenId((id) => (id === activeId ? null : activeId)),
+      screenshot: () => {
+        setFlashing(true);
+        setTimeout(() => setFlashing(false), 260);
+        notify('Screenshot saved', '~/Pictures/screenshot.png', '📸');
+      },
       workspace: (n) => switchWorkspace(n),
       moveWorkspace: (n) => moveToWorkspace(activeId, n),
       powerMenu: () => setIsPowerOpen((o) => !o),
@@ -256,6 +262,7 @@ export default function App() {
     >
       <div className={styles.desktopOverlay}></div>
       {showStartup && <div className={styles.startupFade} />}
+      {flashing && <div className={styles.screenFlash} />}
       {isLoading ? (
         <BootSequence wallpaper={wallpapers[wallpaper]} onComplete={handleLogin} />
       ) : isMobile ? (

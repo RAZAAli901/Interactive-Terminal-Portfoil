@@ -47,6 +47,7 @@ export function useKeybindings(handlers, { enabled = true } = {}) {
         f: 'fullscreen',
         j: 'focusNext',
         k: 'focusPrev',
+        p: 'screenshot',
         ' ': 'toggleFloat',
         Enter: 'terminal',
         '/': 'cheatsheet',
