@@ -34,9 +34,10 @@ export function useKeybindings(handlers, { enabled = true } = {}) {
       const h = ref.current;
       const key = e.key;
 
-      // Workspace switching: Super+1..5
+      // Workspace switching: Super+1..5 (Super+Shift+1..5 moves the window).
       if (/^[1-5]$/.test(key)) {
-        if (h.workspace) { e.preventDefault(); h.workspace(Number(key)); }
+        if (e.shiftKey && h.moveWorkspace) { e.preventDefault(); h.moveWorkspace(Number(key)); }
+        else if (h.workspace) { e.preventDefault(); h.workspace(Number(key)); }
         return;
       }
 
