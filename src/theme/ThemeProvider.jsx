@@ -1,9 +1,8 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { DEFAULT_THEME, THEMES, getTheme, toCssVars } from './themes';
+import { ThemeContext } from './themeContext';
 
 const STORAGE_KEY = 'hypr_theme';
-
-const ThemeContext = createContext(null);
 
 function readStoredTheme() {
   try {
@@ -53,11 +52,4 @@ export function ThemeProvider({ children }) {
   );
 
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
-}
-
-/** Access the active theme and setter. Must be used within <ThemeProvider>. */
-export function useTheme() {
-  const ctx = useContext(ThemeContext);
-  if (!ctx) throw new Error('useTheme must be used within a ThemeProvider');
-  return ctx;
 }
