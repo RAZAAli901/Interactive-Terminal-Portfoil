@@ -18,6 +18,20 @@
 }
 .wsLayer > * { pointer-events: auto; }
 
+/* Hyprland startup: black overlay fading out as the desktop is revealed. */
+.startupFade {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  pointer-events: none;
+  background: var(--hypr-crust, #11111b);
+  animation: startupFade 700ms var(--hypr-ease-out) forwards;
+}
+@keyframes startupFade {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
 .wsSlide {
   animation: wsSlide var(--hypr-dur) var(--hypr-ease-inout);
 }

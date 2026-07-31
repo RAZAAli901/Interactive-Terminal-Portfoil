@@ -4,7 +4,7 @@ import { useKeybindings } from './wm/useKeybindings';
 import { dwindle, workspaceArea } from './layout/dwindle';
 import ErrorBoundary from './components/ErrorBoundary';
 import Terminal from "./components/Terminal";
-import LoadingScreen from "./components/LoadingScreen";
+import BootSequence from "./boot/BootSequence";
 import WindowFrame from "./wm/WindowFrame";
 import DesktopIcon from "./components/DesktopIcon";
 import Waybar from "./shell/Waybar";
@@ -90,7 +90,15 @@ export default function App() {
   const [isLauncherOpen, setIsLauncherOpen] = useState(false);
   const [isPowerOpen, setIsPowerOpen] = useState(false);
   const [isCheatsheetOpen, setIsCheatsheetOpen] = useState(false);
+  const [showStartup, setShowStartup] = useState(false);
   const [viewport, setViewport] = useState({ w: 1280, h: 720 });
+
+  // Called when the SDDM login completes — reveal the desktop with a short fade.
+  const handleLogin = () => {
+    setIsLoading(false);
+    setShowStartup(true);
+    setTimeout(() => setShowStartup(false), 700);
+  };
   const [contextMenu, setContextMenu] = useState({ visible: false, x: 0, y: 0 });
   const [terminalInitialCommand, setTerminalInitialCommand] = useState(null);
 
@@ -229,8 +237,9 @@ export default function App() {
       onContextMenu={handleContextMenu}
     >
       <div className={styles.desktopOverlay}></div>
+      {showStartup && <div className={styles.startupFade} />}
       {isLoading ? (
-        <LoadingScreen onComplete={() => setIsLoading(false)} />
+        <BootSequence wallpaper={wallpapers[wallpaper]} onComplete={handleLogin} />
       ) : isMobile ? (
         <div style={{ width: '100vw', height: '100vh', background: 'var(--terminal-bg)', overflow: 'hidden' }}>
           <Terminal setTheme={setTheme} setWallpaper={setWallpaper} />
