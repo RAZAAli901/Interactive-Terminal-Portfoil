@@ -683,9 +683,9 @@ const commandsListHandler = () => {
 
 const themeHandler = (args) => {
   const raw = args[0] ? args[0].toLowerCase() : null;
-  const themes = ['catppuccin-mocha', 'catppuccin-latte', 'tokyo-night', 'gruvbox', 'nord', 'dracula'];
+  const themes = ['catppuccin-mocha', 'catppuccin-latte', 'tokyo-night', 'gruvbox', 'nord', 'dracula', 'rose-pine'];
   // Accept friendly aliases for the Catppuccin variants.
-  const aliases = { mocha: 'catppuccin-mocha', latte: 'catppuccin-latte', catppuccin: 'catppuccin-mocha', tokyo: 'tokyo-night', tokyonight: 'tokyo-night' };
+  const aliases = { mocha: 'catppuccin-mocha', latte: 'catppuccin-latte', catppuccin: 'catppuccin-mocha', tokyo: 'tokyo-night', tokyonight: 'tokyo-night', rosepine: 'rose-pine', rose: 'rose-pine' };
   const target = raw ? (aliases[raw] || raw) : null;
   if (!target) {
     return {
