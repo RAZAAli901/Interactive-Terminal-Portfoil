@@ -436,7 +436,7 @@ export default function DinoGame({ onScoreReach999 }) {
             const newHigh = Math.max(prev, finalScore);
             if (finalScore > prev) {
               setNewRecord(true);
-              try { localStorage.setItem('dinoHighScore', String(newHigh)); } catch (_err) { /* ignore */ }
+              try { localStorage.setItem('dinoHighScore', String(newHigh)); } catch { /* ignore */ }
             }
             return newHigh;
           });
