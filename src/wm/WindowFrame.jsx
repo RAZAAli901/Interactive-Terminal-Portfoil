@@ -22,6 +22,7 @@ export default function WindowFrame({
   tiled = false,
   rect = null,
   hidden = false,
+  fullscreen = false,
   defaultWidth = 820,
   defaultHeight = 520,
   offsetX = 0,
@@ -47,7 +48,7 @@ export default function WindowFrame({
   useEffect(() => {
     const el = frameRef.current;
     const handle = handleRef.current;
-    if (!el || !handle || isMaximized || tiled) return;
+    if (!el || !handle || isMaximized || tiled || fullscreen) return;
 
     const vw = window.innerWidth;
     const vh = window.innerHeight;
@@ -72,7 +73,7 @@ export default function WindowFrame({
       draggableRef.current = null;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isMaximized, tiled]);
+  }, [isMaximized, tiled, fullscreen]);
 
   // ── Close with animation ───────────────────────────────────────────────────
   const handleClose = useCallback(() => {
@@ -132,6 +133,9 @@ export default function WindowFrame({
   if (hidden) {
     // On another workspace — keep mounted (preserve app state) but not shown.
     frameStyle = { display: 'none' };
+  } else if (fullscreen) {
+    // Hyprland fullscreen: cover the whole output above the bar.
+    frameStyle = { left: 0, top: 0, width: '100vw', height: '100vh', transform: 'none', borderRadius: 0, zIndex: 9990, pointerEvents: 'auto' };
   } else if (isMaximized) {
     frameStyle = { left: 0, top: waybar, transform: 'none', width: '100%', height: `calc(100% - ${waybar}px)`, zIndex, pointerEvents: isMinimized ? 'none' : 'auto' };
   } else if (tiled && rect) {
