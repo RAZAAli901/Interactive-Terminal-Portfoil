@@ -1,15 +1,15 @@
 .chatContainer {
     display: flex;
     height: 100%;
-    background-color: #202020;
-    color: #fff;
+    background-color: var(--hypr-bg, #1e1e2e);
+    color: var(--hypr-text, #cdd6f4);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .sidebar {
     width: 220px;
-    background-color: #1a1a1a;
-    border-right: 1px solid #333;
+    background-color: var(--hypr-mantle, #181825);
+    border-right: 1px solid var(--hypr-border, #45475a);
     display: flex;
     flex-direction: column;
 }
@@ -18,7 +18,7 @@
     padding: 15px 20px;
     font-weight: 600;
     font-size: 16px;
-    border-bottom: 1px solid #333;
+    border-bottom: 1px solid var(--hypr-border, #45475a);
 }
 
 .threadList {
@@ -33,7 +33,7 @@
     align-items: center;
     gap: 12px;
     transition: background-color 0.2s;
-    border-bottom: 1px solid #222;
+    border-bottom: 1px solid var(--hypr-crust, #11111b);
 }
 
 .threadItem:hover {
@@ -42,7 +42,7 @@
 
 .threadActive {
     background-color: rgba(255, 255, 255, 0.1);
-    border-left: 3px solid #0078d4;
+    border-left: 3px solid var(--hypr-accent, #cba6f7);
 }
 
 .avatar {
@@ -53,7 +53,7 @@
     justify-content: center;
     align-items: center;
     font-size: 18px;
-    background-color: #333;
+    background-color: var(--hypr-border, #45475a);
 }
 
 .threadDetails {
@@ -71,7 +71,7 @@
 
 .threadLastMsg {
     font-size: 11px;
-    color: #aaa;
+    color: var(--hypr-subtext, #a6adc8);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -81,13 +81,13 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    background-color: #202020;
+    background-color: var(--hypr-bg, #1e1e2e);
 }
 
 .chatHeader {
     padding: 12px 20px;
-    background-color: #1a1a1a;
-    border-bottom: 1px solid #333;
+    background-color: var(--hypr-mantle, #181825);
+    border-bottom: 1px solid var(--hypr-border, #45475a);
     font-weight: 600;
     font-size: 14px;
 }
@@ -124,20 +124,20 @@
 }
 
 .sent .bubble {
-    background-color: #0078d4;
-    color: #fff;
+    background-color: var(--hypr-accent, #cba6f7);
+    color: var(--hypr-text, #cdd6f4);
     border-bottom-right-radius: 2px;
 }
 
 .received .bubble {
-    background-color: #2d2d2d;
-    color: #fff;
+    background-color: var(--hypr-surface, #313244);
+    color: var(--hypr-text, #cdd6f4);
     border-bottom-left-radius: 2px;
 }
 
 .msgMeta {
     font-size: 10px;
-    color: #888;
+    color: var(--hypr-muted, #7f849c);
     margin-top: 4px;
     padding: 0 4px;
 }
@@ -148,8 +148,8 @@
 
 .inputArea {
     padding: 15px;
-    background-color: #1a1a1a;
-    border-top: 1px solid #333;
+    background-color: var(--hypr-mantle, #181825);
+    border-top: 1px solid var(--hypr-border, #45475a);
     display: flex;
     gap: 10px;
 }
@@ -157,21 +157,21 @@
 .input {
     flex: 1;
     padding: 8px 16px;
-    background-color: #2b2b2b;
-    border: 1px solid #444;
+    background-color: var(--hypr-surface, #313244);
+    border: 1px solid var(--hypr-surface-alt, #45475a);
     border-radius: 20px;
-    color: #fff;
+    color: var(--hypr-text, #cdd6f4);
     outline: none;
     font-size: 13px;
 }
 
 .input:focus {
-    border-color: #0078d4;
+    border-color: var(--hypr-accent, #cba6f7);
 }
 
 .sendBtn {
-    background-color: #0078d4;
-    color: #fff;
+    background-color: var(--hypr-accent, #cba6f7);
+    color: var(--hypr-text, #cdd6f4);
     border: none;
     border-radius: 50%;
     width: 32px;
