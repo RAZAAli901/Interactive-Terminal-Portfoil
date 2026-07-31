@@ -21,6 +21,7 @@ export default function WindowFrame({
   isActive = false,
   tiled = false,
   rect = null,
+  hidden = false,
   defaultWidth = 820,
   defaultHeight = 520,
   offsetX = 0,
@@ -34,6 +35,7 @@ export default function WindowFrame({
   const [isResizing, setIsResizing] = useState(false);
   const [resizeStart, setResizeStart] = useState(null);
   const [isClosing, setIsClosing] = useState(false);
+  const [hasSpawned, setHasSpawned] = useState(false);
 
   const frameRef = useRef(null);
   const handleRef = useRef(null);
@@ -127,7 +129,10 @@ export default function WindowFrame({
   }, [isResizing, resizeStart]);
 
   let frameStyle;
-  if (isMaximized) {
+  if (hidden) {
+    // On another workspace — keep mounted (preserve app state) but not shown.
+    frameStyle = { display: 'none' };
+  } else if (isMaximized) {
     frameStyle = { left: 0, top: waybar, transform: 'none', width: '100%', height: `calc(100% - ${waybar}px)`, zIndex, pointerEvents: isMinimized ? 'none' : 'auto' };
   } else if (tiled && rect) {
     // Tiled: absolute geometry from the dwindle layout, no drag transform.
@@ -147,10 +152,11 @@ export default function WindowFrame({
         isActive ? styles.active : '',
         isMaximized ? styles.maximized : '',
         isMinimized ? styles.minimized : '',
-        isClosing ? styles.closing : styles.spawning,
+        isClosing ? styles.closing : (!hasSpawned ? styles.spawning : ''),
       ].join(' ')}
       style={frameStyle}
       onMouseDown={() => onFocus?.()}
+      onAnimationEnd={(e) => { if (e.animationName.includes('hyprSpawn')) setHasSpawned(true); }}
     >
       <div ref={handleRef} className={styles.handle} onDoubleClick={toggleMaximize}>
         <span className={styles.title}>

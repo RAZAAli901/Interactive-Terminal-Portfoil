@@ -65,6 +65,9 @@
 
 @media (prefers-reduced-motion: reduce) {
   .frame.active::after { animation: none; }
+  /* A 0s animation freezes on its first keyframe; disable outright instead so
+     the window rests at its real geometry (transform: none). */
+  .spawning, .closing { animation: none; }
 }
 
 /* Slim drag handle — Hyprland has no titlebar, but a portfolio needs a mouse
