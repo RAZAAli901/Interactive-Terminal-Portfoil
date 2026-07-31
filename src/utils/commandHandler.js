@@ -553,6 +553,29 @@ const dfHandler = () => ({ type: 'text', content: [
   ]),
 ] });
 
+const ipHandler = (args) => {
+  if (args[0] === 'a' || args[0] === 'addr' || !args[0]) {
+    return { type: 'text', content: [
+      '1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536',
+      '    inet 127.0.0.1/8 scope host lo',
+      '2: wlan0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500',
+      '    inet 192.168.1.42/24 brd 192.168.1.255 scope global dynamic wlan0',
+    ] };
+  }
+  return { type: 'text', content: ["usage: ip [a|addr]"] };
+};
+
+const systemctlHandler = (args) => {
+  if (args[0] === 'status' || !args[0]) {
+    return { type: 'text', content: [
+      formatSuccess('● arch  State: running'),
+      '  Jobs: 0 queued   Failed: 0 units',
+      '  Since: boot   Units: 312 loaded',
+    ] };
+  }
+  return { type: 'text', content: [formatSuccess(`● ${args[1] || 'service'} - active (running)`)] };
+};
+
 const sensorsHandler = () => ({ type: 'text', content: [
   '<span style="color:#cba6f7">nct6798-isa-0290</span>',
   'CPU (Tctl):   +52.0°C',
@@ -1520,6 +1543,20 @@ export const commands = [
     usage: 'sensors',
     examples: ['sensors'],
     handler: sensorsHandler
+  },
+  {
+    name: 'ip',
+    description: 'Show network interfaces and addresses',
+    usage: 'ip [a]',
+    examples: ['ip a'],
+    handler: ipHandler
+  },
+  {
+    name: 'systemctl',
+    description: 'Query the (simulated) systemd service manager',
+    usage: 'systemctl [status]',
+    examples: ['systemctl status'],
+    handler: systemctlHandler
   },
   {
     name: 'banner',
