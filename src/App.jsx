@@ -12,6 +12,8 @@ import Launcher from "./shell/Launcher";
 import PowerMenu from "./shell/PowerMenu";
 import KeybindCheatsheet from "./shell/KeybindCheatsheet";
 import MobileBar from "./shell/MobileBar";
+import Notifications from "./shell/Notifications";
+import { useNotifications } from "./shell/useNotifications";
 import { APPS } from "./config/apps";
 const ExplorerWindow = lazy(() => import("./components/ExplorerWindow"));
 const Notepad = lazy(() => import("./components/Notepad"));
@@ -90,11 +92,15 @@ export default function App() {
   const [showStartup, setShowStartup] = useState(false);
   const [viewport, setViewport] = useState({ w: 1280, h: 720 });
 
+  const { items: notifications, notify, dismiss } = useNotifications();
+
   // Called when the SDDM login completes — reveal the desktop with a short fade.
   const handleLogin = () => {
     setIsLoading(false);
     setShowStartup(true);
     setTimeout(() => setShowStartup(false), 700);
+    setTimeout(() => notify('Welcome to Hyprland', 'Logged in as razaali@arch', '🎉'), 900);
+    setTimeout(() => notify('Tip', 'Press Super+D to open the launcher, Super+/ for keybinds', '💡'), 3200);
   };
   const [contextMenu, setContextMenu] = useState({ visible: false, x: 0, y: 0 });
   const [terminalInitialCommand, setTerminalInitialCommand] = useState(null);
@@ -309,6 +315,8 @@ export default function App() {
             isOpen={isCheatsheetOpen}
             onClose={() => setIsCheatsheetOpen(false)}
           />
+
+          <Notifications items={notifications} onDismiss={dismiss} />
 
           {contextMenu.visible && (
             <div 
