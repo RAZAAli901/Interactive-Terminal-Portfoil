@@ -71,25 +71,27 @@
 
 .contextMenu {
   position: absolute;
-  background-color: var(--tab-bg);
-  border: 1px solid #444;
-  border-radius: 6px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-  padding: 4px 0;
-  min-width: 150px;
+  background-color: color-mix(in srgb, var(--hypr-mantle, #181825) 92%, transparent);
+  border: 1px solid var(--hypr-border, #45475a);
+  border-radius: var(--hypr-radius-sm, 8px);
+  box-shadow: var(--hypr-shadow);
+  padding: 6px;
+  min-width: 170px;
   z-index: 9999;
-  font-family: 'Segoe UI', sans-serif;
-  font-size: 14px;
-  color: #fff;
-  backdrop-filter: blur(10px);
+  font-family: 'JetBrains Mono', system-ui, sans-serif;
+  font-size: 13px;
+  color: var(--hypr-text, #cdd6f4);
+  backdrop-filter: blur(var(--hypr-blur, 8px));
+  -webkit-backdrop-filter: blur(var(--hypr-blur, 8px));
 }
 
 .contextMenuItem {
-  padding: 8px 16px;
+  padding: 8px 12px;
   cursor: pointer;
+  border-radius: 6px;
   transition: background-color 0.1s;
 }
 
 .contextMenuItem:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: color-mix(in srgb, var(--hypr-accent, #cba6f7) 20%, transparent);
 }
