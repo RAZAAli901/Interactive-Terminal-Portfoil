@@ -16,6 +16,12 @@ export function useSystemStats(intervalMs = 2000) {
   });
 
   useEffect(() => {
+    // Skip the ticking telemetry in low-power mode or when the user asked for
+    // reduced motion — the bar just holds its last values.
+    const lowPower = document.documentElement.dataset.perf === 'low';
+    const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    if (lowPower || reduced) return undefined;
+
     const walk = (v, step, lo, hi) => clamp(v + (Math.random() - 0.5) * step, lo, hi);
     const id = setInterval(() => {
       setStats((s) => ({
