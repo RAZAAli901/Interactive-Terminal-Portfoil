@@ -1,0 +1,180 @@
+/* Rotating angle for the animated gradient border (Hyprland signature). */
+@property --hypr-angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+
+.frame {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--hypr-bg, #1e1e2e);
+  border-radius: var(--hypr-radius, 12px);
+  box-shadow: var(--hypr-shadow);
+  opacity: var(--hypr-opacity-inactive, 0.9);
+  overflow: hidden;
+  user-select: none;
+  transition:
+    box-shadow var(--hypr-dur) var(--hypr-ease-out),
+    opacity var(--hypr-dur) var(--hypr-ease-out),
+    width var(--hypr-dur) var(--hypr-ease-out),
+    height var(--hypr-dur) var(--hypr-ease-out);
+}
+
+/* Border ring drawn with a masked gradient so it can be a full gradient, not a
+   flat CSS border. Inactive = muted; active = animated accent gradient. */
+.frame::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: var(--hypr-border-w, 2px);
+  background: var(--hypr-border, #45475a);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  transition: background var(--hypr-dur) var(--hypr-ease-out);
+}
+
+.frame.active {
+  opacity: var(--hypr-opacity-active, 0.96);
+  box-shadow: var(--hypr-shadow-active);
+}
+
+.frame.active::after {
+  background: conic-gradient(
+    from var(--hypr-angle),
+    var(--hypr-accent, #cba6f7),
+    var(--hypr-accent-2, #89b4fa),
+    var(--hypr-accent, #cba6f7)
+  );
+  animation: hyprBorderSpin 6s linear infinite;
+}
+
+@keyframes hyprBorderSpin {
+  to { --hypr-angle: 360deg; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .frame.active::after { animation: none; }
+}
+
+/* Slim drag handle — Hyprland has no titlebar, but a portfolio needs a mouse
+   affordance for dragging + controls. Kept minimal and translucent. */
+.handle {
+  height: 34px;
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 8px 0 12px;
+  background: color-mix(in srgb, var(--hypr-mantle) 70%, transparent);
+  backdrop-filter: blur(var(--hypr-blur));
+  -webkit-backdrop-filter: blur(var(--hypr-blur));
+  cursor: grab;
+}
+
+.handle:active { cursor: grabbing; }
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  font-size: 12px;
+  color: var(--hypr-subtext, #a6adc8);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.frame.active .title { color: var(--hypr-text, #cdd6f4); }
+
+.titleIcon { font-size: 13px; }
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  opacity: 0;
+  transition: opacity var(--hypr-dur-fast) ease;
+}
+
+/* Reveal controls on hover — keyboard users use Super+Q etc. */
+.frame:hover .controls,
+.frame.active .controls { opacity: 1; }
+
+.dot {
+  width: 14px;
+  height: 14px;
+  display: grid;
+  place-items: center;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  padding: 0;
+  color: transparent;
+  font-size: 8px;
+  line-height: 1;
+  transition: color var(--hypr-dur-fast) ease, filter var(--hypr-dur-fast) ease;
+}
+
+.dot:hover { color: rgba(0, 0, 0, 0.6); filter: brightness(1.1); }
+.float { background: var(--hypr-yellow, #f9e2af); }
+.max { background: var(--hypr-green, #a6e3a1); }
+.close { background: var(--hypr-red, #f38ba8); }
+
+.content {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  background: var(--hypr-crust, #11111b);
+}
+
+.resizeHandle {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 16px;
+  height: 16px;
+  cursor: se-resize;
+  z-index: 10;
+}
+
+/* Spawn / close animations driven via classes (anime.js also hooks these). */
+.spawning {
+  animation: hyprSpawn var(--hypr-dur) var(--hypr-ease-pop);
+}
+
+.closing {
+  animation: hyprClose var(--hypr-dur-fast) var(--hypr-ease-out) forwards;
+  pointer-events: none;
+}
+
+@keyframes hyprSpawn {
+  from { opacity: 0; transform: translate(var(--tx, 0), var(--ty, 0)) scale(0.85); }
+  to { opacity: var(--hypr-opacity-active); transform: translate(var(--tx, 0), var(--ty, 0)) scale(1); }
+}
+
+@keyframes hyprClose {
+  to { opacity: 0; transform: translate(var(--tx, 0), var(--ty, 0)) scale(0.88); }
+}
+
+.maximized {
+  border-radius: 0;
+}
+
+.maximized::after { display: none; }
+
+.minimized {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transform: scale(0.85) translateY(200px) !important;
+  transition: transform var(--hypr-dur) var(--hypr-ease-out), opacity var(--hypr-dur) ease !important;
+}
