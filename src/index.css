@@ -4,6 +4,29 @@
 
 @import "./theme/tokens.css";
 
+/* ── Global Catppuccin polish (applies across every app) ─────────────────── */
+::selection {
+  background: color-mix(in srgb, var(--hypr-accent, #cba6f7) 40%, transparent);
+  color: var(--hypr-text, #cdd6f4);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--hypr-surface-alt, #45475a) transparent;
+}
+*::-webkit-scrollbar { width: 10px; height: 10px; }
+*::-webkit-scrollbar-track { background: transparent; }
+*::-webkit-scrollbar-thumb {
+  background: var(--hypr-surface-alt, #45475a);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--hypr-overlay, #6c7086);
+  background-clip: content-box;
+}
+
 :root {
   --bg-color: #0d1117;
   --text-color: #00ff00;
