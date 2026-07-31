@@ -89,6 +89,7 @@ export default function App() {
   const [isLauncherOpen, setIsLauncherOpen] = useState(false);
   const [isPowerOpen, setIsPowerOpen] = useState(false);
   const [isCheatsheetOpen, setIsCheatsheetOpen] = useState(false);
+  const [fullscreenId, setFullscreenId] = useState(null);
   const [showStartup, setShowStartup] = useState(false);
   const [viewport, setViewport] = useState({ w: 1280, h: 720 });
 
@@ -122,10 +123,15 @@ export default function App() {
     {
       launcher: () => setIsLauncherOpen((o) => !o),
       terminal: () => openWindow('terminal'),
-      closeActive: () => activeId && closeWindow(activeId),
+      closeActive: () => {
+        if (!activeId) return;
+        closeWindow(activeId);
+        setFullscreenId((id) => (id === activeId ? null : id));
+      },
       toggleFloat: () => activeId && toggleFloating(activeId),
       focusNext: () => cycleFocus(1),
       focusPrev: () => cycleFocus(-1),
+      fullscreen: () => activeId && setFullscreenId((id) => (id === activeId ? null : activeId)),
       workspace: (n) => switchWorkspace(n),
       moveWorkspace: (n) => moveToWorkspace(activeId, n),
       powerMenu: () => setIsPowerOpen((o) => !o),
@@ -273,6 +279,7 @@ export default function App() {
                     tiled={!win.floating}
                     rect={rectById[win.id]}
                     hidden={win.workspace !== activeWorkspace}
+                    fullscreen={win.id === fullscreenId}
                     onClose={() => closeWindow(win.id)}
                     onToggleFloating={() => toggleFloating(win.id)}
                     isMinimized={win.isMinimized}
