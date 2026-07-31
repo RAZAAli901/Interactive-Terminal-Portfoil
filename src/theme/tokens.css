@@ -1,0 +1,43 @@
+/**
+ * Hyprland design tokens — geometry, blur, shadow and animation constants.
+ *
+ * Color tokens are injected at runtime by ThemeProvider (see themes.js). These
+ * are the structural constants that define the "rice": gaps, rounding, border
+ * width, blur radius, and the signature Hyprland easing curves.
+ */
+
+:root {
+  /* Layout */
+  --hypr-gap: 10px;               /* gaps_in / outer gap between tiled windows */
+  --hypr-gap-outer: 12px;         /* gap to screen edge / under waybar */
+  --hypr-waybar-h: 40px;          /* top bar height */
+
+  /* Window chrome */
+  --hypr-radius: 12px;            /* rounded corners */
+  --hypr-radius-sm: 8px;
+  --hypr-border-w: 2px;           /* active/inactive border thickness */
+  --hypr-blur: 8px;               /* backdrop blur behind translucent surfaces */
+  --hypr-opacity-active: 0.96;    /* focused window opacity */
+  --hypr-opacity-inactive: 0.90;  /* unfocused window opacity */
+
+  /* Shadow (Hyprland drop_shadow) */
+  --hypr-shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
+  --hypr-shadow-active: 0 12px 40px rgba(0, 0, 0, 0.55);
+
+  /* Animation curves (match Hyprland default beziers) */
+  --hypr-ease-pop: cubic-bezier(0.05, 0.9, 0.1, 1.05);   /* overshoot spawn */
+  --hypr-ease-out: cubic-bezier(0.16, 1, 0.3, 1);         /* smooth settle */
+  --hypr-ease-inout: cubic-bezier(0.65, 0, 0.35, 1);      /* workspace slide */
+  --hypr-dur-fast: 160ms;
+  --hypr-dur: 260ms;
+  --hypr-dur-slow: 420ms;
+}
+
+/* Respect users who ask for less motion. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --hypr-dur-fast: 0ms;
+    --hypr-dur: 0ms;
+    --hypr-dur-slow: 0ms;
+  }
+}
