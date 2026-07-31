@@ -83,7 +83,7 @@ export default function App() {
   const {
     windows, activeId, activeWorkspace,
     openWindow, closeWindow, focusWindow, toggleFloating,
-    switchWorkspace, moveToWorkspace,
+    switchWorkspace, moveToWorkspace, cycleFocus,
   } = useHyprland(initialWindows);
 
   const [isLauncherOpen, setIsLauncherOpen] = useState(false);
@@ -124,6 +124,8 @@ export default function App() {
       terminal: () => openWindow('terminal'),
       closeActive: () => activeId && closeWindow(activeId),
       toggleFloat: () => activeId && toggleFloating(activeId),
+      focusNext: () => cycleFocus(1),
+      focusPrev: () => cycleFocus(-1),
       workspace: (n) => switchWorkspace(n),
       moveWorkspace: (n) => moveToWorkspace(activeId, n),
       powerMenu: () => setIsPowerOpen((o) => !o),
