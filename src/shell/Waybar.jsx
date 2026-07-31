@@ -66,6 +66,7 @@ export default function Waybar({
             </button>
           ))}
         </div>
+        <span className={styles.module} title="Layout" aria-label="Tiling layout: dwindle">◫ dwindle</span>
         {focusedTitle && <span className={styles.title}>{focusedTitle}</span>}
       </div>
 
