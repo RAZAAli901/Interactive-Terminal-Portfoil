@@ -11,8 +11,8 @@
 
 .desktopIcons {
   position: absolute;
-  top: 20px;
-  left: 20px;
+  top: calc(var(--hypr-waybar-h, 40px) + 16px);
+  left: 16px;
   display: flex;
   flex-direction: column;
   gap: 20px;
