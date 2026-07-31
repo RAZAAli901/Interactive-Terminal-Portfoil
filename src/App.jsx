@@ -1,6 +1,7 @@
-import { useState, useEffect, Suspense, lazy } from 'react';
+import { useState, useEffect, useMemo, useRef, Suspense, lazy } from 'react';
 import { useHyprland } from './wm/useHyprland';
 import { useKeybindings } from './wm/useKeybindings';
+import { dwindle, workspaceArea } from './layout/dwindle';
 import ErrorBoundary from './components/ErrorBoundary';
 import Terminal from "./components/Terminal";
 import LoadingScreen from "./components/LoadingScreen";
@@ -45,6 +46,7 @@ export default function App() {
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768);
+      setViewport({ w: window.innerWidth, h: window.innerHeight });
     };
     handleResize();
     window.addEventListener('resize', handleResize);
@@ -79,12 +81,16 @@ export default function App() {
     vscode: { id: 'vscode', title: 'Visual Studio Code', icon: '💙', isOpen: false, isMinimized: false, zIndex: 1, defaultWidth: 900, defaultHeight: 600 },
     minesweeper: { id: 'minesweeper', title: 'MineSweeper', icon: '💣', isOpen: false, isMinimized: false, zIndex: 1, defaultWidth: 400, defaultHeight: 500 }
   };
-  const { windows, activeId, openWindow, closeWindow, focusWindow, toggleFloating } = useHyprland(initialWindows);
+  const {
+    windows, activeId, activeWorkspace,
+    openWindow, closeWindow, focusWindow, toggleFloating,
+    switchWorkspace, moveToWorkspace,
+  } = useHyprland(initialWindows);
 
   const [isLauncherOpen, setIsLauncherOpen] = useState(false);
   const [isPowerOpen, setIsPowerOpen] = useState(false);
   const [isCheatsheetOpen, setIsCheatsheetOpen] = useState(false);
-  const [activeWorkspace, setActiveWorkspace] = useState(1);
+  const [viewport, setViewport] = useState({ w: 1280, h: 720 });
   const [contextMenu, setContextMenu] = useState({ visible: false, x: 0, y: 0 });
   const [terminalInitialCommand, setTerminalInitialCommand] = useState(null);
 
@@ -107,12 +113,34 @@ export default function App() {
       terminal: () => openWindow('terminal'),
       closeActive: () => activeId && closeWindow(activeId),
       toggleFloat: () => activeId && toggleFloating(activeId),
-      workspace: (n) => setActiveWorkspace(n),
+      workspace: (n) => switchWorkspace(n),
+      moveWorkspace: (n) => moveToWorkspace(activeId, n),
       powerMenu: () => setIsPowerOpen((o) => !o),
       cheatsheet: () => setIsCheatsheetOpen((o) => !o),
     },
     { enabled: !isLoading && !isMobile },
   );
+
+  // Dwindle layout for tiled windows on the active workspace.
+  const rectById = useMemo(() => {
+    const tiledWins = Object.values(windows).filter(
+      (w) => w.isOpen && !w.isMinimized && !w.floating && w.workspace === activeWorkspace,
+    );
+    const rects = dwindle(workspaceArea(viewport.w, viewport.h), tiledWins.length);
+    const map = {};
+    tiledWins.forEach((w, i) => { map[w.id] = rects[i]; });
+    return map;
+  }, [windows, activeWorkspace, viewport]);
+
+  // Re-trigger the workspace slide animation on each switch (no remount).
+  const layerRef = useRef(null);
+  useEffect(() => {
+    const el = layerRef.current;
+    if (!el) return;
+    el.classList.remove(styles.wsSlide);
+    void el.offsetWidth; // force reflow so the animation restarts
+    el.classList.add(styles.wsSlide);
+  }, [activeWorkspace]);
 
   const wallpapers = {
     1: 'https://images.unsplash.com/photo-1496247749665-49cf5b1022e9?q=80&w=2073&auto=format&fit=crop',
@@ -256,36 +284,41 @@ export default function App() {
             )}
           </div>
 
-          {Object.values(windows).map(win => {
-            if (!win.isOpen) return null;
-            return (
-              <ErrorBoundary key={win.id}>
-                <WindowFrame
-                  title={win.title}
-                  icon={win.icon}
-                  isActive={win.id === activeId}
-                  onClose={() => closeWindow(win.id)}
-                  onToggleFloating={() => toggleFloating(win.id)}
-                  isMinimized={win.isMinimized}
-                  defaultWidth={win.defaultWidth}
-                  defaultHeight={win.defaultHeight}
-                  offsetX={win.offsetX}
-                  offsetY={win.offsetY}
-                  zIndex={win.zIndex}
-                  onFocus={() => focusWindow(win.id)}
-                >
-                  <Suspense fallback={<div style={{ padding: '20px', color: 'var(--terminal-text)' }}>Loading app...</div>}>
-                    {renderWindowContent(win.id)}
-                  </Suspense>
-                </WindowFrame>
-              </ErrorBoundary>
-            );
-          })}
+          <div className={styles.wsLayer} ref={layerRef}>
+            {Object.values(windows).map(win => {
+              if (!win.isOpen) return null;
+              return (
+                <ErrorBoundary key={win.id}>
+                  <WindowFrame
+                    title={win.title}
+                    icon={win.icon}
+                    isActive={win.id === activeId}
+                    tiled={!win.floating}
+                    rect={rectById[win.id]}
+                    hidden={win.workspace !== activeWorkspace}
+                    onClose={() => closeWindow(win.id)}
+                    onToggleFloating={() => toggleFloating(win.id)}
+                    isMinimized={win.isMinimized}
+                    defaultWidth={win.defaultWidth}
+                    defaultHeight={win.defaultHeight}
+                    offsetX={win.offsetX}
+                    offsetY={win.offsetY}
+                    zIndex={win.zIndex}
+                    onFocus={() => focusWindow(win.id)}
+                  >
+                    <Suspense fallback={<div style={{ padding: '20px', color: 'var(--terminal-text)' }}>Loading app...</div>}>
+                      {renderWindowContent(win.id)}
+                    </Suspense>
+                  </WindowFrame>
+                </ErrorBoundary>
+              );
+            })}
+          </div>
 
           <Waybar
             activeWorkspace={activeWorkspace}
-            occupied={new Set(Object.values(windows).some((w) => w.isOpen) ? [activeWorkspace] : [])}
-            onWorkspace={setActiveWorkspace}
+            occupied={new Set(Object.values(windows).filter((w) => w.isOpen).map((w) => w.workspace))}
+            onWorkspace={switchWorkspace}
             focusedTitle={windows[activeId]?.title || ''}
             onLauncher={() => setIsLauncherOpen((o) => !o)}
             onPower={() => setIsPowerOpen(true)}
