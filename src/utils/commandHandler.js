@@ -523,6 +523,44 @@ const freeHandler = () => {
 
 const whoamiHandler = () => ({ type: 'text', content: ['razaali'] });
 
+const pacmanHandler = (args) => {
+  if (args[0] === '-Q' || args[0] === '-Qe') {
+    const pkgs = [
+      'hyprland 0.41.2-1', 'waybar 0.11.0-1', 'kitty 0.35.2-1', 'wofi 1.4-1',
+      'firefox 128.0-1', 'neovim 0.10.0-1', 'thunar 4.18.10-1', 'mako 1.9.0-1',
+      'catppuccin-gtk-theme-mocha 0.7.0-1', 'ttf-jetbrains-mono-nerd 3.2.1-1',
+    ];
+    return { type: 'text', content: pkgs };
+  }
+  if (args[0] === '-Syu') {
+    return { type: 'text', content: [
+      formatInfo(':: Synchronizing package databases...'),
+      ' core is up to date', ' extra is up to date',
+      formatSuccess(':: There is nothing to do (system is up to date)'),
+    ] };
+  }
+  return { type: 'text', content: [
+    formatInfo('pacman — package manager'),
+    "usage: pacman [-Q | -Qe | -Syu]",
+  ] };
+};
+
+const dfHandler = () => ({ type: 'text', content: [
+  ...formatTable(['Filesystem', 'Size', 'Used', 'Avail', 'Use%', 'Mounted on'], [
+    ['/dev/nvme0n1p2', '916G', '312G', '558G', '36%', '/'],
+    ['/dev/nvme0n1p1', '1.0G', '288M', '736M', '29%', '/boot'],
+    ['tmpfs', '16G', '112M', '15.9G', '1%', '/tmp'],
+  ]),
+] });
+
+const sensorsHandler = () => ({ type: 'text', content: [
+  '<span style="color:#cba6f7">nct6798-isa-0290</span>',
+  'CPU (Tctl):   +52.0°C',
+  'GPU (edge):   +44.0°C',
+  'NVMe:         +38.9°C',
+  'fan1:         1180 RPM',
+] });
+
 const lsHandler = (args, context) => {
   const isLa = args.includes('-la') || args.includes('-a');
   const pathArg = args.filter(a => !a.startsWith('-'))[0];
@@ -1461,6 +1499,27 @@ export const commands = [
     usage: 'whoami',
     examples: ['whoami'],
     handler: whoamiHandler
+  },
+  {
+    name: 'pacman',
+    description: 'Arch package manager (query installed packages)',
+    usage: 'pacman [-Q|-Syu]',
+    examples: ['pacman -Q', 'pacman -Syu'],
+    handler: pacmanHandler
+  },
+  {
+    name: 'df',
+    description: 'Report filesystem disk space usage',
+    usage: 'df [-h]',
+    examples: ['df -h'],
+    handler: dfHandler
+  },
+  {
+    name: 'sensors',
+    description: 'Show hardware temperatures and fan speeds',
+    usage: 'sensors',
+    examples: ['sensors'],
+    handler: sensorsHandler
   },
   {
     name: 'banner',
