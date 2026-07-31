@@ -597,8 +597,11 @@ const commandsListHandler = () => {
 };
 
 const themeHandler = (args) => {
-  const target = args[0] ? args[0].toLowerCase() : null;
-  const themes = ['dracula', 'nord', 'monokai', 'matrix', 'cyberpunk', 'retro'];
+  const raw = args[0] ? args[0].toLowerCase() : null;
+  const themes = ['catppuccin-mocha', 'catppuccin-latte', 'tokyo-night', 'gruvbox', 'nord', 'dracula'];
+  // Accept friendly aliases for the Catppuccin variants.
+  const aliases = { mocha: 'catppuccin-mocha', latte: 'catppuccin-latte', catppuccin: 'catppuccin-mocha', tokyo: 'tokyo-night', tokyonight: 'tokyo-night' };
+  const target = raw ? (aliases[raw] || raw) : null;
   if (!target) {
     return {
       type: 'text',
@@ -1431,8 +1434,8 @@ export const commands = [
   {
     name: 'theme',
     description: 'Switch terminal color scheme and persist preference',
-    usage: 'theme [dracula|nord|monokai|matrix|cyberpunk|retro]',
-    examples: ['theme matrix', 'theme'],
+    usage: 'theme [catppuccin-mocha|catppuccin-latte|tokyo-night|gruvbox|nord|dracula]',
+    examples: ['theme tokyo-night', 'theme gruvbox', 'theme'],
     handler: themeHandler
   },
   {
