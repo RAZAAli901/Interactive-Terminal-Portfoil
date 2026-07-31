@@ -20,6 +20,8 @@
   transition:
     box-shadow var(--hypr-dur) var(--hypr-ease-out),
     opacity var(--hypr-dur) var(--hypr-ease-out),
+    left var(--hypr-dur) var(--hypr-ease-out),
+    top var(--hypr-dur) var(--hypr-ease-out),
     width var(--hypr-dur) var(--hypr-ease-out),
     height var(--hypr-dur) var(--hypr-ease-out);
 }

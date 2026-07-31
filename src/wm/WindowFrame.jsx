@@ -19,6 +19,8 @@ export default function WindowFrame({
   onToggleFloating,
   isMinimized,
   isActive = false,
+  tiled = false,
+  rect = null,
   defaultWidth = 820,
   defaultHeight = 520,
   offsetX = 0,
@@ -39,11 +41,11 @@ export default function WindowFrame({
 
   const waybar = 40;
 
-  // ── anime.js draggable (floating windows) ──────────────────────────────────
+  // ── anime.js draggable (floating windows only) ─────────────────────────────
   useEffect(() => {
     const el = frameRef.current;
     const handle = handleRef.current;
-    if (!el || !handle || isMaximized) return;
+    if (!el || !handle || isMaximized || tiled) return;
 
     const vw = window.innerWidth;
     const vh = window.innerHeight;
@@ -68,7 +70,7 @@ export default function WindowFrame({
       draggableRef.current = null;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isMaximized]);
+  }, [isMaximized, tiled]);
 
   // ── Close with animation ───────────────────────────────────────────────────
   const handleClose = useCallback(() => {
@@ -124,9 +126,16 @@ export default function WindowFrame({
     };
   }, [isResizing, resizeStart]);
 
-  const frameStyle = isMaximized
-    ? { left: 0, top: waybar, transform: 'none', width: '100%', height: `calc(100% - ${waybar}px)`, zIndex, opacity: isMinimized ? 0 : undefined, pointerEvents: isMinimized ? 'none' : 'auto' }
-    : { width: size.width, height: size.height, zIndex, pointerEvents: isMinimized ? 'none' : 'auto' };
+  let frameStyle;
+  if (isMaximized) {
+    frameStyle = { left: 0, top: waybar, transform: 'none', width: '100%', height: `calc(100% - ${waybar}px)`, zIndex, pointerEvents: isMinimized ? 'none' : 'auto' };
+  } else if (tiled && rect) {
+    // Tiled: absolute geometry from the dwindle layout, no drag transform.
+    frameStyle = { left: rect.x, top: rect.y, width: rect.w, height: rect.h, transform: 'none', zIndex, pointerEvents: isMinimized ? 'none' : 'auto' };
+  } else {
+    // Floating: anime.js owns position via transform; left/top stay 0.
+    frameStyle = { width: size.width, height: size.height, zIndex, pointerEvents: isMinimized ? 'none' : 'auto' };
+  }
 
   return (
     <div
@@ -157,7 +166,7 @@ export default function WindowFrame({
 
       <div className={styles.content}>{children}</div>
 
-      {!isMaximized && <div className={styles.resizeHandle} onMouseDown={handleResizeMouseDown} />}
+      {!isMaximized && !tiled && <div className={styles.resizeHandle} onMouseDown={handleResizeMouseDown} />}
     </div>
   );
 }
