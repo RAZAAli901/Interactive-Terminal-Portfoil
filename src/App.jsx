@@ -146,6 +146,8 @@ export default function App() {
         notify('Screenshot saved', '~/Pictures/screenshot.png', '📸');
       },
       workspace: (n) => switchWorkspace(n),
+      workspacePrev: () => switchWorkspace(Math.max(1, activeWorkspace - 1)),
+      workspaceNext: () => switchWorkspace(Math.min(5, activeWorkspace + 1)),
       moveWorkspace: (n) => moveToWorkspace(activeId, n),
       powerMenu: () => setIsPowerOpen((o) => !o),
       cheatsheet: () => setIsCheatsheetOpen((o) => !o),
