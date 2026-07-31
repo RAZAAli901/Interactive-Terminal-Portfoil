@@ -111,16 +111,16 @@
       "stars": 15,
       "forks": 3,
       "lastUpdated": "2026-06-25",
-      "description": "Windows-style desktop workspace portfolio with full window drag/resize support, simulated terminal shell, apps, and live system clocks.",
-      "longDescription": "A highly interactive simulated desktop experience that works inside web browsers. Mimics operating system layouts including a command prompt, file explorer, chat clients, and system configurations.",
+      "description": "Arch Linux + Hyprland desktop simulated in the browser: dwindle tiling, waybar, wofi launcher, animated window spawns, and a kitty terminal shell.",
+      "longDescription": "A ricer-grade recreation of an Arch Linux + Hyprland rice running entirely client-side. Boots through a fake BIOS/POST, systemd log and SDDM login into a Catppuccin desktop with a waybar, wofi-style launcher, Super-key bindings, dwindle tiling across five workspaces, and a fastfetch landing card. Fully theme-switchable at runtime.",
       "liveUrl": "https://github.com/RAZAAli901/Interactive-Terminal-Portfoil",
       "repoUrl": "https://github.com/RAZAAli901/Interactive-Terminal-Portfoil",
       "features": [
-        "Fully draggable, resizable window frames.",
-        "Interactive retro command prompt with Tab completion and history.",
-        "Real-time clock, Minesweeper game, and settings panel."
+        "Dwindle tiling window manager with floating toggle and five workspaces.",
+        "Full boot sequence: BIOS to systemd to SDDM login to Hyprland startup.",
+        "Waybar, wofi launcher, Super-key bindings, and runtime Catppuccin theming."
       ],
-      "relatedSkills": ["React 19", "Vite", "CSS Modules", "TailwindCSS"]
+      "relatedSkills": ["React 19", "Vite", "anime.js", "CSS Modules", "TailwindCSS"]
     },
     {
       "id": "Enterprise-RAG-Pipeline",
