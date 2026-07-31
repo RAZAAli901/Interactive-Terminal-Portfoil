@@ -60,6 +60,12 @@ export default function Launcher({ isOpen, onLaunch, onClose }) {
             aria-label="Search applications"
           />
         </div>
+        <div className={styles.hintbar} aria-hidden="true">
+          <span>↑↓ navigate</span>
+          <span>↵ launch</span>
+          <span>esc close</span>
+          <span className={styles.count}>{results.length} apps</span>
+        </div>
         <div className={styles.list} role="listbox">
           {results.length === 0 && <div className={styles.empty}>No matching applications</div>}
           {results.map((app, i) => (
