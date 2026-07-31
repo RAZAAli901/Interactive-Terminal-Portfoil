@@ -11,6 +11,7 @@ import Waybar from "./shell/Waybar";
 import Launcher from "./shell/Launcher";
 import PowerMenu from "./shell/PowerMenu";
 import KeybindCheatsheet from "./shell/KeybindCheatsheet";
+import MobileBar from "./shell/MobileBar";
 import { APPS } from "./config/apps";
 const ExplorerWindow = lazy(() => import("./components/ExplorerWindow"));
 const Notepad = lazy(() => import("./components/Notepad"));
@@ -237,8 +238,11 @@ export default function App() {
       {isLoading ? (
         <BootSequence wallpaper={wallpapers[wallpaper]} onComplete={handleLogin} />
       ) : isMobile ? (
-        <div style={{ width: '100vw', height: '100vh', background: 'var(--terminal-bg)', overflow: 'hidden' }}>
-          <Terminal setTheme={setTheme} setWallpaper={setWallpaper} />
+        <div style={{ width: '100vw', height: '100vh', display: 'flex', flexDirection: 'column', background: 'var(--terminal-bg)', overflow: 'hidden' }}>
+          <MobileBar />
+          <div style={{ flex: 1, minHeight: 0 }}>
+            <Terminal setTheme={setTheme} setWallpaper={setWallpaper} />
+          </div>
         </div>
       ) : (
         <>
