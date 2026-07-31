@@ -16,7 +16,6 @@ export default function WindowFrame({
   title = 'kitty',
   icon = '\u{1F5A5}️',
   onClose,
-  onMinimize,
   onToggleFloating,
   isMinimized,
   isActive = false,

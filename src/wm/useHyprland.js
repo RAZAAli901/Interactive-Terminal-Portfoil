@@ -11,7 +11,7 @@ import { useCallback, useMemo, useState } from 'react';
  * @param {Record<string, object>} initialWindows
  */
 export function useHyprland(initialWindows) {
-  const [maxZIndex, setMaxZIndex] = useState(10);
+  const [, setMaxZIndex] = useState(10);
   const [windows, setWindows] = useState(initialWindows);
   const [activeId, setActiveId] = useState(
     () => Object.values(initialWindows).find((w) => w.isOpen && !w.isMinimized)?.id ?? null,
