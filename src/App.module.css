@@ -9,6 +9,28 @@
   overflow: hidden;
 }
 
+/* Layer holding all windows; transforming it slides every window together on a
+   workspace switch. Empty areas let clicks fall through to the desktop. */
+.wsLayer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.wsLayer > * { pointer-events: auto; }
+
+.wsSlide {
+  animation: wsSlide var(--hypr-dur) var(--hypr-ease-inout);
+}
+
+@keyframes wsSlide {
+  from { opacity: 0.4; transform: translateX(4%); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wsSlide { animation: none; }
+}
+
 .desktopIcons {
   position: absolute;
   top: calc(var(--hypr-waybar-h, 40px) + 16px);
