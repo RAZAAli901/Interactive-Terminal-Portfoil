@@ -28,20 +28,16 @@ const Store = lazy(() => import("./components/Store"));
 const SnippingTool = lazy(() => import("./components/SnippingTool"));
 const Vscode = lazy(() => import("./components/Vscode"));
 const Minesweeper = lazy(() => import("./components/Minesweeper"));
-import { getThemePreference, saveThemePreference } from './utils/localStorage';
+import { useTheme } from './theme/themeContext';
 
 import styles from './App.module.css';
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [wallpaper, setWallpaper] = useState(4); // Default wallpaper ID
-  const [theme, setTheme] = useState(getThemePreference);
+  const { setTheme } = useTheme(); // Hyprland palette switcher (drives root CSS vars)
 
   const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    saveThemePreference(theme);
-  }, [theme]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -61,17 +57,17 @@ export default function App() {
 
   // Dynamic window list
   const initialWindows = {
-    terminal: { id: 'terminal', title: 'Command Prompt', icon: '💻', isOpen: true, isMinimized: false, zIndex: 10, defaultWidth: 800, defaultHeight: 500, offsetX: 0, offsetY: 0 },
-    explorer: { id: 'explorer', title: 'My Computer', icon: '🖥️', isOpen: false, isMinimized: false, zIndex: 1, defaultWidth: 800, defaultHeight: 500 },
-    notepad: { id: 'notepad', title: 'Notepad', icon: '📝', isOpen: false, isMinimized: false, zIndex: 1, defaultWidth: 650, defaultHeight: 500, offsetX: 80, offsetY: 40 },
-    chat: { id: 'chat', title: 'Chat', icon: '💬', isOpen: false, isMinimized: false, zIndex: 1, defaultWidth: 700, defaultHeight: 500 },
-    browser: { id: 'browser', title: 'Web Browser', icon: '🌐', isOpen: false, isMinimized: false, zIndex: 1, defaultWidth: 900, defaultHeight: 600 },
+    terminal: { id: 'terminal', title: 'kitty', icon: '💻', isOpen: true, isMinimized: false, zIndex: 10, defaultWidth: 800, defaultHeight: 500, offsetX: 0, offsetY: 0 },
+    explorer: { id: 'explorer', title: 'Files', icon: '📁', isOpen: false, isMinimized: false, zIndex: 1, defaultWidth: 800, defaultHeight: 500 },
+    notepad: { id: 'notepad', title: 'Text Editor', icon: '📝', isOpen: false, isMinimized: false, zIndex: 1, defaultWidth: 650, defaultHeight: 500, offsetX: 80, offsetY: 40 },
+    chat: { id: 'chat', title: 'Discord', icon: '💬', isOpen: false, isMinimized: false, zIndex: 1, defaultWidth: 700, defaultHeight: 500 },
+    browser: { id: 'browser', title: 'Firefox', icon: '🦊', isOpen: false, isMinimized: false, zIndex: 1, defaultWidth: 900, defaultHeight: 600 },
     settings: { id: 'settings', title: 'Settings', icon: '⚙️', isOpen: false, isMinimized: false, zIndex: 1, defaultWidth: 750, defaultHeight: 500 },
     calculator: { id: 'calculator', title: 'Calculator', icon: '🧮', isOpen: false, isMinimized: false, zIndex: 1, defaultWidth: 320, defaultHeight: 480 },
-    clock: { id: 'clock', title: 'Clock', icon: '⏰', isOpen: false, isMinimized: false, zIndex: 1, defaultWidth: 450, defaultHeight: 400 },
+    clock: { id: 'clock', title: 'Clocks', icon: '⏰', isOpen: false, isMinimized: false, zIndex: 1, defaultWidth: 450, defaultHeight: 400 },
     store: { id: 'store', title: 'Microsoft Store', icon: '🛍️', isOpen: false, isMinimized: false, zIndex: 1, defaultWidth: 900, defaultHeight: 600 },
-    photos: { id: 'photos', title: 'Photos', icon: '🖼️', isOpen: false, isMinimized: false, zIndex: 1, defaultWidth: 700, defaultHeight: 500 },
-    solitaire: { id: 'solitaire', title: 'Solitaire', icon: '🃏', isOpen: false, isMinimized: false, zIndex: 1, defaultWidth: 700, defaultHeight: 550 },
+    photos: { id: 'photos', title: 'Image Viewer', icon: '🖼️', isOpen: false, isMinimized: false, zIndex: 1, defaultWidth: 700, defaultHeight: 500 },
+    solitaire: { id: 'solitaire', title: 'AisleRiot Solitaire', icon: '🃏', isOpen: false, isMinimized: false, zIndex: 1, defaultWidth: 700, defaultHeight: 550 },
     word: { id: 'word', title: 'Word - Document1.docx', icon: '📝', isOpen: false, isMinimized: false, zIndex: 1, defaultWidth: 750, defaultHeight: 550 },
     excel: { id: 'excel', title: 'Excel - Book1.xlsx', icon: '📊', isOpen: false, isMinimized: false, zIndex: 1, defaultWidth: 800, defaultHeight: 500 },
     powerpoint: { id: 'powerpoint', title: 'PowerPoint - Presentation1.pptx', icon: '🔴', isOpen: false, isMinimized: false, zIndex: 1, defaultWidth: 800, defaultHeight: 550 },
@@ -79,7 +75,7 @@ export default function App() {
     snipping: { id: 'snipping', title: 'Snipping Tool', icon: '✂️', isOpen: false, isMinimized: false, zIndex: 1, defaultWidth: 600, defaultHeight: 450 },
     onenote: { id: 'onenote', title: 'OneNote', icon: '📓', isOpen: false, isMinimized: false, zIndex: 1, defaultWidth: 750, defaultHeight: 500 },
     vscode: { id: 'vscode', title: 'Visual Studio Code', icon: '💙', isOpen: false, isMinimized: false, zIndex: 1, defaultWidth: 900, defaultHeight: 600 },
-    minesweeper: { id: 'minesweeper', title: 'MineSweeper', icon: '💣', isOpen: false, isMinimized: false, zIndex: 1, defaultWidth: 400, defaultHeight: 500 }
+    minesweeper: { id: 'minesweeper', title: 'Mines', icon: '💣', isOpen: false, isMinimized: false, zIndex: 1, defaultWidth: 400, defaultHeight: 500 }
   };
   const {
     windows, activeId, activeWorkspace,
@@ -231,7 +227,7 @@ export default function App() {
 
   return (
     <div
-      className={`${styles.desktop} theme-${theme} ${isMobile ? 'mobile-terminal-active' : ''}`}
+      className={`${styles.desktop} ${isMobile ? 'mobile-terminal-active' : ''}`}
       style={{ backgroundImage: `url(${wallpapers[wallpaper]})` }}
       onClick={handleDesktopClick}
       onContextMenu={handleContextMenu}
@@ -247,50 +243,10 @@ export default function App() {
       ) : (
         <>
           <div className={styles.desktopIcons}>
-            <DesktopIcon
-              label="Terminal"
-              icon="💻"
-              onDoubleClick={() => openWindow('terminal')}
-            />
-            <DesktopIcon
-              label="My Computer"
-              icon="🖥️"
-              onDoubleClick={() => openWindow('explorer')}
-            />
-            <DesktopIcon
-              label="Recycle Bin"
-              icon="🗑️"
-              onDoubleClick={() => alert("Recycle bin is empty.")}
-            />
-            <DesktopIcon
-              label="Notepad"
-              icon="📝"
-              onDoubleClick={() => openWindow('notepad')}
-            />
-            <DesktopIcon
-              label="Chat"
-              icon="💬"
-              onDoubleClick={() => openWindow('chat')}
-            />
-            <DesktopIcon
-              label="Browser"
-              icon="🌐"
-              onDoubleClick={() => openWindow('browser')}
-            />
-            {installedApps.vscode && (
-              <DesktopIcon
-                label="VS Code"
-                icon="💙"
-                onDoubleClick={() => openWindow('vscode')}
-              />
-            )}
-            {installedApps.minesweeper && (
-              <DesktopIcon
-                label="MineSweeper"
-                icon="💣"
-                onDoubleClick={() => openWindow('minesweeper')}
-              />
-            )}
+            <DesktopIcon label="kitty" icon="💻" onDoubleClick={() => openWindow('terminal')} />
+            <DesktopIcon label="Files" icon="📁" onDoubleClick={() => openWindow('explorer')} />
+            <DesktopIcon label="Firefox" icon="🦊" onDoubleClick={() => openWindow('browser')} />
+            <DesktopIcon label="Code" icon="💙" onDoubleClick={() => openWindow('vscode')} />
           </div>
 
           <div className={styles.wsLayer} ref={layerRef}>
