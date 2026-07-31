@@ -39,7 +39,15 @@ export default function Waybar({
         <button className={styles.arch} onClick={onLauncher} title="Applications (Super+D)" aria-label="Open application launcher">
           <ArchLogo />
         </button>
-        <div className={styles.workspaces} role="tablist" aria-label="Workspaces">
+        <div
+          className={styles.workspaces}
+          role="tablist"
+          aria-label="Workspaces"
+          onWheel={(e) => {
+            const dir = e.deltaY > 0 ? 1 : -1;
+            onWorkspace?.(Math.min(5, Math.max(1, activeWorkspace + dir)));
+          }}
+        >
           {WORKSPACES.map((n) => (
             <button
               key={n}
