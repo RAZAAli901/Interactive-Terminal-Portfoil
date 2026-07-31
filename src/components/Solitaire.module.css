@@ -83,7 +83,7 @@
 }
 
 .restartBtn {
-    background-color: #0078d4;
+    background-color: var(--hypr-accent, #cba6f7);
     color: #fff;
     border: none;
     padding: 6px 12px;
@@ -93,7 +93,7 @@
 }
 
 .restartBtn:hover {
-    background-color: #1084e4;
+    background-color: var(--hypr-accent-2, #89b4fa);
 }
 
 .winOverlay {
