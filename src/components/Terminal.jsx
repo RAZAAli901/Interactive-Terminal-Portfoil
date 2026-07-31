@@ -11,8 +11,7 @@ import styles from './Terminal.module.css';
 
 export default function Terminal({ setTheme, setWallpaper, initialCommand, setInitialCommand }) {
     const welcomeLines = [
-        'Microsoft Windows [Version 10.0.26200.7171]',
-        '(c) Microsoft Corporation. All rights reserved.',
+        'Arch Linux (rolling) — kitty terminal',
         '',
         "Type 'help' or 'commands' to list available utilities.",
         "Simulated filesystem mounted at /portfolio. Try 'ls' or 'cd'.",
@@ -437,6 +436,19 @@ export default function Terminal({ setTheme, setWallpaper, initialCommand, setIn
             if (setInitialCommand) setInitialCommand(null);
         }
     }, [initialCommand, isTyping]);
+
+    // Run fastfetch once as the landing card after the welcome finishes typing.
+    const landedRef = useRef(false);
+    useEffect(() => {
+        if (!isTyping && !landedRef.current && !initialCommand) {
+            landedRef.current = true;
+            const output = handleCommand('fastfetch', {
+                isAdmin, setWallpaper, setIsAdmin, currentPath, history: sessionHistory,
+            });
+            setHistory(prev => [...prev, { command: '', output }]);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isTyping]);
 
     return (
         <div className={styles.terminalContainer}>
