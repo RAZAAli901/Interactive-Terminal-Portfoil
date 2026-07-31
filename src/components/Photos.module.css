@@ -2,8 +2,8 @@
     display: flex;
     flex-direction: column;
     height: 100%;
-    background-color: #1a1a1a;
-    color: #fff;
+    background-color: var(--hypr-mantle, #181825);
+    color: var(--hypr-text, #cdd6f4);
     font-family: 'Segoe UI', sans-serif;
     position: relative;
 }
@@ -30,7 +30,7 @@
 
 .photoCard:hover {
     transform: scale(1.03);
-    border-color: #0078d4;
+    border-color: var(--hypr-accent, #cba6f7);
 }
 
 /* Lightbox view styles */
@@ -57,11 +57,11 @@
 .closeBtn {
     font-size: 20px;
     cursor: default;
-    color: #fff;
+    color: var(--hypr-text, #cdd6f4);
 }
 
 .closeBtn:hover {
-    color: #cc1111;
+    color: var(--hypr-red, #f38ba8);
 }
 
 .lightboxContent {
@@ -82,7 +82,7 @@
 
 .navBtn {
     background-color: rgba(255,255,255,0.1);
-    color: #fff;
+    color: var(--hypr-text, #cdd6f4);
     border: none;
     font-size: 24px;
     padding: 15px 10px;
@@ -98,6 +98,6 @@
     padding: 15px;
     text-align: center;
     font-size: 14px;
-    color: #ccc;
+    color: var(--hypr-subtext, #a6adc8);
     background-color: rgba(0,0,0,0.5);
 }
