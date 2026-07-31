@@ -1,11 +1,21 @@
 import { useState } from 'react';
 import { useTheme } from '../theme/themeContext';
 import { THEME_LIST } from '../theme/themes';
+import { getPerf, setPerf } from '../theme/perf';
 import styles from './Settings.module.css';
 
 export default function Settings({ setWallpaper, currentWallpaper }) {
     const [activeSection, setActiveSection] = useState('system');
     const { themeId, setTheme } = useTheme();
+    const [lowPower, setLowPower] = useState(() => getPerf() === 'low');
+
+    const toggleLowPower = () => {
+        setLowPower((on) => {
+            const next = !on;
+            setPerf(next ? 'low' : 'normal');
+            return next;
+        });
+    };
 
     const wallpapers = [
         { id: 1, name: 'Glitch/Broken', url: 'https://images.unsplash.com/photo-1496247749665-49cf5b1022e9?q=80&w=2073&auto=format&fit=crop' },
@@ -79,13 +89,23 @@ export default function Settings({ setWallpaper, currentWallpaper }) {
                                 <span className={styles.specValue}>🔋 87% (Plugged in, charging)</span>
                             </div>
                             <div className={styles.specRow}>
-                                <span className={styles.specLabel}>Performance Mode</span>
+                                <span className={styles.specLabel}>Low-power mode</span>
                                 <span className={styles.specValue}>
-                                    <select style={{ background: '#333', color: '#fff', border: '1px solid #555', padding: '2px 4px', borderRadius: '3px', fontSize: '12px' }}>
-                                        <option>Best Power Efficiency</option>
-                                        <option>Balanced Mode</option>
-                                        <option>Best Performance</option>
-                                    </select>
+                                    <button
+                                        onClick={toggleLowPower}
+                                        aria-pressed={lowPower}
+                                        style={{
+                                            cursor: 'pointer',
+                                            fontSize: '12px',
+                                            padding: '4px 12px',
+                                            borderRadius: '999px',
+                                            border: `1px solid ${lowPower ? 'var(--hypr-green, #a6e3a1)' : 'var(--hypr-border, #45475a)'}`,
+                                            background: lowPower ? 'color-mix(in srgb, var(--hypr-green, #a6e3a1) 22%, transparent)' : 'transparent',
+                                            color: 'var(--hypr-text, #eee)',
+                                        }}
+                                    >
+                                        {lowPower ? 'On — blur & animations off' : 'Off'}
+                                    </button>
                                 </span>
                             </div>
                         </div>
