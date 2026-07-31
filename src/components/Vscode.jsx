@@ -31,34 +31,35 @@ export default function Vscode() {
         loadMonaco();
     }, []);
     const files = {
-        'App.jsx': `import { useState, useEffect } from 'react';
-import Terminal from "./components/Terminal";
-import Window from "./components/Window";
-import Taskbar from "./components/Taskbar";
-import DesktopIcon from "./components/DesktopIcon";
+        'App.jsx': `import { useHyprland } from "./wm/useHyprland";
+import { useKeybindings } from "./wm/useKeybindings";
+import { dwindle, workspaceArea } from "./layout/dwindle";
+import WindowFrame from "./wm/WindowFrame";
+import Waybar from "./shell/Waybar";
+import Launcher from "./shell/Launcher";
 
 export default function App() {
-  const [windows, setWindows] = useState({
-    terminal: { id: 'terminal', title: 'Command Prompt', icon: '💻', isOpen: true, isMinimized: false, zIndex: 10 },
-    explorer: { id: 'explorer', title: 'My Computer', icon: '🖥️', isOpen: false, isMinimized: false, zIndex: 1 }
-  });
-  const [maxZIndex, setMaxZIndex] = useState(10);
+  const { windows, activeId, activeWorkspace, openWindow,
+          switchWorkspace, toggleFloating } = useHyprland(initialWindows);
 
-  const openWindow = (id) => {
-    const nextZ = maxZIndex + 1;
-    setMaxZIndex(nextZ);
-    setWindows(prev => ({
-      ...prev,
-      [id]: { ...prev[id], isOpen: true, isMinimized: false, zIndex: nextZ }
-    }));
-  };
+  useKeybindings({
+    launcher: () => setLauncherOpen(o => !o),
+    workspace: (n) => switchWorkspace(n),
+    toggleFloat: () => toggleFloating(activeId),
+  });
+
+  // Dwindle tiling for the active workspace
+  const rects = dwindle(workspaceArea(innerWidth, innerHeight),
+                        tiledWindows.length);
 
   return (
     <div className="desktop">
-      <div className="desktopIcons">
-        <DesktopIcon label="Terminal" icon="💻" onDoubleClick={() => openWindow('terminal')} />
-      </div>
-      <Taskbar windows={Object.values(windows)} />
+      <Waybar activeWorkspace={activeWorkspace} onLauncher={openLauncher} />
+      {tiledWindows.map((win, i) => (
+        <WindowFrame key={win.id} rect={rects[i]} tiled
+                     isActive={win.id === activeId} />
+      ))}
+      <Launcher onLaunch={openWindow} />
     </div>
   );
 }`,
