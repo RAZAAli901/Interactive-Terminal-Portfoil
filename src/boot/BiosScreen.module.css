@@ -1,0 +1,36 @@
+.screen {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: #000;
+  color: #c8c8c8;
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  line-height: 1.5;
+  padding: 32px 40px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.head { color: #e8e8e8; margin-bottom: 4px; }
+.amber { color: #e6b450; }
+.dim { color: #6b6b6b; }
+.rows { margin-top: 18px; }
+.row { white-space: pre; }
+
+.foot {
+  position: absolute;
+  bottom: 28px;
+  left: 40px;
+  right: 40px;
+  display: flex;
+  justify-content: space-between;
+  color: #8a8a8a;
+  font-size: 13px;
+}
+
+.blink { animation: blink 1s step-end infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+
+.fadeOut { animation: fade 240ms ease forwards; }
+@keyframes fade { to { opacity: 0; } }
