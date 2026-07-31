@@ -1,27 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { CATEGORIES, enabledApps } from '../config/apps';
 import { useFocusTrap } from './useFocusTrap';
+import { searchApps } from './launcherSearch';
 import styles from './Launcher.module.css';
-
-/**
- * Fuzzy subsequence score: -1 if `q` is not a subsequence of `text`, otherwise
- * higher is better. Consecutive character matches score a bonus, and matches
- * nearer the start of the text are preferred.
- */
-function subsequenceScore(q, text) {
-  if (!q) return 0;
-  let from = 0;
-  let score = 0;
-  let prev = -2;
-  for (const c of q) {
-    const found = text.indexOf(c, from);
-    if (found === -1) return -1;
-    score += found === prev + 1 ? 2 : 1;
-    prev = found;
-    from = found + 1;
-  }
-  return score - text.indexOf(q[0]) * 0.05;
-}
 
 /**
  * Wofi/rofi-style application launcher. Fuzzy-filters the enabled app registry;
@@ -36,15 +17,7 @@ export default function Launcher({ isOpen, onLaunch, onClose }) {
 
   const apps = useMemo(() => enabledApps(), []);
 
-  const results = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    if (!q) return apps;
-    return apps
-      .map((a) => ({ a, s: Math.max(subsequenceScore(q, a.name.toLowerCase()), subsequenceScore(q, a.exec.toLowerCase())) }))
-      .filter((x) => x.s >= 0)
-      .sort((x, y) => y.s - x.s)
-      .map((x) => x.a);
-  }, [query, apps]);
+  const results = useMemo(() => searchApps(query, apps), [query, apps]);
 
   // Reset + focus whenever the launcher opens.
   useEffect(() => {
