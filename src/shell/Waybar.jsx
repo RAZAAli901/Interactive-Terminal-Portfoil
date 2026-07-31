@@ -60,6 +60,7 @@ export default function Waybar({
               ].join(' ')}
               onClick={() => onWorkspace?.(n)}
               title={`Workspace ${n}`}
+              aria-label={`Workspace ${n}`}
             >
               {n}
             </button>
