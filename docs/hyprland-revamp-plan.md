@@ -123,3 +123,21 @@ Old `Taskbar`, `StartMenu`, `LoadingScreen`, `DesktopIcon`, Windows `Window` chr
 ## 7. Out of scope (v1)
 
 Real Wayland behavior, multi-monitor, actual IPC, persistent per-visitor window layouts, server-side anything. All simulated client-side.
+
+---
+
+## 8. Delivered
+
+All six phases shipped, plus extras beyond the original plan. Build clean, lint
+0 errors, 151 tests across 31 files.
+
+- **Boot** — BIOS/POST → systemd log → SDDM login → Hyprland startup fade, all skippable.
+- **Shell** — waybar (workspaces, layout indicator, live telemetry, clock, power), wofi launcher with fuzzy search + hint bar, power menu, keybind cheatsheet, mako-style notifications, mobile bar.
+- **WM** — dwindle tiling, 5 workspaces (slide transitions), floating toggle, fullscreen, focus cycling, animated gradient focus borders, spawn/close animations.
+- **Keybindings** — `Super+D/Return/Q/Space/F/P/J/K/H/L`, `Super+1-5`, `Super+Shift+1-5`, `Super+Esc`, `Super+/`.
+- **Theming** — 7 palettes (Catppuccin Mocha/Latte, Tokyo Night, Gruvbox, Nord, Dracula, Rosé Pine), switchable via `theme <name>` or the Settings picker; global scrollbars/selection.
+- **Terminal** — fastfetch landing + `hyprctl`, `htop`, `cava`, `uname`, `uptime`, `free`, `whoami`, `pacman`, `df`, `sensors`, `ip`, `systemctl`.
+- **Apps** — curated to Linux identities (kitty, Files, Firefox, Code, Image Viewer, Settings, Calculator, Clocks, Discord); dark apps recoloured to Catppuccin; legacy Windows apps retired.
+- **Accessibility & perf** — focus traps + aria on overlays, `prefers-reduced-motion` support, low-power mode (blur/animations off) with telemetry pause.
+
+Extras not in the original plan: notifications, low-power mode, focus cycling, screenshot flash, workspace scroll/H-L navigation, and the extended Linux command set.
