@@ -7,6 +7,8 @@ const BINDS = [
   { keys: ['Super', 'Q'], desc: 'Close focused window' },
   { keys: ['Super', 'J / K'], desc: 'Cycle window focus' },
   { keys: ['Super', 'Space'], desc: 'Toggle floating / tiled' },
+  { keys: ['Super', 'F'], desc: 'Fullscreen window' },
+  { keys: ['Super', 'P'], desc: 'Screenshot' },
   { keys: ['Super', '1-5'], desc: 'Switch workspace' },
   { keys: ['Super', 'Esc'], desc: 'Power menu' },
   { keys: ['Super', '/'], desc: 'Toggle this cheatsheet' },
