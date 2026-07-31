@@ -13,7 +13,9 @@ import { useCallback, useMemo, useState } from 'react';
 export function useHyprland(initialWindows) {
   const [maxZIndex, setMaxZIndex] = useState(10);
   const [windows, setWindows] = useState(initialWindows);
-  const [activeId, setActiveId] = useState(null);
+  const [activeId, setActiveId] = useState(
+    () => Object.values(initialWindows).find((w) => w.isOpen && !w.isMinimized)?.id ?? null,
+  );
 
   /** Highest-z open, non-minimized window — used to reassign focus. */
   const topWindowId = useCallback((wins, excludeId) => {
