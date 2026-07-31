@@ -41,3 +41,13 @@
     --hypr-dur-slow: 0ms;
   }
 }
+
+/* Low-power mode (Settings toggle): drop blur + animations for weaker GPUs. */
+:root[data-perf="low"] *,
+:root[data-perf="low"] *::before,
+:root[data-perf="low"] *::after {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  animation: none !important;
+  transition: none !important;
+}
