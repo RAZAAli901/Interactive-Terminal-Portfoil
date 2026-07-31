@@ -38,7 +38,7 @@ import styles from './App.module.css';
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [wallpaper, setWallpaper] = useState(4); // Default wallpaper ID
-  const { setTheme } = useTheme(); // Hyprland palette switcher (drives root CSS vars)
+  const { setTheme, theme } = useTheme(); // Hyprland palette switcher (drives root CSS vars)
 
   const [isMobile, setIsMobile] = useState(false);
 
@@ -103,6 +103,13 @@ export default function App() {
     setTimeout(() => notify('Welcome to Hyprland', 'Logged in as razaali@arch', '🎉'), 900);
     setTimeout(() => notify('Tip', 'Press Super+D to open the launcher, Super+/ for keybinds', '💡'), 3200);
   };
+
+  // Toast whenever the colorscheme changes (skips the initial render).
+  const firstThemeRun = useRef(true);
+  useEffect(() => {
+    if (firstThemeRun.current) { firstThemeRun.current = false; return; }
+    notify('Theme changed', theme.label, '🎨');
+  }, [theme.label, notify]);
   const [contextMenu, setContextMenu] = useState({ visible: false, x: 0, y: 0 });
   const [terminalInitialCommand, setTerminalInitialCommand] = useState(null);
 
