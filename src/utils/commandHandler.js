@@ -386,6 +386,58 @@ const asciiArtHandler = () => {
   };
 };
 
+// fastfetch/neofetch — Arch logo + portfolio "system info".
+const fastfetchHandler = () => {
+  const b = portfolioData.bio;
+  const cyan = (s) => `<span style="color:#89dceb">${s}</span>`;
+  const blue = (s) => `<span style="color:#89b4fa">${s}</span>`;
+  const mauve = (s) => `<span style="color:#cba6f7">${s}</span>`;
+  const label = (s) => `<span style="color:#cba6f7;font-weight:600">${s}</span>`;
+
+  const langs = portfolioData.skills.languages.map((l) => l.name).join(', ');
+  const featured = portfolioData.projects.filter((p) => p.featured).length;
+  const yrs = new Date().getFullYear() - 2021;
+
+  const art = [
+    '                  ',
+    '        /\\        ',
+    '       /  \\       ',
+    '      /\\   \\      ',
+    '     /  ::  \\     ',
+    '    /  :::.  \\    ',
+    '   /  :::::.  \\   ',
+    '  / ::-----:: \\  ',
+    ' /_:-\'\'    \'\'-:_\\ ',
+    '                  ',
+  ];
+
+  const info = [
+    `${label('raza')}@${label('portfolio')}`,
+    '─────────────────────',
+    `${label('OS')}: Arch Linux x86_64`,
+    `${label('WM')}: Hyprland`,
+    `${label('Shell')}: portfolio-sh`,
+    `${label('Role')}: ${b.title}`,
+    `${label('Location')}: ${b.location}`,
+    `${label('Uptime')}: ${yrs} yrs coding`,
+    `${label('Languages')}: ${langs}`,
+    `${label('Projects')}: ${featured} featured`,
+    `${label('Contact')}: ${b.email}`,
+  ];
+
+  const rows = art.map((a, i) => `${cyan(a)}  ${info[i] || ''}`);
+  return {
+    type: 'text',
+    content: [
+      ...rows,
+      '',
+      `${blue('●')} ${mauve('●')} <span style="color:#f38ba8">●</span> <span style="color:#a6e3a1">●</span> <span style="color:#f9e2af">●</span> <span style="color:#89dceb">●</span>`,
+      '',
+      formatInfo("Type 'help' for commands, or 'projects' to explore my work."),
+    ],
+  };
+};
+
 const lsHandler = (args, context) => {
   const isLa = args.includes('-la') || args.includes('-a');
   const pathArg = args.filter(a => !a.startsWith('-'))[0];
@@ -1258,6 +1310,20 @@ export const commands = [
     usage: 'ascii-art',
     examples: ['ascii-art'],
     handler: asciiArtHandler
+  },
+  {
+    name: 'fastfetch',
+    description: 'Show an Arch/Hyprland-style system info card with my profile',
+    usage: 'fastfetch',
+    examples: ['fastfetch'],
+    handler: fastfetchHandler
+  },
+  {
+    name: 'neofetch',
+    description: 'Alias for fastfetch',
+    usage: 'neofetch',
+    examples: ['neofetch'],
+    handler: fastfetchHandler
   },
   {
     name: 'banner',
