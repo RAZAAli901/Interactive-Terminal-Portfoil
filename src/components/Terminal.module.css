@@ -36,15 +36,15 @@
 }
 
 .terminalContainer::-webkit-scrollbar-track {
-    background: #0c0c0c;
+    background: var(--terminal-bg, #11111b);
 }
 
 .terminalContainer::-webkit-scrollbar-thumb {
-    background: #444;
+    background: var(--hypr-surface-alt, #45475a);
 }
 
 .terminalContainer::-webkit-scrollbar-thumb:hover {
-    background: #555;
+    background: var(--hypr-overlay, #6c7086);
 }
 
 .historyEntry {
@@ -81,7 +81,7 @@
 }
 
 .terminalHeaderLine {
-    color: #50fa7b;
+    color: var(--color-success, #a6e3a1);
     font-weight: bold;
     margin-top: 6px;
     margin-bottom: 2px;
@@ -92,7 +92,7 @@
 }
 
 .highlightText {
-    color: #8be9fd;
+    color: var(--color-info, #89dceb);
     font-weight: bold;
 }
 
