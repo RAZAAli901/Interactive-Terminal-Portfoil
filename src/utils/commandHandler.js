@@ -5,6 +5,7 @@ import portfolioData from '../data/portfolio.json';
 import { funFacts } from '../data/funFacts';
 import { resolveAbsolutePath, getFsItem } from './fileSystem';
 import { easterEggs } from '../data/easterEggs';
+import { WALLPAPERS } from '../data/wallpapers';
 
 // Helper handlers to reuse between aliases
 const resumeHandler = () => {
@@ -522,6 +523,45 @@ const freeHandler = () => {
 };
 
 const whoamiHandler = () => ({ type: 'text', content: ['razaali'] });
+
+// swww-style wallpaper switcher over the bundled rice wallpapers.
+const wallpaperHandler = (args) => {
+  const target = args[0] ? args[0].toLowerCase() : null;
+  if (!target || target === 'list' || target === '-l') {
+    const byPalette = WALLPAPERS.reduce((acc, w) => {
+      (acc[w.palette] ||= []).push(w.id);
+      return acc;
+    }, {});
+    return {
+      type: 'text',
+      content: [
+        ...formatSection('WALLPAPERS'),
+        'Usage: wallpaper <name>   ·   wallpaper random',
+        '',
+        ...Object.entries(byPalette).flatMap(([palette, ids]) => [
+          formatWarning(palette),
+          ...ids.map((id) => `  • ${id}`),
+        ]),
+      ],
+    };
+  }
+  if (target === 'random') {
+    const pick = WALLPAPERS[Math.floor(Math.random() * WALLPAPERS.length)];
+    return { type: 'action', action: 'wallpaper', wallpaper: pick.id };
+  }
+  const match = WALLPAPERS.find((w) => w.id === target)
+    || WALLPAPERS.find((w) => w.id.includes(target));
+  if (!match) {
+    return {
+      type: 'text',
+      content: [
+        formatError(`Unknown wallpaper '${args[0]}'.`),
+        "Run 'wallpaper' with no arguments to list them.",
+      ],
+    };
+  }
+  return { type: 'action', action: 'wallpaper', wallpaper: match.id };
+};
 
 const pacmanHandler = (args) => {
   if (args[0] === '-Q' || args[0] === '-Qe') {
@@ -1522,6 +1562,20 @@ export const commands = [
     usage: 'whoami',
     examples: ['whoami'],
     handler: whoamiHandler
+  },
+  {
+    name: 'wallpaper',
+    description: 'List or set the desktop wallpaper',
+    usage: 'wallpaper [name|random]',
+    examples: ['wallpaper', 'wallpaper nord-aurora', 'wallpaper random'],
+    handler: wallpaperHandler
+  },
+  {
+    name: 'swww',
+    description: 'Alias for wallpaper',
+    usage: 'swww [name|random]',
+    examples: ['swww random'],
+    handler: wallpaperHandler
   },
   {
     name: 'pacman',
