@@ -2,17 +2,24 @@ import { useEffect } from 'react';
 import styles from './KeybindCheatsheet.module.css';
 
 const BINDS = [
+  { keys: ['Ctrl', 'Q'], desc: 'New terminal · overview once tiled' },
+  { keys: ['Ctrl', '`'], desc: 'Toggle window overview' },
+  { keys: ['Esc'], desc: 'Exit overview' },
   { keys: ['Super', 'D'], desc: 'Open app launcher' },
   { keys: ['Super', 'Return'], desc: 'Open terminal' },
   { keys: ['Super', 'Q'], desc: 'Close focused window' },
   { keys: ['Super', 'J / K'], desc: 'Cycle window focus' },
-  { keys: ['Super', 'Space'], desc: 'Toggle floating / tiled' },
-  { keys: ['Super', 'F'], desc: 'Fullscreen window' },
-  { keys: ['Super', 'P'], desc: 'Screenshot' },
+  { keys: ['Super', 'Space'], desc: 'Toggle dwindle / floating' },
   { keys: ['Super', '1-5'], desc: 'Switch workspace' },
+  { keys: ['Super', 'Shift', '1-5'], desc: 'Move window to workspace' },
   { keys: ['Super', 'H / L'], desc: 'Previous / next workspace' },
   { keys: ['Super', 'Esc'], desc: 'Power menu' },
   { keys: ['Super', '/'], desc: 'Toggle this cheatsheet' },
+];
+
+const MOUSE = [
+  'Drag a gap to resize panes',
+  'Drag a title bar to swap two windows',
 ];
 
 /** Hyprland keybind cheatsheet (Super+/). */
@@ -37,6 +44,14 @@ export default function KeybindCheatsheet({ isOpen, onClose }) {
               <span className={styles.keys}>
                 {b.keys.map((k) => <span className={styles.key} key={k}>{k}</span>)}
               </span>
+            </div>
+          ))}
+        </div>
+        <div className={styles.rows}>
+          {MOUSE.map((m) => (
+            <div className={styles.row} key={m}>
+              <span>{m}</span>
+              <span className={styles.keys}><span className={styles.key}>mouse</span></span>
             </div>
           ))}
         </div>
