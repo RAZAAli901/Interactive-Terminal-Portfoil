@@ -31,35 +31,43 @@ export default function Vscode() {
         loadMonaco();
     }, []);
     const files = {
-        'App.jsx': `import { useHyprland } from "./wm/useHyprland";
+        'App.jsx': `import { useRiceWM } from "./wm/useRiceWM";
 import { useKeybindings } from "./wm/useKeybindings";
-import { dwindle, workspaceArea } from "./layout/dwindle";
+import { overviewLayout } from "./shell/overviewGrid";
 import WindowFrame from "./wm/WindowFrame";
-import Waybar from "./shell/Waybar";
-import Launcher from "./shell/Launcher";
+import { Dividers } from "./wm/TilingOverlays";
+import TopBar from "./shell/TopBar";
+import Dock from "./shell/Dock";
 
 export default function App() {
-  const { windows, activeId, activeWorkspace, openWindow,
-          switchWorkspace, toggleFloating } = useHyprland(initialWindows);
+  const wm = useRiceWM(RICE_APPS);
 
   useKeybindings({
     launcher: () => setLauncherOpen(o => !o),
-    workspace: (n) => switchWorkspace(n),
-    toggleFloat: () => toggleFloating(activeId),
+    workspace: (n) => wm.switchWorkspace(n),
+    toggleFloat: () => wm.toggleLayout(),
   });
-
-  // Dwindle tiling for the active workspace
-  const rects = dwindle(workspaceArea(innerWidth, innerHeight),
-                        tiledWindows.length);
 
   return (
     <div className="desktop">
-      <Waybar activeWorkspace={activeWorkspace} onLauncher={openLauncher} />
-      {tiledWindows.map((win, i) => (
-        <WindowFrame key={win.id} rect={rects[i]} tiled
-                     isActive={win.id === activeId} />
+      <NeuralCanvas accent={theme.role.accent} />
+      <TopBar activeWorkspace={wm.activeWorkspace} onPower={openPower} />
+
+      {/* Every window stays mounted; off-workspace ones are hidden so
+          their app state survives a workspace switch. */}
+      {wm.mountedIds.map((id) => (
+        <WindowFrame
+          key={id}
+          rect={wm.geometry[id]}
+          hidden={wm.windows[id].ws !== wm.activeWorkspace}
+          isActive={id === wm.focusedId}
+          onDragStart={(e) => wm.startTileDrag(id, e)}
+        />
       ))}
-      <Launcher onLaunch={openWindow} />
+
+      {/* Drag the gaps to re-ratio the BSP splits. */}
+      <Dividers dividers={wm.dividers} onDragStart={wm.startDivider} />
+      <Dock windows={wm.dockWindows} onSelect={wm.focusWindow} />
     </div>
   );
 }`,
