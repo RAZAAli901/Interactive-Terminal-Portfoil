@@ -1,0 +1,122 @@
+.root {
+  min-height: 100%;
+  padding: 22px 26px;
+  /* Semi-transparent tint over the window glass (design: rgba(26,27,38,0.32)). */
+  background: color-mix(in srgb, var(--hypr-mantle, #1a1b26) 32%, transparent);
+  font-family: var(--hypr-font-ui, 'Inter', system-ui, sans-serif);
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--hypr-text, #c0caf5);
+}
+
+.path {
+  margin-bottom: 12px;
+  font-family: var(--hypr-font-mono, 'JetBrains Mono', monospace);
+  font-size: 12px;
+  color: var(--hypr-muted, #565f89);
+}
+
+.h1 {
+  margin: 0 0 2px;
+  font-family: var(--hypr-font-mono, 'JetBrains Mono', monospace);
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 1.3;
+  color: var(--hypr-info, #7dcfff);
+}
+
+.h2 {
+  margin: 20px 0 10px;
+  font-family: var(--hypr-font-mono, 'JetBrains Mono', monospace);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--hypr-green, #9ece6a);
+}
+
+/* The literal markdown "#"/"##" markers stay dim, like unrendered source. */
+.hash {
+  margin-right: 0.5ch;
+  color: var(--hypr-muted, #565f89);
+}
+
+.role {
+  margin: 0 0 18px;
+  font-size: 14px;
+  color: var(--hypr-accent-2, #bb9af7);
+}
+
+.bio {
+  margin: 0 0 16px;
+  color: var(--hypr-subtext, #a9b1d6);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.chip {
+  padding: 4px 11px;
+  border: 1px solid color-mix(in srgb, var(--hypr-accent, #7aa2f7) 16%, transparent);
+  border-radius: 7px;
+  background: color-mix(in srgb, var(--hypr-surface, #1f2335) 60%, transparent);
+  font-family: var(--hypr-font-mono, 'JetBrains Mono', monospace);
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--hypr-text, #c0caf5);
+}
+
+.contact {
+  display: grid;
+  grid-template-columns: 78px 1fr;
+  margin: 0;
+  font-family: var(--hypr-font-mono, 'JetBrains Mono', monospace);
+  font-size: 13px;
+  line-height: 2;
+}
+
+.key {
+  color: var(--hypr-muted, #565f89);
+}
+
+.value {
+  margin: 0;
+  color: var(--hypr-text, #c0caf5);
+}
+
+.link {
+  color: var(--hypr-accent, #7aa2f7);
+  text-decoration: none;
+  border-bottom: 1px solid color-mix(in srgb, var(--hypr-accent, #7aa2f7) 35%, transparent);
+  transition: color var(--hypr-dur-fast, 160ms) var(--hypr-ease-out, ease);
+}
+
+.link:hover {
+  color: var(--hypr-info, #7dcfff);
+}
+
+.link:focus-visible {
+  outline: 2px solid var(--hypr-accent, #7aa2f7);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
+/* Narrow windows: stack the contact rows instead of squeezing the value column. */
+@media (max-width: 480px) {
+  .root { padding: 18px 16px; }
+  .contact { grid-template-columns: 1fr; line-height: 1.7; }
+  .key { margin-top: 8px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .link { transition: none; }
+}
+
+/* Low-power mode: flatten the translucent chip fill (blur/transitions are
+   already dropped globally by the token stylesheet). */
+:root[data-perf="low"] .root { background: var(--hypr-mantle, #1a1b26); }
+:root[data-perf="low"] .chip { background: var(--hypr-surface, #1f2335); }
