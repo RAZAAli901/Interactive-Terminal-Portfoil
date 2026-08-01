@@ -47,3 +47,22 @@ describe('wallpaper manifest', () => {
     }
   });
 });
+
+describe('wallpaper URLs under a sub-path deploy', () => {
+  it('prefixes every wallpaper with the Vite base URL', () => {
+    const base = import.meta.env?.BASE_URL || '/';
+    for (const w of WALLPAPERS) {
+      expect(wallpaperUrl(w.id)).toBe(`${base}wallpapers/${w.file}`);
+    }
+  });
+
+  it('never produces a double slash between the base and the folder', () => {
+    for (const w of WALLPAPERS) {
+      expect(wallpaperUrl(w.id)).not.toMatch(/[^:]\/\//);
+    }
+  });
+
+  it('resolves an unknown id to the default wallpaper file', () => {
+    expect(wallpaperUrl('nope')).toMatch(/tokyo-night-skyline\.svg$/);
+  });
+});
