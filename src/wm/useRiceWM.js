@@ -87,6 +87,22 @@ export function useRiceWM(appDefs) {
     [state.windows, state.activeWorkspace],
   );
 
+  /**
+   * Every non-minimized window across all workspaces, in stable id order.
+   *
+   * The desktop mounts all of these and hides the ones that are not on the
+   * active workspace, so switching workspaces preserves each app's state —
+   * terminal scrollback, scroll position, half-typed input — instead of
+   * unmounting and rebuilding it.
+   */
+  const mountedIds = useMemo(
+    () => Object.values(state.windows)
+      .filter((w) => !w.min)
+      .map((w) => w.id)
+      .sort(),
+    [state.windows],
+  );
+
   const cycleFocus = useCallback((dir = 1) => {
     if (openIds.length < 2) return;
     const idx = openIds.indexOf(state.focusedId);
@@ -248,7 +264,7 @@ export function useRiceWM(appDefs) {
     activeWorkspace: state.activeWorkspace,
     focusedId: state.focusedId,
     tiling,
-    tree, rects, dividers, geometry, openIds, occupied, dockWindows,
+    tree, rects, dividers, geometry, openIds, mountedIds, occupied, dockWindows,
     area, viewport,
     overview, setOverview: toggleOverview,
     drag,
