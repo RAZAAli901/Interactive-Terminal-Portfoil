@@ -126,7 +126,9 @@ export function useRiceWM(appDefs) {
   }, [state.windows, focusWindow]);
 
   const startTileDrag = useCallback((id, e) => {
-    actionRef.current = { type: 'tiledrag', id };
+    // Remember which workspace the drag began on: a mid-gesture workspace
+    // switch must not retarget the swap at a different tree.
+    actionRef.current = { type: 'tiledrag', id, ws: live.current.ws };
     setDrag({ id, target: null, cursor: { x: e.clientX, y: e.clientY } });
     focusWindow(id);
     bumpFrame((n) => n + 1);
@@ -192,7 +194,7 @@ export function useRiceWM(appDefs) {
       if (a.type === 'tiledrag') {
         const { id, target } = live.current.drag;
         if (target && target !== id) {
-          dispatch({ type: 'swap', a: id, b: target, ws: live.current.ws });
+          dispatch({ type: 'swap', a: id, b: target, ws: a.ws ?? live.current.ws });
         }
         setDrag({ id: null, target: null, cursor: null });
       }
