@@ -1,12 +1,27 @@
 .desktop {
   width: 100%;
   height: 100%;
+  background-color: var(--hypr-bg, #0e0e16);
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   transition: background-image 0.5s ease-in-out;
   position: relative;
   overflow: hidden;
+  font-family: var(--hypr-font-ui, 'Inter', system-ui, sans-serif);
+}
+
+/* Design-handoff ground: three soft radial washes tinted with the palette,
+   layered over the wallpaper so every rice reads as one coherent desktop. */
+.ground {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(1000px 700px at 10% 90%, color-mix(in srgb, var(--hypr-accent, #7aa2f7) 14%, transparent), transparent 60%),
+    radial-gradient(1100px 780px at 90% 8%, color-mix(in srgb, var(--hypr-accent-2, #bb9af7) 12%, transparent), transparent 60%),
+    radial-gradient(800px 560px at 55% 55%, color-mix(in srgb, var(--hypr-info, #7dcfff) 7%, transparent), transparent 65%);
 }
 
 /* Layer holding all windows; transforming it slides every window together on a
