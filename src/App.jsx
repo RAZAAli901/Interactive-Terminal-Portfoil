@@ -60,6 +60,7 @@ export default function App() {
   const [isLauncherOpen, setIsLauncherOpen] = useState(false);
   const [isPowerOpen, setIsPowerOpen] = useState(false);
   const [isCheatsheetOpen, setIsCheatsheetOpen] = useState(false);
+  const [overviewSel, setOverviewSel] = useState(0);
   const [terminalCommand, setTerminalCommand] = useState(null);
 
   const { setTheme, theme } = useTheme();
@@ -67,6 +68,8 @@ export default function App() {
   const wm = useRiceWM(RICE_APPS);
 
   useEffect(() => { setPref('wallpaper', wallpaper); }, [wallpaper]);
+
+  useEffect(() => { if (wm.overview) setOverviewSel(0); }, [wm.overview]);
 
   useEffect(() => {
     const onResize = () => setIsMobile(window.innerWidth <= 768);
@@ -101,7 +104,21 @@ export default function App() {
   // listener is attached once per boot/viewport change. Depending on `wm` here
   // would re-attach a window listener on every pointer move during a drag.
   const keyHandlers = useRef(null);
-  keyHandlers.current = { handleCtrlQ, setOverview: wm.setOverview, overview: wm.overview };
+  keyHandlers.current = {
+    handleCtrlQ,
+    setOverview: wm.setOverview,
+    overview: wm.overview,
+    moveSel: (d) => setOverviewSel((i) => {
+      const n = wm.openIds.length;
+      return n ? (i + d + n) % n : 0;
+    }),
+    pickSel: () => {
+      const id = wm.openIds[overviewSel];
+      if (!id) return;
+      wm.setOverview(false);
+      wm.focusWindow(id);
+    },
+  };
 
   useEffect(() => {
     if (isLoading || isMobile) return undefined;
@@ -110,7 +127,14 @@ export default function App() {
       const k = (e.key || '').toLowerCase();
       if (e.ctrlKey && k === 'q') { e.preventDefault(); h.handleCtrlQ(); }
       else if (e.ctrlKey && (e.code === 'Backquote' || k === '`')) { e.preventDefault(); h.setOverview(); }
-      else if (k === 'escape' && h.overview) { e.preventDefault(); h.setOverview(false); }
+      else if (h.overview) {
+        // In overview the arrows walk the grid and Enter picks the highlighted
+        // window, so the whole mode is reachable without a pointer.
+        if (k === 'escape') { e.preventDefault(); h.setOverview(false); }
+        else if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); h.moveSel(1); }
+        else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); h.moveSel(-1); }
+        else if (e.key === 'Enter') { e.preventDefault(); h.pickSel(); }
+      }
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
@@ -241,7 +265,7 @@ export default function App() {
               color={def?.color}
               rect={rect}
               zIndex={wm.tiling ? (id === wm.focusedId ? 120 : 100) : 100 + win.z}
-              isActive={id === wm.focusedId}
+              isActive={wm.overview ? (onActiveWs && wm.openIds[overviewSel] === id) : id === wm.focusedId}
               isTerminal={win.app === 'terminal'}
               hidden={!onActiveWs}
               isDragging={wm.drag.id === id}
