@@ -12,11 +12,27 @@ describe('<WindowFrame> states', () => {
     expect(frame.style.display).toBe('none');
   });
 
-  it('covers the viewport when fullscreen', () => {
-    render(<WindowFrame title="Firefox" fullscreen rect={RECT}><span>x</span></WindowFrame>);
+  it('honours the overview transform instead of its own rect', () => {
+    render(
+      <WindowFrame
+        title="Firefox"
+        tiled
+        rect={RECT}
+        overviewStyle={{ left: 200, top: 120, width: 400, height: 300, transform: 'scale(0.5)' }}
+      >
+        <span>x</span>
+      </WindowFrame>,
+    );
     const frame = screen.getByRole('dialog', { name: 'Firefox window' });
-    expect(frame.style.width).toBe('100vw');
-    expect(frame.style.height).toBe('100vh');
+    expect(frame.style.left).toBe('200px');
+    expect(frame.style.transform).toBe('scale(0.5)');
+  });
+
+  it('tints the title dot with the app colour', () => {
+    const { container } = render(
+      <WindowFrame title="Files" tiled rect={RECT} color="#e0af68"><span>x</span></WindowFrame>,
+    );
+    expect(container.querySelector('[role="dialog"]').style.getPropertyValue('--win-color')).toBe('#e0af68');
   });
 
   it('positions a tiled window at its rect', () => {
