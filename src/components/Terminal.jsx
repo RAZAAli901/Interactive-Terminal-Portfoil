@@ -5,13 +5,14 @@ import { getHistory, saveHistory } from '../utils/localStorage';
 import { fetchGithubData, getClaudeResponse } from '../utils/apiClient';
 import { formatTable, formatSuccess, formatError, formatInfo, formatWarning, formatSection } from '../utils/terminalFormatting';
 import MatrixScreensaver from './MatrixScreensaver';
+import NeofetchPanel from '../apps/NeofetchPanel';
 import Hero from '../sections/Hero';
 import portfolioData from '../data/portfolio.json';
 import styles from './Terminal.module.css';
 
 export default function Terminal({ setTheme, setWallpaper, initialCommand, setInitialCommand }) {
     const welcomeLines = [
-        'Arch Linux (rolling) — kitty terminal',
+        'Arch Linux (rolling) — kitty 0.35.2',
         '',
         "Type 'help' or 'commands' to list available utilities.",
         "Simulated filesystem mounted at /portfolio. Try 'ls' or 'cd'.",
@@ -447,10 +448,12 @@ export default function Terminal({ setTheme, setWallpaper, initialCommand, setIn
     useEffect(() => {
         if (!isTyping && !landedRef.current && !initialCommand) {
             landedRef.current = true;
-            const output = handleCommand('fastfetch', {
-                isAdmin, setWallpaper, setIsAdmin, currentPath, history: sessionHistory,
-            });
-            setHistory(prev => [...prev, { command: '', output }]);
+            // The rendered neofetch card is the terminal's landing view; typing
+            // `fastfetch` still prints the plain-text version.
+            setHistory(prev => [
+                ...prev,
+                { command: '', output: { type: 'node', node: <NeofetchPanel /> } },
+            ]);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isTyping]);
@@ -474,7 +477,7 @@ export default function Terminal({ setTheme, setWallpaper, initialCommand, setIn
                             </div>
                         )}
                         <div className={styles.output}>
-                            {entry.output.type === 'text' ? (
+                            {entry.output.type === 'node' ? entry.output.node : entry.output.type === 'text' ? (
                                 entry.output.content.map((line, i) => {
                                     if (typeof line === 'string') {
                                         // Highlight standard markdown headers
