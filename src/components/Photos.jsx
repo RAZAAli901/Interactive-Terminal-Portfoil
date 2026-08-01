@@ -1,18 +1,18 @@
 import { useState } from 'react';
+import { WALLPAPERS, wallpaperUrl } from '../data/wallpapers';
 import styles from './Photos.module.css';
 
 export default function Photos() {
     const [lightboxIndex, setLightboxIndex] = useState(null);
     const [zoom, setZoom] = useState(1);
 
-    const images = [
-        { id: 1, title: 'Code Workspace', url: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=600&auto=format&fit=crop' },
-        { id: 2, title: 'Cyberpunk Streets', url: 'https://images.unsplash.com/photo-1515621061946-eff1c2a352bd?q=80&w=600&auto=format&fit=crop' },
-        { id: 3, title: 'Mountain Peaks', url: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=600&auto=format&fit=crop' },
-        { id: 4, title: 'Retro Terminal Screen', url: 'https://images.unsplash.com/photo-1542831371-29b0f74f9713?q=80&w=600&auto=format&fit=crop' },
-        { id: 5, title: 'Deep Space Galaxy', url: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=600&auto=format&fit=crop' },
-        { id: 6, title: 'Nature Forest Path', url: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=600&auto=format&fit=crop' }
-    ];
+    // The image viewer browses the bundled rice wallpapers — no external
+    // requests, and it doubles as a full-size preview for the wallpaper picker.
+    const images = WALLPAPERS.map((w, i) => ({
+        id: i + 1,
+        title: `${w.name} — ${w.palette}`,
+        url: wallpaperUrl(w.id),
+    }));
 
     const openLightbox = (index) => {
         setLightboxIndex(index);
