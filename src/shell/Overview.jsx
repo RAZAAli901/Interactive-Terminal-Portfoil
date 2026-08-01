@@ -16,7 +16,9 @@ export default function Overview({ open, count = 0, onExit }) {
       onClick={() => onExit?.()}
     >
       <p className={styles.caption}>
-        <span className={styles.count}>{count}</span> windows — click to focus ·{' '}
+        <span className={styles.count}>{count}</span> windows —{' '}
+        <span className={styles.key}>←→</span> select ·{' '}
+        <span className={styles.key}>↵</span> focus ·{' '}
         <span className={styles.key}>Esc</span> to exit
       </p>
     </div>
