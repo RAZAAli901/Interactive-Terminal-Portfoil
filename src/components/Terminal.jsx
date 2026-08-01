@@ -434,6 +434,9 @@ export default function Terminal({ setTheme, setWallpaper, initialCommand, setIn
             
             setTimeout(typeChar, 200);
         }
+        // Mount-only: the welcome banner types itself out exactly once per
+        // terminal instance. Re-running it on history changes would restart it.
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
@@ -441,6 +444,9 @@ export default function Terminal({ setTheme, setWallpaper, initialCommand, setIn
             onCommandSubmit(initialCommand);
             if (setInitialCommand) setInitialCommand(null);
         }
+        // Deliberately keyed on the command only — onCommandSubmit is redefined
+        // every render, so depending on it would re-fire the command.
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [initialCommand, isTyping]);
 
     // Run fastfetch once as the landing card after the welcome finishes typing.
