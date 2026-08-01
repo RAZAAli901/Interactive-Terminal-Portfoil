@@ -11,6 +11,21 @@
   font-family: var(--hypr-font-ui, 'Inter', system-ui, sans-serif);
 }
 
+/* Phones get a terminal-first shell — tiling does not translate to a 6" screen. */
+.mobile {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--hypr-crust, #0a0a12);
+}
+
+.mobileBody {
+  flex: 1;
+  min-height: 0;
+}
+
 /* Design-handoff ground: three soft radial washes tinted with the palette,
    layered over the wallpaper so every rice reads as one coherent desktop. */
 .ground {
