@@ -24,7 +24,6 @@ import KeybindCheatsheet from './shell/KeybindCheatsheet';
 import MobileBar from './shell/MobileBar';
 import Notifications from './shell/Notifications';
 import { useNotifications } from './shell/useNotifications';
-import { useSystemStats } from './shell/useSystemStats';
 
 // Design-handoff apps
 const AboutApp = lazy(() => import('./apps/AboutApp'));
@@ -64,7 +63,6 @@ export default function App() {
   const [terminalCommand, setTerminalCommand] = useState(null);
 
   const { setTheme, theme } = useTheme();
-  const stats = useSystemStats();
   const { items: notifications, notify, dismiss } = useNotifications();
   const wm = useRiceWM(RICE_APPS);
 
@@ -291,7 +289,6 @@ export default function App() {
         onToggleLayout={wm.toggleLayout}
         onOverview={() => wm.setOverview((o) => !o)}
         onPower={() => setIsPowerOpen(true)}
-        stats={stats}
       />
 
       <Dock windows={wm.dockWindows} onSelect={wm.focusWindow} />

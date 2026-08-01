@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useSystemStats } from './useSystemStats';
 import styles from './TopBar.module.css';
 
 const WORKSPACES = [1, 2, 3, 4, 5];
@@ -35,9 +36,13 @@ export default function TopBar({
   onToggleLayout,
   onOverview,
   onPower,
-  stats = {},
+  stats: statsOverride,
 }) {
   const [now, setNow] = useState(() => new Date());
+  // Telemetry is sourced here rather than in App: its 2s tick would otherwise
+  // re-render the whole window tree. Tests can still inject fixed values.
+  const liveStats = useSystemStats();
+  const stats = statsOverride ?? liveStats;
 
   useEffect(() => {
     const id = setInterval(() => setNow(new Date()), 1000);
