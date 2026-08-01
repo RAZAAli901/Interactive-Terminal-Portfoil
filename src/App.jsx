@@ -1,366 +1,290 @@
-import { useState, useEffect, useMemo, useRef, Suspense, lazy } from 'react';
-import { useHyprland } from './wm/useHyprland';
+import { useCallback, useEffect, useMemo, useState, Suspense, lazy } from 'react';
+import { useRiceWM } from './wm/useRiceWM';
 import { useKeybindings } from './wm/useKeybindings';
-import { dwindle, workspaceArea } from './layout/dwindle';
+import { overviewLayout } from './shell/overviewGrid';
+import { RICE_APPS } from './config/riceApps';
+import { DEFAULT_WALLPAPER, wallpaperUrl } from './data/wallpapers';
+
 import ErrorBoundary from './components/ErrorBoundary';
-import Terminal from "./components/Terminal";
-import BootSequence from "./boot/BootSequence";
-import WindowFrame from "./wm/WindowFrame";
-import DesktopIcon from "./components/DesktopIcon";
-import Waybar from "./shell/Waybar";
-import Launcher from "./shell/Launcher";
-import PowerMenu from "./shell/PowerMenu";
-import KeybindCheatsheet from "./shell/KeybindCheatsheet";
-import MobileBar from "./shell/MobileBar";
-import Notifications from "./shell/Notifications";
-import { useNotifications } from "./shell/useNotifications";
-import { APPS } from "./config/apps";
-const ExplorerWindow = lazy(() => import("./components/ExplorerWindow"));
-const Notepad = lazy(() => import("./components/Notepad"));
+import Terminal from './components/Terminal';
+import BootSequence from './boot/BootSequence';
+import WindowFrame from './wm/WindowFrame';
+import { Dividers, DragGhost, SwapTarget } from './wm/TilingOverlays';
 
-// New dynamic apps
-const Calculator = lazy(() => import("./components/Calculator"));
-const Clock = lazy(() => import("./components/Clock"));
-const Settings = lazy(() => import("./components/Settings"));
-const Browser = lazy(() => import("./components/Browser"));
-const Chat = lazy(() => import("./components/Chat"));
-const Photos = lazy(() => import("./components/Photos"));
-const Solitaire = lazy(() => import("./components/Solitaire"));
-const OfficeApp = lazy(() => import("./components/OfficeApp"));
-const Store = lazy(() => import("./components/Store"));
-const SnippingTool = lazy(() => import("./components/SnippingTool"));
-const Vscode = lazy(() => import("./components/Vscode"));
-const Minesweeper = lazy(() => import("./components/Minesweeper"));
+import NeuralCanvas from './shell/NeuralCanvas';
+import TopBar from './shell/TopBar';
+import Dock from './shell/Dock';
+import EmptyHint from './shell/EmptyHint';
+import Overview from './shell/Overview';
+import LauncherColumn from './shell/LauncherColumn';
+import Launcher from './shell/Launcher';
+import PowerMenu from './shell/PowerMenu';
+import KeybindCheatsheet from './shell/KeybindCheatsheet';
+import MobileBar from './shell/MobileBar';
+import Notifications from './shell/Notifications';
+import { useNotifications } from './shell/useNotifications';
+import { useSystemStats } from './shell/useSystemStats';
+
+// Design-handoff apps
+const AboutApp = lazy(() => import('./apps/AboutApp'));
+const ProjectsApp = lazy(() => import('./apps/ProjectsApp'));
+const FilesApp = lazy(() => import('./apps/FilesApp'));
+const CodeApp = lazy(() => import('./apps/CodeApp'));
+const BrowserApp = lazy(() => import('./apps/BrowserApp'));
+const PowerApp = lazy(() => import('./apps/PowerApp'));
+
+// Existing portfolio apps, reachable from the search launcher
+const Settings = lazy(() => import('./components/Settings'));
+const Notepad = lazy(() => import('./components/Notepad'));
+const Photos = lazy(() => import('./components/Photos'));
+const Chat = lazy(() => import('./components/Chat'));
+const Calculator = lazy(() => import('./components/Calculator'));
+const Clock = lazy(() => import('./components/Clock'));
+const Solitaire = lazy(() => import('./components/Solitaire'));
+const Minesweeper = lazy(() => import('./components/Minesweeper'));
+
 import { useTheme } from './theme/themeContext';
-
 import styles from './App.module.css';
+
+const FALLBACK = <div style={{ padding: 20, color: 'var(--hypr-subtext)' }}>Loading…</div>;
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
-  const [wallpaper, setWallpaper] = useState(4); // Default wallpaper ID
-  const { setTheme, theme } = useTheme(); // Hyprland palette switcher (drives root CSS vars)
-
   const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768);
-      setViewport({ w: window.innerWidth, h: window.innerHeight });
-    };
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  // Dynamic installation state for Store apps
-  const [installedApps, setInstalledApps] = useState({
-    vscode: false,
-    minesweeper: false
-  });
-
-  // Dynamic window list
-  const initialWindows = {
-    terminal: { id: 'terminal', title: 'kitty', icon: '💻', isOpen: true, isMinimized: false, zIndex: 10, defaultWidth: 800, defaultHeight: 500, offsetX: 0, offsetY: 0 },
-    explorer: { id: 'explorer', title: 'Files', icon: '📁', isOpen: false, isMinimized: false, zIndex: 1, defaultWidth: 800, defaultHeight: 500 },
-    notepad: { id: 'notepad', title: 'Text Editor', icon: '📝', isOpen: false, isMinimized: false, zIndex: 1, defaultWidth: 650, defaultHeight: 500, offsetX: 80, offsetY: 40 },
-    chat: { id: 'chat', title: 'Discord', icon: '💬', isOpen: false, isMinimized: false, zIndex: 1, defaultWidth: 700, defaultHeight: 500 },
-    browser: { id: 'browser', title: 'Firefox', icon: '🦊', isOpen: false, isMinimized: false, zIndex: 1, defaultWidth: 900, defaultHeight: 600 },
-    settings: { id: 'settings', title: 'Settings', icon: '⚙️', isOpen: false, isMinimized: false, zIndex: 1, defaultWidth: 750, defaultHeight: 500 },
-    calculator: { id: 'calculator', title: 'Calculator', icon: '🧮', isOpen: false, isMinimized: false, zIndex: 1, defaultWidth: 320, defaultHeight: 480 },
-    clock: { id: 'clock', title: 'Clocks', icon: '⏰', isOpen: false, isMinimized: false, zIndex: 1, defaultWidth: 450, defaultHeight: 400 },
-    store: { id: 'store', title: 'Microsoft Store', icon: '🛍️', isOpen: false, isMinimized: false, zIndex: 1, defaultWidth: 900, defaultHeight: 600 },
-    photos: { id: 'photos', title: 'Image Viewer', icon: '🖼️', isOpen: false, isMinimized: false, zIndex: 1, defaultWidth: 700, defaultHeight: 500 },
-    solitaire: { id: 'solitaire', title: 'AisleRiot Solitaire', icon: '🃏', isOpen: false, isMinimized: false, zIndex: 1, defaultWidth: 700, defaultHeight: 550 },
-    word: { id: 'word', title: 'Word - Document1.docx', icon: '📝', isOpen: false, isMinimized: false, zIndex: 1, defaultWidth: 750, defaultHeight: 550 },
-    excel: { id: 'excel', title: 'Excel - Book1.xlsx', icon: '📊', isOpen: false, isMinimized: false, zIndex: 1, defaultWidth: 800, defaultHeight: 500 },
-    powerpoint: { id: 'powerpoint', title: 'PowerPoint - Presentation1.pptx', icon: '🔴', isOpen: false, isMinimized: false, zIndex: 1, defaultWidth: 800, defaultHeight: 550 },
-    outlook: { id: 'outlook', title: 'Outlook', icon: '📧', isOpen: false, isMinimized: false, zIndex: 1, defaultWidth: 850, defaultHeight: 550 },
-    snipping: { id: 'snipping', title: 'Snipping Tool', icon: '✂️', isOpen: false, isMinimized: false, zIndex: 1, defaultWidth: 600, defaultHeight: 450 },
-    onenote: { id: 'onenote', title: 'OneNote', icon: '📓', isOpen: false, isMinimized: false, zIndex: 1, defaultWidth: 750, defaultHeight: 500 },
-    vscode: { id: 'vscode', title: 'Visual Studio Code', icon: '💙', isOpen: false, isMinimized: false, zIndex: 1, defaultWidth: 900, defaultHeight: 600 },
-    minesweeper: { id: 'minesweeper', title: 'Mines', icon: '💣', isOpen: false, isMinimized: false, zIndex: 1, defaultWidth: 400, defaultHeight: 500 }
-  };
-  const {
-    windows, activeId, activeWorkspace,
-    openWindow, closeWindow, focusWindow, toggleFloating,
-    switchWorkspace, moveToWorkspace, cycleFocus,
-  } = useHyprland(initialWindows);
-
+  const [wallpaper, setWallpaper] = useState(DEFAULT_WALLPAPER);
+  const [browserProject, setBrowserProject] = useState(0);
+  const [showStartup, setShowStartup] = useState(false);
   const [isLauncherOpen, setIsLauncherOpen] = useState(false);
   const [isPowerOpen, setIsPowerOpen] = useState(false);
   const [isCheatsheetOpen, setIsCheatsheetOpen] = useState(false);
-  const [fullscreenId, setFullscreenId] = useState(null);
-  const [flashing, setFlashing] = useState(false);
-  const [showStartup, setShowStartup] = useState(false);
-  const [viewport, setViewport] = useState({ w: 1280, h: 720 });
+  const [terminalCommand, setTerminalCommand] = useState(null);
 
+  const { setTheme, theme } = useTheme();
+  const stats = useSystemStats();
   const { items: notifications, notify, dismiss } = useNotifications();
+  const wm = useRiceWM(RICE_APPS);
 
-  // Called when the SDDM login completes — reveal the desktop with a short fade.
+  useEffect(() => {
+    const onResize = () => setIsMobile(window.innerWidth <= 768);
+    onResize();
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
+
+  // ── launching ────────────────────────────────────────────────────────────
+  const launch = useCallback((app) => {
+    if (app === 'power') { setIsPowerOpen(true); return; }
+    wm.openApp(app);
+  }, [wm]);
+
+  /** Open the browser window on a specific repo (from Projects or Files). */
+  const openProject = useCallback((index) => {
+    setBrowserProject(index);
+    wm.openApp('browser');
+  }, [wm]);
+
+  const openTerminalWith = useCallback((cmd) => {
+    setTerminalCommand(cmd);
+    wm.openApp('terminal');
+  }, [wm]);
+
+  // ── keyboard ─────────────────────────────────────────────────────────────
+  // Ctrl+Q is the design's primary bind: it spawns terminals, and once you have
+  // a terminal plus a second window it doubles as the overview toggle.
+  const handleCtrlQ = useCallback(() => {
+    if (wm.overview) { wm.setOverview(false); wm.openApp('terminal'); return; }
+    const hasTerminal = wm.openIds.some((id) => id.startsWith('term'));
+    if (hasTerminal && wm.openIds.length >= 2) { wm.setOverview(true); return; }
+    wm.openApp('terminal');
+  }, [wm]);
+
+  useEffect(() => {
+    if (isLoading || isMobile) return undefined;
+    const onKey = (e) => {
+      const k = (e.key || '').toLowerCase();
+      if (e.ctrlKey && k === 'q') { e.preventDefault(); handleCtrlQ(); }
+      else if (e.ctrlKey && (e.code === 'Backquote' || k === '`')) { e.preventDefault(); wm.setOverview((o) => !o); }
+      else if (k === 'escape' && wm.overview) { e.preventDefault(); wm.setOverview(false); }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [isLoading, isMobile, handleCtrlQ, wm]);
+
+  useKeybindings({
+    launcher: () => setIsLauncherOpen((o) => !o),
+    terminal: () => wm.openApp('terminal'),
+    closeActive: () => wm.focusedId && wm.closeWindow(wm.focusedId),
+    toggleFloat: () => wm.toggleLayout(),
+    focusNext: () => wm.cycleFocus(1),
+    focusPrev: () => wm.cycleFocus(-1),
+    workspace: (n) => wm.switchWorkspace(n),
+    workspacePrev: () => wm.switchWorkspace(Math.max(1, wm.activeWorkspace - 1)),
+    workspaceNext: () => wm.switchWorkspace(Math.min(5, wm.activeWorkspace + 1)),
+    moveWorkspace: (n) => wm.focusedId && wm.moveToWorkspace(wm.focusedId, n),
+    fullscreen: () => wm.setOverview((o) => !o),
+    powerMenu: () => setIsPowerOpen((o) => !o),
+    cheatsheet: () => setIsCheatsheetOpen((o) => !o),
+    screenshot: () => notify('Screenshot saved', '~/Pictures/screenshot.png', '📸'),
+  }, { enabled: !isLoading && !isMobile });
+
+  // ── boot ─────────────────────────────────────────────────────────────────
   const handleLogin = () => {
     setIsLoading(false);
     setShowStartup(true);
     setTimeout(() => setShowStartup(false), 700);
-    setTimeout(() => notify('Welcome to Hyprland', 'Logged in as razaali@arch', '🎉'), 900);
-    setTimeout(() => notify('Tip', 'Press Super+D to open the launcher, Super+/ for keybinds', '💡'), 3200);
+    setTimeout(() => wm.openApp('terminal'), 260);
+    setTimeout(() => notify('Welcome to Hyprland', 'Logged in as raza@arch', '🎉'), 1000);
+    setTimeout(() => notify('Tip', 'ctrl+q spawns terminals · ctrl+` for overview', '💡'), 3600);
   };
-
-  // Toast whenever the colorscheme changes (skips the initial render).
-  const firstThemeRun = useRef(true);
-  useEffect(() => {
-    if (firstThemeRun.current) { firstThemeRun.current = false; return; }
-    notify('Theme changed', theme.label, '🎨');
-  }, [theme.label, notify]);
-  const [contextMenu, setContextMenu] = useState({ visible: false, x: 0, y: 0 });
-  const [terminalInitialCommand, setTerminalInitialCommand] = useState(null);
-
-  // Launch a registry app by id, resolving to its underlying window id.
-  const launchApp = (id) => openWindow(APPS[id]?.legacyId || id);
 
   const handlePower = (action) => {
     setIsPowerOpen(false);
-    // Phase 4 wires these to the real boot/login/lock screens; for now reboot,
-    // shutdown and logout all restart the session.
-    if (action === 'reboot' || action === 'shutdown' || action === 'logout') {
-      window.location.reload();
-    }
+    if (action === 'lock') return;
+    window.location.reload();
   };
 
-  // Hyprland-style Super-key shortcuts.
-  useKeybindings(
-    {
-      launcher: () => setIsLauncherOpen((o) => !o),
-      terminal: () => openWindow('terminal'),
-      closeActive: () => {
-        if (!activeId) return;
-        closeWindow(activeId);
-        setFullscreenId((id) => (id === activeId ? null : id));
-      },
-      toggleFloat: () => activeId && toggleFloating(activeId),
-      focusNext: () => cycleFocus(1),
-      focusPrev: () => cycleFocus(-1),
-      fullscreen: () => activeId && setFullscreenId((id) => (id === activeId ? null : activeId)),
-      screenshot: () => {
-        setFlashing(true);
-        setTimeout(() => setFlashing(false), 260);
-        notify('Screenshot saved', '~/Pictures/screenshot.png', '📸');
-      },
-      workspace: (n) => switchWorkspace(n),
-      workspacePrev: () => switchWorkspace(Math.max(1, activeWorkspace - 1)),
-      workspaceNext: () => switchWorkspace(Math.min(5, activeWorkspace + 1)),
-      moveWorkspace: (n) => moveToWorkspace(activeId, n),
-      powerMenu: () => setIsPowerOpen((o) => !o),
-      cheatsheet: () => setIsCheatsheetOpen((o) => !o),
-    },
-    { enabled: !isLoading && !isMobile },
-  );
+  // ── overview geometry ────────────────────────────────────────────────────
+  const overviewRects = useMemo(() => {
+    if (!wm.overview) return null;
+    const items = wm.openIds.map((id) => ({ id, w: wm.geometry[id].w, h: wm.geometry[id].h }));
+    const placed = overviewLayout(items, wm.viewport);
+    return Object.fromEntries(placed.map((p) => [p.id, p]));
+  }, [wm.overview, wm.openIds, wm.geometry, wm.viewport]);
 
-  // Dwindle layout for tiled windows on the active workspace.
-  const rectById = useMemo(() => {
-    const tiledWins = Object.values(windows).filter(
-      (w) => w.isOpen && !w.isMinimized && !w.floating && w.workspace === activeWorkspace,
-    );
-    const rects = dwindle(workspaceArea(viewport.w, viewport.h), tiledWins.length);
-    const map = {};
-    tiledWins.forEach((w, i) => { map[w.id] = rects[i]; });
-    return map;
-  }, [windows, activeWorkspace, viewport]);
-
-  // Re-trigger the workspace slide animation on each switch (no remount).
-  const layerRef = useRef(null);
-  useEffect(() => {
-    const el = layerRef.current;
-    if (!el) return;
-    el.classList.remove(styles.wsSlide);
-    void el.offsetWidth; // force reflow so the animation restarts
-    el.classList.add(styles.wsSlide);
-  }, [activeWorkspace]);
-
-  const wallpapers = {
-    1: 'https://images.unsplash.com/photo-1496247749665-49cf5b1022e9?q=80&w=2073&auto=format&fit=crop',
-    2: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?q=80&w=2070&auto=format&fit=crop',
-    3: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2064&auto=format&fit=crop',
-    4: 'https://images.unsplash.com/photo-1607799279861-4dd421887fb3?q=80&w=2070&auto=format&fit=crop',
-    5: 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?q=80&w=2070&auto=format&fit=crop',
-    6: 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?q=80&w=2070&auto=format&fit=crop',
-    7: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=2071&auto=format&fit=crop',
-    8: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop',
-    9: 'https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2070&auto=format&fit=crop',
-    10: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=2070&auto=format&fit=crop',
-    11: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=2073&auto=format&fit=crop',
-    12: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=2070&auto=format&fit=crop',
-  };
-
-  const openTerminalWithCommand = (cmd) => {
-    setTerminalInitialCommand(cmd);
-    openWindow('terminal');
-  };
-
-  const handleDesktopClick = () => {
-    if (contextMenu.visible) setContextMenu({ visible: false, x: 0, y: 0 });
-  };
-
-  const handleContextMenu = (e) => {
-    e.preventDefault();
-    setContextMenu({
-      visible: true,
-      x: e.clientX,
-      y: e.clientY
-    });
-  };
-
-  // Render individual application content
-  const renderWindowContent = (id) => {
-    switch (id) {
+  // ── window content ───────────────────────────────────────────────────────
+  const renderContent = (win) => {
+    switch (win.app) {
       case 'terminal':
-        return <Terminal setTheme={setTheme} setWallpaper={setWallpaper} initialCommand={terminalInitialCommand} setInitialCommand={setTerminalInitialCommand} />;
-      case 'explorer':
-        return <ExplorerWindow />;
-      case 'notepad':
-        return <Notepad />;
-      case 'chat':
-        return <Chat />;
-      case 'browser':
-        return <Browser />;
-      case 'settings':
-        return <Settings setWallpaper={setWallpaper} currentWallpaper={wallpaper} />;
-      case 'calculator':
-        return <Calculator />;
-      case 'clock':
-        return <Clock />;
-      case 'store':
         return (
-          <Store 
-            installedApps={installedApps} 
-            onInstallApp={(appId) => setInstalledApps(prev => ({ ...prev, [appId]: true }))} 
-            onOpenApp={openWindow}
+          <Terminal
+            setTheme={setTheme}
+            setWallpaper={setWallpaper}
+            initialCommand={terminalCommand}
+            setInitialCommand={setTerminalCommand}
           />
         );
-      case 'photos':
-        return <Photos />;
-      case 'solitaire':
-        return <Solitaire />;
-      case 'word':
-      case 'excel':
-      case 'powerpoint':
-      case 'outlook':
-      case 'onenote':
-        return <OfficeApp appType={id} />;
-      case 'vscode':
-        return <Vscode />;
-      case 'minesweeper':
-        return <Minesweeper />;
-      default:
-        return null;
+      case 'about': return <AboutApp />;
+      case 'projects': return <ProjectsApp onOpenProject={openProject} />;
+      case 'files': return <FilesApp onOpenProject={openProject} />;
+      case 'code': return <CodeApp />;
+      case 'browser': return <BrowserApp projectIndex={browserProject} />;
+      case 'power': return <PowerApp />;
+      case 'settings': return <Settings setWallpaper={setWallpaper} currentWallpaper={wallpaper} />;
+      case 'editor': return <Notepad />;
+      case 'images': return <Photos />;
+      case 'chat': return <Chat />;
+      case 'calculator': return <Calculator />;
+      case 'clock': return <Clock />;
+      case 'solitaire': return <Solitaire />;
+      case 'minesweeper': return <Minesweeper />;
+      default: return null;
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className={styles.desktop} style={{ backgroundImage: `url(${wallpaperUrl(wallpaper)})` }}>
+        <div className={styles.ground} />
+        <BootSequence wallpaper={wallpaperUrl(wallpaper)} onComplete={handleLogin} />
+      </div>
+    );
+  }
+
+  if (isMobile) {
+    return (
+      <div className={styles.mobile}>
+        <MobileBar />
+        <div className={styles.mobileBody}>
+          <Terminal setTheme={setTheme} setWallpaper={setWallpaper} />
+        </div>
+      </div>
+    );
+  }
+
+  const swapRect = wm.drag.target ? wm.geometry[wm.drag.target] : null;
+  const dragWin = wm.drag.id ? wm.windows[wm.drag.id] : null;
 
   return (
     <div
-      className={`${styles.desktop} ${isMobile ? 'mobile-terminal-active' : ''}`}
-      style={{ backgroundImage: `url(${wallpapers[wallpaper]})` }}
-      onClick={handleDesktopClick}
-      onContextMenu={handleContextMenu}
+      className={styles.desktop}
+      style={{ backgroundImage: `url(${wallpaperUrl(wallpaper)})` }}
     >
-      <div className={styles.desktopOverlay}></div>
+      <div className={styles.ground} />
+      <NeuralCanvas accent={theme.role.accent} />
       {showStartup && <div className={styles.startupFade} />}
-      {flashing && <div className={styles.screenFlash} />}
-      {isLoading ? (
-        <BootSequence wallpaper={wallpapers[wallpaper]} onComplete={handleLogin} />
-      ) : isMobile ? (
-        <div style={{ width: '100vw', height: '100vh', display: 'flex', flexDirection: 'column', background: 'var(--terminal-bg)', overflow: 'hidden' }}>
-          <MobileBar />
-          <div style={{ flex: 1, minHeight: 0 }}>
-            <Terminal setTheme={setTheme} setWallpaper={setWallpaper} />
-          </div>
-        </div>
-      ) : (
-        <>
-          <div className={styles.desktopIcons}>
-            <DesktopIcon label="kitty" icon="💻" onDoubleClick={() => openWindow('terminal')} />
-            <DesktopIcon label="Files" icon="📁" onDoubleClick={() => openWindow('explorer')} />
-            <DesktopIcon label="Firefox" icon="🦊" onDoubleClick={() => openWindow('browser')} />
-            <DesktopIcon label="Code" icon="💙" onDoubleClick={() => openWindow('vscode')} />
-          </div>
 
-          <div className={styles.wsLayer} ref={layerRef}>
-            {Object.values(windows).map(win => {
-              if (!win.isOpen) return null;
-              return (
-                <ErrorBoundary key={win.id}>
-                  <WindowFrame
-                    title={win.title}
-                    icon={win.icon}
-                    isActive={win.id === activeId}
-                    tiled={!win.floating}
-                    rect={rectById[win.id]}
-                    hidden={win.workspace !== activeWorkspace}
-                    fullscreen={win.id === fullscreenId}
-                    onClose={() => closeWindow(win.id)}
-                    onToggleFloating={() => toggleFloating(win.id)}
-                    isMinimized={win.isMinimized}
-                    defaultWidth={win.defaultWidth}
-                    defaultHeight={win.defaultHeight}
-                    offsetX={win.offsetX}
-                    offsetY={win.offsetY}
-                    zIndex={win.zIndex}
-                    onFocus={() => focusWindow(win.id)}
-                  >
-                    <Suspense fallback={<div style={{ padding: '20px', color: 'var(--terminal-text)' }}>Loading app...</div>}>
-                      {renderWindowContent(win.id)}
-                    </Suspense>
-                  </WindowFrame>
-                </ErrorBoundary>
-              );
-            })}
-          </div>
+      <LauncherColumn onLaunch={launch} />
+      <EmptyHint visible={wm.openIds.length === 0} />
+      <Overview open={wm.overview} count={wm.openIds.length} onExit={() => wm.setOverview(false)} />
 
-          <Waybar
-            activeWorkspace={activeWorkspace}
-            occupied={new Set(Object.values(windows).filter((w) => w.isOpen).map((w) => w.workspace))}
-            onWorkspace={switchWorkspace}
-            focusedTitle={windows[activeId]?.title || ''}
-            onLauncher={() => setIsLauncherOpen((o) => !o)}
-            onPower={() => setIsPowerOpen(true)}
-          />
-
-          <Launcher
-            isOpen={isLauncherOpen}
-            onLaunch={launchApp}
-            onClose={() => setIsLauncherOpen(false)}
-          />
-
-          <PowerMenu
-            isOpen={isPowerOpen}
-            onClose={() => setIsPowerOpen(false)}
-            onAction={handlePower}
-          />
-
-          <KeybindCheatsheet
-            isOpen={isCheatsheetOpen}
-            onClose={() => setIsCheatsheetOpen(false)}
-          />
-
-          <Notifications items={notifications} onDismiss={dismiss} />
-
-          {contextMenu.visible && (
-            <div 
-              className={styles.contextMenu}
-              style={{ left: contextMenu.x, top: contextMenu.y }}
+      {wm.openIds.map((id, idx) => {
+        const win = wm.windows[id];
+        const def = RICE_APPS[win.app];
+        const rect = wm.geometry[id];
+        const ov = overviewRects?.[id];
+        return (
+          <ErrorBoundary key={id}>
+            <WindowFrame
+              title={def?.title || win.app}
+              color={def?.color}
+              rect={rect}
+              zIndex={wm.tiling ? (id === wm.focusedId ? 120 : 100) : 100 + win.z}
+              isActive={id === wm.focusedId}
+              isTerminal={win.app === 'terminal'}
+              isDragging={wm.drag.id === id}
+              animated={wm.animated}
+              floating={!wm.tiling && !wm.overview}
+              overviewStyle={ov && {
+                left: ov.left, top: ov.top, width: ov.w, height: ov.h,
+                transform: `scale(${ov.scale})`, transformOrigin: '0 0',
+                zIndex: 200 + idx,
+                transition: 'transform 0.3s cubic-bezier(.2,.8,.2,1), left 0.3s cubic-bezier(.2,.8,.2,1), top 0.3s cubic-bezier(.2,.8,.2,1)',
+              }}
+              onFocus={() => (wm.overview ? (wm.setOverview(false), wm.focusWindow(id)) : wm.focusWindow(id))}
+              onClose={() => wm.closeWindow(id)}
+              onMinimize={() => wm.minimizeWindow(id)}
+              onDragStart={(e) => {
+                if (wm.overview) { e.preventDefault(); wm.setOverview(false); wm.focusWindow(id); return; }
+                (wm.tiling ? wm.startTileDrag : wm.startMove)(id, e);
+              }}
+              onResizeStart={(e) => wm.startResize(id, e)}
             >
-              <div className={styles.contextMenuItem} onClick={() => setWallpaper((prev) => (prev % 12) + 1)}>
-                Change Wallpaper
-              </div>
-              <div className={styles.contextMenuItem} onClick={() => openWindow('terminal')}>
-                Open Terminal
-              </div>
-              <div className={styles.contextMenuItem} onClick={() => openTerminalWithCommand('about')}>
-                About
-              </div>
-            </div>
-          )}
-        </>
+              <Suspense fallback={FALLBACK}>{renderContent(win)}</Suspense>
+            </WindowFrame>
+          </ErrorBoundary>
+        );
+      })}
+
+      {wm.tiling && !wm.overview && (
+        <Dividers dividers={wm.dividers} onDragStart={wm.startDivider} />
       )}
+      {!wm.overview && <SwapTarget rect={swapRect} />}
+      {dragWin && (
+        <DragGhost
+          cursor={wm.drag.cursor}
+          title={RICE_APPS[dragWin.app]?.title || dragWin.app}
+          color={RICE_APPS[dragWin.app]?.color}
+        />
+      )}
+
+      <TopBar
+        activeWorkspace={wm.activeWorkspace}
+        occupied={wm.occupied}
+        onWorkspace={wm.switchWorkspace}
+        focusedTitle={wm.focusedId ? RICE_APPS[wm.windows[wm.focusedId]?.app]?.title : ''}
+        layout={wm.layout}
+        onToggleLayout={wm.toggleLayout}
+        onOverview={() => wm.setOverview((o) => !o)}
+        onPower={() => setIsPowerOpen(true)}
+        stats={stats}
+      />
+
+      <Dock windows={wm.dockWindows} onSelect={wm.focusWindow} />
+
+      <Launcher isOpen={isLauncherOpen} onLaunch={launch} onClose={() => setIsLauncherOpen(false)} />
+      <PowerMenu isOpen={isPowerOpen} onClose={() => setIsPowerOpen(false)} onAction={handlePower} />
+      <KeybindCheatsheet isOpen={isCheatsheetOpen} onClose={() => setIsCheatsheetOpen(false)} />
+      <Notifications items={notifications} onDismiss={dismiss} />
     </div>
   );
 }
