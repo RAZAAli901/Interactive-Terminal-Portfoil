@@ -52,8 +52,11 @@ Discord and games behind the search launcher.
 
 ### Terminal
 A real command shell — auto-complete, history, an AI/RAG query parser, live GitHub API stats, and
-a simulated filesystem. Linux commands included: `fastfetch`, `hyprctl`, `htop`, `cava`, `pacman`,
-`uname`, `uptime`, `free`, `df`, `sensors`, `ip`, `systemctl`, `wallpaper`/`swww`.
+a simulated filesystem — including your real dotfiles at `~/.config/hypr/hyprland.conf`.
+
+Linux commands: `fastfetch` · `hyprctl` (version/monitors/workspaces/clients/activewindow/getoption)
+· `btop` · `htop` · `cava` · `pacman` · `uname` · `uptime` · `free` · `df` · `sensors` · `ip`
+· `systemctl` · `wallpaper`/`swww` · `theme`.
 
 ## ⌨️ Keybindings
 
