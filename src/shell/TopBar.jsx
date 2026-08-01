@@ -49,7 +49,9 @@ export default function TopBar({
     return () => clearInterval(id);
   }, []);
 
-  const tiling = layout !== 'float';
+  // Match the dwindle name explicitly: an unrecognised value should not
+  // silently read as tiling.
+  const tiling = layout === 'dwindle';
   // useSystemStats() names the download rate `netDown`; accept either key.
   const net = stats.net ?? stats.netDown ?? 0;
   const volume = stats.volume ?? 65;
@@ -61,7 +63,12 @@ export default function TopBar({
           className={styles.workspaces}
           role="tablist"
           aria-label="Workspaces"
-          onWheel={(e) => onWorkspace?.(clampWs(activeWorkspace + (e.deltaY > 0 ? 1 : -1)))}
+          onWheel={(e) => {
+            const next = clampWs(activeWorkspace + (e.deltaY > 0 ? 1 : -1));
+            if (next === activeWorkspace) return;
+            e.preventDefault();
+            onWorkspace?.(next);
+          }}
         >
           {WORKSPACES.map((n) => (
             <button
@@ -98,6 +105,7 @@ export default function TopBar({
           className={styles.layout}
           onClick={onToggleLayout}
           aria-pressed={tiling}
+          aria-label="Toggle tiling layout"
           title="Toggle tiling / floating"
         >
           <span className={styles.layoutGlyph} aria-hidden="true">▤</span>
