@@ -73,6 +73,8 @@ export default function Minesweeper() {
         return () => {
             if (timerRef.current) clearInterval(timerRef.current);
         };
+        // Mount-only: lay out the first grid and tear the timer down on unmount.
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     // Game Timer

@@ -130,6 +130,9 @@ export default function Clock() {
             setTimerTotal(total);
             setTimerRemaining(total);
         }
+        // Only the entered duration should reseed the timer — reacting to
+        // `timerRunning` here would reset it the moment it starts.
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [timerHrs, timerMins, timerSecs]);
 
     const formatTimer = (totalSeconds) => {

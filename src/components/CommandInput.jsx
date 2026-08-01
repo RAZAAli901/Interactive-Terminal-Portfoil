@@ -85,6 +85,9 @@ export default function CommandInput({ onSubmit, mode = 'command', history = [],
         } else {
             setSuggestion('');
         }
+        // `availableCommands` is a constant list; recomputing the suggestion on
+        // input alone is the intended behaviour.
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [input]);
 
     const suggestionGhost = suggestion && suggestion.startsWith(input.toLowerCase()) ? suggestion.slice(input.length) : '';

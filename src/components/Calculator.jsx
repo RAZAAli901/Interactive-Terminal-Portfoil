@@ -88,6 +88,9 @@ export default function Calculator() {
         };
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
+        // The key handlers are redefined every render; depending on them would
+        // rebind the listener constantly. The state they read is in the deps.
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [display, equation, shouldReset]);
 
     const handleScientific = (op) => {
