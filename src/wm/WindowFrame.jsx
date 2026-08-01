@@ -40,7 +40,8 @@ export default function WindowFrame({
   const style = hidden
     // On another workspace — keep mounted (preserves app state) but not shown.
     ? { display: 'none' }
-    : { ...geometry, zIndex, '--win-color': color || 'var(--hypr-accent, #7aa2f7)' };
+    // Overview supplies its own stacking, so it must win over the tiling z.
+    : { zIndex, ...geometry, '--win-color': color || 'var(--hypr-accent, #7aa2f7)' };
 
   const stop = (e) => e.stopPropagation();
 
