@@ -83,11 +83,6 @@ export default function App() {
     wm.openApp('browser');
   }, [wm]);
 
-  const openTerminalWith = useCallback((cmd) => {
-    setTerminalCommand(cmd);
-    wm.openApp('terminal');
-  }, [wm]);
-
   // ── keyboard ─────────────────────────────────────────────────────────────
   // Ctrl+Q is the design's primary bind: it spawns terminals, and once you have
   // a terminal plus a second window it doubles as the overview toggle.

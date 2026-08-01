@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { readdirSync } from 'node:fs';
 import { resolve } from 'node:path';
+import process from 'node:process';
 import { WALLPAPERS, DEFAULT_WALLPAPER, getWallpaper, wallpaperUrl } from '../data/wallpapers';
 
 const DIR = resolve(process.cwd(), 'public/wallpapers');
