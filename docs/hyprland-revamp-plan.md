@@ -141,3 +141,27 @@ All six phases shipped, plus extras beyond the original plan. Build clean, lint
 - **Accessibility & perf** — focus traps + aria on overlays, `prefers-reduced-motion` support, low-power mode (blur/animations off) with telemetry pause.
 
 Extras not in the original plan: notifications, low-power mode, focus cycling, screenshot flash, workspace scroll/H-L navigation, and the extended Linux command set.
+
+---
+
+## 9. Phase 2 — the Tokyo Night rice (design handoff)
+
+After the six phases above shipped, a design handoff
+(`design_handoff_terminal_desktop`) specified a full Tokyo Night rice. That work
+replaced most of the shell built above:
+
+| Phase 1 (this document) | Phase 2 (the rice) |
+|---|---|
+| Spiral dwindle (`layout/dwindle.js`) | Real BSP tree (`layout/bsp.js`) with drag-to-resize and drag-to-swap |
+| `useHyprland` | `wmReducer` + `useRiceWM`, one tiling tree per workspace |
+| Waybar | `shell/TopBar.jsx` to the handoff's exact spec |
+| Desktop icons | `shell/LauncherColumn.jsx` + the bottom dock |
+| Catppuccin Mocha default | Tokyo Night default (all seven palettes retained) |
+| Wallpapers hotlinked from Unsplash | 20 bundled original SVG rice wallpapers |
+| — | Neural-network canvas, hyprexpo overview, floating mode, notifications |
+
+See [design-parity.md](design-parity.md) for the section-by-section mapping of
+the handoff to the implementation, including the deliberate divergences.
+
+The modules retired in Phase 2 (`dwindle.js`, `useHyprland.js`, `Waybar.jsx`,
+`DesktopIcon.jsx`, `config/apps.js`) remain in git history.
