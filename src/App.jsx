@@ -3,7 +3,8 @@ import { useRiceWM } from './wm/useRiceWM';
 import { useKeybindings } from './wm/useKeybindings';
 import { overviewLayout } from './shell/overviewGrid';
 import { RICE_APPS } from './config/riceApps';
-import { DEFAULT_WALLPAPER, wallpaperUrl } from './data/wallpapers';
+import { DEFAULT_WALLPAPER, getWallpaper, wallpaperUrl } from './data/wallpapers';
+import { getPref, setPref } from './utils/prefs';
 
 import ErrorBoundary from './components/ErrorBoundary';
 import Terminal from './components/Terminal';
@@ -51,7 +52,10 @@ const FALLBACK = <div style={{ padding: 20, color: 'var(--hypr-subtext)' }}>Load
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
-  const [wallpaper, setWallpaper] = useState(DEFAULT_WALLPAPER);
+  // Wallpaper choice survives reloads, like a real desktop.
+  const [wallpaper, setWallpaper] = useState(
+    () => getWallpaper(getPref('wallpaper', DEFAULT_WALLPAPER)).id,
+  );
   const [browserProject, setBrowserProject] = useState(0);
   const [showStartup, setShowStartup] = useState(false);
   const [isLauncherOpen, setIsLauncherOpen] = useState(false);
@@ -63,6 +67,8 @@ export default function App() {
   const stats = useSystemStats();
   const { items: notifications, notify, dismiss } = useNotifications();
   const wm = useRiceWM(RICE_APPS);
+
+  useEffect(() => { setPref('wallpaper', wallpaper); }, [wallpaper]);
 
   useEffect(() => {
     const onResize = () => setIsMobile(window.innerWidth <= 768);
