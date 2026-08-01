@@ -1,5 +1,5 @@
-import { describe, it, expect, beforeAll, afterEach, vi } from 'vitest';
-import { fireEvent, render, screen, act } from '@testing-library/react';
+import { describe, it, expect, beforeAll, beforeEach, afterEach, vi } from 'vitest';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { ThemeProvider } from '../theme/ThemeProvider';
 import App from '../App';
 
@@ -17,9 +17,26 @@ beforeAll(() => {
   }));
 });
 
+beforeEach(() => localStorage.clear());
 afterEach(() => vi.restoreAllMocks());
 
 const renderApp = () => render(<ThemeProvider><App /></ThemeProvider>);
+
+/**
+ * Drive the boot sequence through to the desktop.
+ *
+ * Each stage advances on its own timers, so rather than sleeping for a fixed
+ * amount (which is flaky when the whole suite runs in parallel) this keeps
+ * nudging the current stage until the status bar appears.
+ */
+async function bootToDesktop() {
+  await waitFor(() => {
+    const login = screen.queryByLabelText('Log in');
+    if (login) fireEvent.click(login);
+    else fireEvent.keyDown(window, { key: 'Enter' });
+    expect(screen.getByLabelText('Status bar')).toBeInTheDocument();
+  }, { timeout: 10000, interval: 120 });
+}
 
 describe('App smoke', () => {
   it('boots to the BIOS screen without console errors', () => {
@@ -32,25 +49,7 @@ describe('App smoke', () => {
   it('reaches the desktop after logging in, with no hook-order violations', async () => {
     const spy = vi.spyOn(console, 'error').mockImplementation(() => {});
     renderApp();
-
-    // Skip BIOS -> systemd, then log in.
-    await act(async () => {
-      fireEvent.keyDown(window, { key: 'Enter' });
-      await new Promise((r) => setTimeout(r, 400));
-    });
-    await act(async () => {
-      fireEvent.keyDown(window, { key: 'Enter' });
-      await new Promise((r) => setTimeout(r, 700));
-    });
-    const login = screen.queryByLabelText('Log in');
-    if (login) {
-      await act(async () => {
-        fireEvent.click(login);
-        await new Promise((r) => setTimeout(r, 700));
-      });
-    }
-
-    expect(screen.getByLabelText('Status bar')).toBeInTheDocument();
+    await bootToDesktop();
 
     const hookErrors = spy.mock.calls.filter((c) => String(c[0]).includes('order of Hooks'));
     expect(hookErrors, 'React reported a hook-order violation').toHaveLength(0);
@@ -58,21 +57,7 @@ describe('App smoke', () => {
 
   it('renders the desktop shell surfaces', async () => {
     renderApp();
-    await act(async () => {
-      fireEvent.keyDown(window, { key: 'Enter' });
-      await new Promise((r) => setTimeout(r, 400));
-    });
-    await act(async () => {
-      fireEvent.keyDown(window, { key: 'Enter' });
-      await new Promise((r) => setTimeout(r, 700));
-    });
-    const login = screen.queryByLabelText('Log in');
-    if (login) {
-      await act(async () => {
-        fireEvent.click(login);
-        await new Promise((r) => setTimeout(r, 700));
-      });
-    }
+    await bootToDesktop();
 
     expect(screen.getAllByRole('tab')).toHaveLength(5);
     expect(screen.getByLabelText('Launch kitty')).toBeInTheDocument();
