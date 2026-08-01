@@ -46,3 +46,12 @@ describe('useKeybindings — window & workspace motions', () => {
     expect(cheatsheet).toHaveBeenCalledTimes(1);
   });
 });
+
+describe('useKeybindings — minimize', () => {
+  it('minimizes the focused window with Super+M', () => {
+    const minimize = vi.fn();
+    renderHook(() => useKeybindings({ minimize }));
+    press('m');
+    expect(minimize).toHaveBeenCalledTimes(1);
+  });
+});
