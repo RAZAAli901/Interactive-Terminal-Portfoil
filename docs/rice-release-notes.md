@@ -67,4 +67,11 @@ files: `cat ~/.config/hypr/hyprland.conf`.
   when swapping across workspaces, app state being destroyed on workspace
   switch, and a global key listener re-attaching on every pointer move.
 
+## Known follow-up
+
+`src/utils/portfolioData.js` still points the project-detail carousel at generic
+Unsplash stock photos labelled as "screenshots" — the last external image
+requests in the app. Replacing them with real screenshots (or bundled placeholder
+cards) is tracked separately; it is a content decision, not a rice one.
+
 See [design-parity.md](design-parity.md) for the spec-to-implementation map.
