@@ -51,3 +51,27 @@ describe('system / Hyprland terminal commands', () => {
     expect(run('theme mocha').theme).toBe('catppuccin-mocha');
   });
 });
+
+describe('hyprctl subcommands', () => {
+  it('clients lists managed windows', () => {
+    const text = flat(run('hyprctl clients'));
+    expect(text).toMatch(/class: kitty/);
+    expect(text).toMatch(/workspace: 1/);
+  });
+
+  it('activewindow reports the focused window', () => {
+    expect(flat(run('hyprctl activewindow'))).toMatch(/raza@arch/);
+  });
+
+  it('getoption reports the tiling config', () => {
+    const text = flat(run('hyprctl getoption'));
+    expect(text).toMatch(/gaps_in/);
+    expect(text).toMatch(/dwindle/);
+  });
+
+  it('rejects an unknown request with the valid list', () => {
+    const text = flat(run('hyprctl nonsense'));
+    expect(text).toMatch(/unknown request/);
+    expect(text).toMatch(/activewindow/);
+  });
+});
