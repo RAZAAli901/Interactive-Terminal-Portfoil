@@ -1,0 +1,56 @@
+/* Transparent grab strips centred on each tiling gap. */
+.divider {
+  position: absolute;
+  z-index: 130;
+  background: transparent;
+  border: none;
+  padding: 0;
+  border-radius: 3px;
+  transition: background var(--hypr-dur-fast) ease;
+}
+
+.divider:hover,
+.divider:focus-visible {
+  background: rgba(122, 162, 247, 0.35);
+  outline: none;
+}
+
+.row { cursor: col-resize; }
+.col { cursor: row-resize; }
+
+/* Dashed outline over the pane a dragged window would swap with. */
+.swapTarget {
+  position: absolute;
+  z-index: 118;
+  border: 2px dashed var(--hypr-accent, #7aa2f7);
+  background: color-mix(in srgb, var(--hypr-accent, #7aa2f7) 13%, transparent);
+  border-radius: var(--hypr-radius, 11px);
+  pointer-events: none;
+}
+
+/* Chip that follows the cursor while dragging a title bar. */
+.ghost {
+  position: fixed;
+  z-index: 9500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 9px;
+  background: rgba(16, 16, 26, 0.9);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(122, 162, 247, 0.3);
+  color: var(--hypr-subtext, #a9b1d6);
+  font-family: var(--hypr-font-mono, 'JetBrains Mono', monospace);
+  font-size: 12px;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.ghostDot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--ghost-color, var(--hypr-accent, #7aa2f7));
+}
