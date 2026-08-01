@@ -185,6 +185,10 @@ export function useRiceWM(appDefs) {
     const onMove = (e) => {
       const a = actionRef.current;
       if (!a) return;
+      // The button can be released outside the document (over browser chrome, or
+      // in another window), in which case no mouseup ever reaches us. Any move
+      // with no button held means the gesture is over — end it here.
+      if (e.buttons === 0) { endGesture(); return; }
 
       if (a.type === 'move') {
         dispatch({
@@ -221,7 +225,7 @@ export function useRiceWM(appDefs) {
       }
     };
 
-    const onUp = () => {
+    const endGesture = () => {
       const a = actionRef.current;
       if (!a) return;
       if (a.type === 'tiledrag') {
@@ -235,11 +239,16 @@ export function useRiceWM(appDefs) {
       bumpFrame((n) => n + 1);
     };
 
+    // A gesture also ends if the pointer leaves for another window entirely.
+    const onBlur = () => endGesture();
+
     document.addEventListener('mousemove', onMove);
-    document.addEventListener('mouseup', onUp);
+    document.addEventListener('mouseup', endGesture);
+    window.addEventListener('blur', onBlur);
     return () => {
       document.removeEventListener('mousemove', onMove);
-      document.removeEventListener('mouseup', onUp);
+      document.removeEventListener('mouseup', endGesture);
+      window.removeEventListener('blur', onBlur);
     };
   }, []);
 
