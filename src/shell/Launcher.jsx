@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { CATEGORIES, enabledApps } from '../config/apps';
+import { LAUNCHABLE } from '../config/riceApps';
 import { useFocusTrap } from './useFocusTrap';
 import { searchApps } from './launcherSearch';
 import styles from './Launcher.module.css';
@@ -15,7 +15,7 @@ export default function Launcher({ isOpen, onLaunch, onClose }) {
   const panelRef = useRef(null);
   useFocusTrap(isOpen, panelRef);
 
-  const apps = useMemo(() => enabledApps(), []);
+  const apps = useMemo(() => LAUNCHABLE, []);
 
   const results = useMemo(() => searchApps(query, apps), [query, apps]);
 
@@ -77,12 +77,12 @@ export default function Launcher({ isOpen, onLaunch, onClose }) {
               onMouseEnter={() => setSel(i)}
               onClick={() => launch(app)}
             >
-              <span className={styles.rowIcon}>{app.icon}</span>
+              <span className={styles.rowIcon} style={{ color: app.color }} aria-hidden="true">●</span>
               <span className={styles.rowText}>
                 <span className={styles.rowName}>{app.name}</span>
                 <span className={styles.rowExec}>{app.exec}</span>
               </span>
-              <span className={styles.rowCat}>{CATEGORIES[app.category]}</span>
+              
             </div>
           ))}
         </div>
