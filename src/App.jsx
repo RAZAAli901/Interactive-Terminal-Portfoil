@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState, Suspense, lazy } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, Suspense, lazy } from 'react';
 import { useRiceWM } from './wm/useRiceWM';
 import { useKeybindings } from './wm/useKeybindings';
 import { overviewLayout } from './shell/overviewGrid';
@@ -99,17 +99,24 @@ export default function App() {
     wm.openApp('terminal');
   }, [wm]);
 
+  // `wm` is a fresh object every render, so the handler is kept in a ref and the
+  // listener is attached once per boot/viewport change. Depending on `wm` here
+  // would re-attach a window listener on every pointer move during a drag.
+  const keyHandlers = useRef(null);
+  keyHandlers.current = { handleCtrlQ, setOverview: wm.setOverview, overview: wm.overview };
+
   useEffect(() => {
     if (isLoading || isMobile) return undefined;
     const onKey = (e) => {
+      const h = keyHandlers.current;
       const k = (e.key || '').toLowerCase();
-      if (e.ctrlKey && k === 'q') { e.preventDefault(); handleCtrlQ(); }
-      else if (e.ctrlKey && (e.code === 'Backquote' || k === '`')) { e.preventDefault(); wm.setOverview((o) => !o); }
-      else if (k === 'escape' && wm.overview) { e.preventDefault(); wm.setOverview(false); }
+      if (e.ctrlKey && k === 'q') { e.preventDefault(); h.handleCtrlQ(); }
+      else if (e.ctrlKey && (e.code === 'Backquote' || k === '`')) { e.preventDefault(); h.setOverview(); }
+      else if (k === 'escape' && h.overview) { e.preventDefault(); h.setOverview(false); }
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [isLoading, isMobile, handleCtrlQ, wm]);
+  }, [isLoading, isMobile]);
 
   useKeybindings({
     launcher: () => setIsLauncherOpen((o) => !o),
