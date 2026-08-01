@@ -6,7 +6,7 @@ import styles from './SddmLogin.module.css';
  * and submits nowhere; any value (or none) and Enter/click proceeds to the
  * desktop. `wallpaper` is blurred behind the card.
  */
-export default function SddmLogin({ wallpaper, user = 'razaali', onLogin }) {
+export default function SddmLogin({ wallpaper, user = 'raza', onLogin }) {
   const [pw, setPw] = useState('');
   const [time, setTime] = useState(new Date());
   const [leaving, setLeaving] = useState(false);

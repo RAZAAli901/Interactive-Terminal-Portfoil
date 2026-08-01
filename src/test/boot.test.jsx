@@ -19,7 +19,7 @@ describe('boot sequence', () => {
 
   it('SDDM login shows the user and Hyprland session', () => {
     render(<SddmLogin wallpaper="" onLogin={() => {}} />);
-    expect(screen.getByText('razaali')).toBeInTheDocument();
+    expect(screen.getByText('raza')).toBeInTheDocument();
     expect(screen.getByText('Hyprland')).toBeInTheDocument();
     expect(screen.getByLabelText(/Password/)).toBeInTheDocument();
   });
@@ -41,6 +41,6 @@ describe('boot sequence', () => {
 
   it('BootSequence can start at the login stage', () => {
     render(<BootSequence wallpaper="" onComplete={() => {}} startStage="login" />);
-    expect(screen.getByText('razaali')).toBeInTheDocument();
+    expect(screen.getByText('raza')).toBeInTheDocument();
   });
 });

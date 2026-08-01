@@ -27,7 +27,7 @@ export default function MobileBar() {
         borderBottom: '1px solid var(--hypr-border, #45475a)',
       }}
     >
-      <span style={{ color: 'var(--hypr-accent, #cba6f7)', fontWeight: 600 }}>razaali@arch</span>
+      <span style={{ color: 'var(--hypr-accent, #7aa2f7)', fontWeight: 600 }}>raza@arch</span>
       <span>{time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false })}</span>
     </div>
   );
