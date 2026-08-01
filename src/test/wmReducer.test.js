@@ -172,3 +172,28 @@ describe('wmReducer — gestures', () => {
     expect(wmReducer(s, { type: 'swap', a: 'term1', b: null })).toBe(s);
   });
 });
+
+describe('wmReducer — swap safety', () => {
+  it('refuses a swap when the dragged window is not in that workspace tree', () => {
+    let s = openAll(['terminal', 'files']);
+    // 'ghost' never existed on workspace 1.
+    const after = wmReducer(s, { type: 'swap', a: 'ghost', b: 'files', ws: 1 });
+    expect(after).toBe(s);
+    expect(allLeaves(after.trees[1]).sort()).toEqual(['files', 'term1']);
+  });
+
+  it('refuses a swap when the target is not in that workspace tree', () => {
+    const s = openAll(['terminal', 'files']);
+    expect(wmReducer(s, { type: 'swap', a: 'term1', b: 'ghost', ws: 1 })).toBe(s);
+  });
+
+  it('never loses a window when a swap targets another workspace', () => {
+    // term1 on ws1, files on ws2 — a cross-workspace swap must be a no-op.
+    let s = open(initialState(), 'terminal');
+    s = wmReducer(s, { type: 'workspace', n: 2 });
+    s = open(s, 'files');
+    const after = wmReducer(s, { type: 'swap', a: 'term1', b: 'files', ws: 2 });
+    expect(allLeaves(after.trees[1])).toEqual(['term1']);
+    expect(allLeaves(after.trees[2])).toEqual(['files']);
+  });
+});
