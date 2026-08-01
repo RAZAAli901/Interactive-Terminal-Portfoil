@@ -1,0 +1,17 @@
+/**
+ * Decorative wallpaper canvas: full-bleed, behind every shell layer, never
+ * interactive. The animation itself is gated in JS (NeuralCanvas.jsx) for
+ * prefers-reduced-motion and low-power mode, since a canvas rAF loop cannot be
+ * stopped from a stylesheet.
+ */
+.canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  /* Never captures the caret or a text selection drag on the desktop. */
+  user-select: none;
+}
