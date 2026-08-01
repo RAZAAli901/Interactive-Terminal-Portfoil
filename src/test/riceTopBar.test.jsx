@@ -66,42 +66,43 @@ describe('<TopBar> workspace wheel', () => {
     expect(onWorkspace).toHaveBeenCalledWith(1);
   });
 
-  it('clamps at workspace 1 when scrolling up from the first', () => {
+  it('does not fire a redundant update scrolling up from the first', () => {
     const onWorkspace = vi.fn();
     render(<TopBar activeWorkspace={1} onWorkspace={onWorkspace} />);
 
     wheel(-1);
-    expect(onWorkspace).toHaveBeenCalledWith(1);
+    expect(onWorkspace).not.toHaveBeenCalled();
   });
 
-  it('clamps at workspace 5 when scrolling down from the last', () => {
+  it('does not fire a redundant update scrolling down from the last', () => {
     const onWorkspace = vi.fn();
     render(<TopBar activeWorkspace={5} onWorkspace={onWorkspace} />);
 
     wheel(1);
-    expect(onWorkspace).toHaveBeenCalledWith(5);
+    expect(onWorkspace).not.toHaveBeenCalled();
   });
 });
 
 describe('<TopBar> layout toggle', () => {
   it('reads "dwindle" and is pressed while tiling', () => {
     render(<TopBar layout="dwindle" />);
-    const btn = screen.getByRole('button', { name: 'dwindle' });
+    const btn = screen.getByRole('button', { name: 'Toggle tiling layout' });
     expect(btn).toHaveAttribute('aria-pressed', 'true');
+    expect(btn).toHaveTextContent('dwindle');
   });
 
   it('reads "floating" and is unpressed in float layout', () => {
     render(<TopBar layout="float" />);
-    const btn = screen.getByRole('button', { name: 'floating' });
+    const btn = screen.getByRole('button', { name: 'Toggle tiling layout' });
     expect(btn).toHaveAttribute('aria-pressed', 'false');
-    expect(screen.queryByRole('button', { name: 'dwindle' })).toBeNull();
+    expect(btn).toHaveTextContent('floating');
   });
 
   it('calls onToggleLayout when clicked', () => {
     const onToggleLayout = vi.fn();
     render(<TopBar layout="dwindle" onToggleLayout={onToggleLayout} />);
 
-    fireEvent.click(screen.getByRole('button', { name: 'dwindle' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Toggle tiling layout' }));
     expect(onToggleLayout).toHaveBeenCalledTimes(1);
   });
 });
