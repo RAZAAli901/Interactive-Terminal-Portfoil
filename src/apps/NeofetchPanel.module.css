@@ -1,0 +1,130 @@
+.panel {
+  /* Stacking follows the window's own width, not the viewport — the terminal is
+     a freely resizable tile, so a media query would answer the wrong question. */
+  container-type: inline-size;
+  min-height: 100%;
+  padding: 16px 18px;
+  background: color-mix(in srgb, var(--hypr-crust, #10101a) 12%, transparent);
+  color: var(--hypr-text, #c0caf5);
+  font-family: var(--hypr-font-mono, 'JetBrains Mono', monospace);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 22px;
+}
+
+.logo {
+  flex: 0 0 auto;
+  margin: 0;
+  color: var(--hypr-accent, #7aa2f7);
+  font-family: inherit;
+  font-size: 10.5px;
+  line-height: 1.05;
+  white-space: pre;
+}
+
+.info {
+  flex: 1 1 260px;
+  min-width: 240px;
+}
+
+.user { color: var(--hypr-accent-2, #bb9af7); }
+.at { color: var(--hypr-muted, #565f89); }
+
+.rule {
+  overflow: hidden;
+  white-space: nowrap;
+  color: color-mix(in srgb, var(--hypr-accent, #7aa2f7) 35%, transparent);
+}
+
+.rows { margin: 0; }
+
+/* Each pair is its own block so the inline-block key can column-align the value. */
+.row { display: block; }
+
+.key {
+  display: inline-block;
+  width: 74px;
+  color: var(--hypr-accent, #7aa2f7);
+}
+
+.value {
+  display: inline;
+  margin: 0;
+  color: var(--hypr-text, #c0caf5);
+}
+
+.chips {
+  display: flex;
+  gap: 5px;
+  margin-top: 8px;
+}
+
+.chip {
+  width: 15px;
+  height: 15px;
+  border-radius: 3px;
+}
+
+.cmd {
+  margin-top: 16px;
+  color: var(--hypr-muted, #565f89);
+}
+
+.cmdName { color: var(--hypr-green, #9ece6a); }
+
+.bio {
+  margin: 0;
+  color: var(--hypr-text, #c0caf5);
+}
+
+.prompt { margin-top: 10px; }
+
+.promptUser { color: var(--hypr-green, #9ece6a); }
+.punct { color: var(--hypr-muted, #565f89); }
+.path { color: var(--hypr-accent, #7aa2f7); }
+
+.cursor {
+  display: inline-block;
+  width: 8px;
+  height: 15px;
+  vertical-align: middle;
+  background: var(--hypr-info, #7dcfff);
+  animation: blink 1.1s step-end infinite;
+}
+
+@keyframes blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+/* Narrow window: drop the logo above the info block instead of beside it. */
+@container (max-width: 520px) {
+  .top { flex-direction: column; gap: 14px; }
+  .logo { font-size: 9.5px; }
+  .info { flex-basis: auto; min-width: 0; }
+}
+
+/* Fallback for engines without container queries — a ≤520px viewport implies a
+   ≤520px window, so the same stacking applies. */
+@media (max-width: 520px) {
+  .top { flex-direction: column; gap: 14px; }
+  .logo { font-size: 9.5px; }
+  .info { flex-basis: auto; min-width: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cursor { animation: none; }
+}
+
+/* Low-power mode: the global token rule already forces `animation: none`, but
+   pin the cursor solid so it can never be left mid-blink at opacity 0. */
+:root[data-perf="low"] .cursor {
+  animation: none;
+  opacity: 1;
+}
