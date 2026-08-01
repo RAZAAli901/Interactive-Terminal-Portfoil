@@ -24,7 +24,9 @@ function hexToRgb(hex) {
 function motionAllowed() {
   if (typeof document === 'undefined') return false;
   if (document.documentElement.dataset.perf === 'low') return false;
-  return !window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+  // Some environments (and some polyfills) return undefined from matchMedia, so
+  // guard the result as well as the function itself.
+  return !window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
 }
 
 /**
