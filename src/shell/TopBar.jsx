@@ -83,7 +83,7 @@ export default function TopBar({
           className={styles.overview}
           onClick={onOverview}
           title="Window overview (Ctrl+`)"
-          aria-label="Window overview"
+          aria-label="Toggle window overview"
         >
           ⊞
         </button>
