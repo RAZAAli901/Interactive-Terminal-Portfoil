@@ -85,10 +85,14 @@ const catppuccinLatte = (() => {
   };
 })();
 
+// Tokyo Night — the design handoff's palette. `bg` is the desktop "ground"
+// (#0e0e16) the rice is built on, deliberately darker than upstream Tokyo Night
+// so the glass surfaces and the neural-network canvas read correctly on top.
 const tokyoNight = (() => {
   const p = {
-    bg: '#1a1b26', mantle: '#16161e', crust: '#13131a',
-    surface0: '#24283b', surface1: '#292e42', overlay0: '#565f89',
+    bg: '#0e0e16', mantle: '#10101a', crust: '#0a0a12',
+    surface0: '#1f2335', surface1: '#292e42', line: '#3b4261',
+    overlay0: '#565f89',
     text: '#c0caf5', subtext0: '#a9b1d6', muted: '#565f89',
     red: '#f7768e', peach: '#ff9e64', yellow: '#e0af68', green: '#9ece6a',
     teal: '#73daca', sky: '#7dcfff', blue: '#7aa2f7', mauve: '#bb9af7',
@@ -98,7 +102,7 @@ const tokyoNight = (() => {
     role: roles(p, {
       bg: 'bg', mantle: 'mantle', crust: 'crust', surface: 'surface0',
       surfaceAlt: 'surface1', overlay: 'overlay0', text: 'text',
-      subtext: 'subtext0', muted: 'muted', border: 'surface1',
+      subtext: 'subtext0', muted: 'muted', border: 'line',
       accent: 'blue', accent2: 'mauve', success: 'green', error: 'red',
       warning: 'yellow', info: 'sky',
     }),
@@ -195,7 +199,9 @@ export const THEMES = {
   'rose-pine': rosePine,
 };
 
-export const DEFAULT_THEME = 'catppuccin-mocha';
+// Tokyo Night is the desktop's shipped rice (matches the design handoff); the
+// other palettes stay switchable at runtime via `theme <name>` or Settings.
+export const DEFAULT_THEME = 'tokyo-night';
 
 /** Ordered list for launcher/settings dropdowns. */
 export const THEME_LIST = Object.values(THEMES).map((t) => ({ id: t.id, label: t.label }));
