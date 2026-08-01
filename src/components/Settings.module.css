@@ -57,22 +57,28 @@
 
 .wallpaperThumb {
     position: relative;
+    display: block;
+    width: 100%;
+    padding: 0 0 56.25%; /* 16:9 ratio */
     border-radius: 6px;
     overflow: hidden;
-    cursor: default;
+    cursor: pointer;
     border: 2px solid transparent;
-    padding-bottom: 56.25%; /* 16:9 ratio */
+    background-color: var(--hypr-crust, #11111b);
     background-size: cover;
     background-position: center;
     transition: border-color 0.2s, transform 0.2s;
 }
 
-.wallpaperThumb:hover {
+.wallpaperThumb:hover,
+.wallpaperThumb:focus-visible {
     transform: scale(1.05);
+    outline: none;
+    border-color: color-mix(in srgb, var(--hypr-accent, #7aa2f7) 60%, transparent);
 }
 
 .activeWallpaper {
-    border-color: #0078d4;
+    border-color: var(--hypr-accent, #7aa2f7);
 }
 
 .wpLabel {

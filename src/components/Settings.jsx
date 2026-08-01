@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useTheme } from '../theme/themeContext';
 import { THEME_LIST } from '../theme/themes';
 import { getPerf, setPerf } from '../theme/perf';
+import { WALLPAPERS, wallpaperUrl } from '../data/wallpapers';
 import styles from './Settings.module.css';
 
 export default function Settings({ setWallpaper, currentWallpaper }) {
@@ -17,16 +18,8 @@ export default function Settings({ setWallpaper, currentWallpaper }) {
         });
     };
 
-    const wallpapers = [
-        { id: 1, name: 'Glitch/Broken', url: 'https://images.unsplash.com/photo-1496247749665-49cf5b1022e9?q=80&w=2073&auto=format&fit=crop' },
-        { id: 2, name: 'Cyberpunk', url: 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?q=80&w=2070&auto=format&fit=crop' },
-        { id: 3, name: 'Vaporwave', url: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=2071&auto=format&fit=crop' },
-        { id: 4, name: 'Nebula', url: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop' },
-        { id: 5, name: 'Matrix', url: 'https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2070&auto=format&fit=crop' },
-        { id: 6, name: 'Yosemite', url: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=2070&auto=format&fit=crop' },
-        { id: 7, name: 'Pacific', url: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=2073&auto=format&fit=crop' },
-        { id: 8, name: 'Everest', url: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=2070&auto=format&fit=crop' }
-    ];
+    // The twenty bundled rice wallpapers (see src/data/wallpapers.js).
+    const wallpapers = WALLPAPERS;
 
     return (
         <div className={styles.settingsContainer}>
@@ -137,17 +130,22 @@ export default function Settings({ setWallpaper, currentWallpaper }) {
                         </div>
 
                         <div className={styles.title}>Desktop Wallpaper</div>
-                        <p style={{ fontSize: '14px', color: '#ccc' }}>Select an image to update the desktop background:</p>
+                        <p style={{ fontSize: '14px', color: 'var(--hypr-subtext, #ccc)' }}>
+                            Twenty bundled rice wallpapers — also settable from the terminal with <code>wallpaper &lt;name&gt;</code>:
+                        </p>
                         <div className={styles.wallpaperGrid}>
                             {wallpapers.map((wp) => (
-                                <div 
+                                <button
                                     key={wp.id}
+                                    type="button"
+                                    aria-label={`${wp.name} — ${wp.palette}`}
+                                    aria-pressed={currentWallpaper === wp.id}
                                     className={`${styles.wallpaperThumb} ${currentWallpaper === wp.id ? styles.activeWallpaper : ''}`}
-                                    style={{ backgroundImage: `url(${wp.url})` }}
+                                    style={{ backgroundImage: `url(${wallpaperUrl(wp.id)})` }}
                                     onClick={() => setWallpaper(wp.id)}
                                 >
-                                    <div className={styles.wpLabel}>{wp.name}</div>
-                                </div>
+                                    <span className={styles.wpLabel}>{wp.name}</span>
+                                </button>
                             ))}
                         </div>
                     </div>
