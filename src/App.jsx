@@ -219,8 +219,13 @@ export default function App() {
       <EmptyHint visible={wm.openIds.length === 0} />
       <Overview open={wm.overview} count={wm.openIds.length} onExit={() => wm.setOverview(false)} />
 
-      {wm.openIds.map((id, idx) => {
+      {/* Every non-minimized window stays mounted; off-workspace ones are
+          hidden so their app state (terminal scrollback, scroll position,
+          half-typed input) survives a workspace switch. */}
+      {wm.mountedIds.map((id) => {
         const win = wm.windows[id];
+        const onActiveWs = win.ws === wm.activeWorkspace;
+        const idx = wm.openIds.indexOf(id);
         const def = RICE_APPS[win.app];
         const rect = wm.geometry[id];
         const ov = overviewRects?.[id];
@@ -233,10 +238,11 @@ export default function App() {
               zIndex={wm.tiling ? (id === wm.focusedId ? 120 : 100) : 100 + win.z}
               isActive={id === wm.focusedId}
               isTerminal={win.app === 'terminal'}
+              hidden={!onActiveWs}
               isDragging={wm.drag.id === id}
               animated={wm.animated}
               floating={!wm.tiling && !wm.overview}
-              overviewStyle={ov && {
+              overviewStyle={onActiveWs && ov && {
                 left: ov.left, top: ov.top, width: ov.w, height: ov.h,
                 transform: `scale(${ov.scale})`, transformOrigin: '0 0',
                 zIndex: 200 + idx,
