@@ -5,6 +5,13 @@ import { WORKSPACES, initialState, wmReducer } from './wmReducer';
 export const WAYBAR_H = 40;
 export { WORKSPACES };
 
+/** Find a split node by its stable id. */
+function findSplit(node, sid) {
+  if (!node || node.id != null) return null;
+  if (node.sid === sid) return node;
+  return findSplit(node.children[0], sid) || findSplit(node.children[1], sid);
+}
+
 /**
  * Hyprland window manager: BSP tiling per workspace, a floating mode, and the
  * four live pointer gestures (move, resize, title-bar swap, divider drag).
@@ -51,6 +58,8 @@ export function useRiceWM(appDefs) {
   // Mirrors so the once-registered global listeners always read fresh values.
   const live = useRef({ rects, drag, ws: state.activeWorkspace });
   live.current = { rects, drag, ws: state.activeWorkspace };
+  const treeRef = useRef(tree);
+  treeRef.current = tree;
 
   // ── actions ──────────────────────────────────────────────────────────────
   const openApp = useCallback(
@@ -112,6 +121,13 @@ export function useRiceWM(appDefs) {
     e.preventDefault();
     actionRef.current = { type: 'divider', sid: divider.sid, dir: divider.dir, prect: divider.prect };
     bumpFrame((n) => n + 1);
+  }, []);
+
+  /** Keyboard resize: shift a split's ratio by `delta` (arrow keys on a divider). */
+  const nudgeDivider = useCallback((divider, delta) => {
+    const node = findSplit(treeRef.current, divider.sid);
+    if (!node) return;
+    dispatch({ type: 'setRatio', sid: divider.sid, ratio: node.ratio + delta, ws: live.current.ws });
   }, []);
 
   // ── global gesture listeners (registered once) ───────────────────────────
@@ -223,6 +239,6 @@ export function useRiceWM(appDefs) {
     animated: !actionRef.current,
     openApp, closeWindow, minimizeWindow, focusWindow,
     toggleLayout, switchWorkspace, moveToWorkspace, cycleFocus,
-    startMove, startResize, startTileDrag, startDivider,
+    startMove, startResize, startTileDrag, startDivider, nudgeDivider,
   };
 }

@@ -251,7 +251,7 @@ export default function App() {
       })}
 
       {wm.tiling && !wm.overview && (
-        <Dividers dividers={wm.dividers} onDragStart={wm.startDivider} />
+        <Dividers dividers={wm.dividers} onDragStart={wm.startDivider} onNudge={wm.nudgeDivider} />
       )}
       {!wm.overview && <SwapTarget rect={swapRect} />}
       {dragWin && (
