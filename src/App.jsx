@@ -116,6 +116,7 @@ export default function App() {
     terminal: () => wm.openApp('terminal'),
     closeActive: () => wm.focusedId && wm.closeWindow(wm.focusedId),
     toggleFloat: () => wm.toggleLayout(),
+    minimize: () => wm.focusedId && wm.minimizeWindow(wm.focusedId),
     focusNext: () => wm.cycleFocus(1),
     focusPrev: () => wm.cycleFocus(-1),
     workspace: (n) => wm.switchWorkspace(n),

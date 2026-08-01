@@ -49,6 +49,7 @@ export function useKeybindings(handlers, { enabled = true } = {}) {
         k: 'focusPrev',
         h: 'workspacePrev',
         l: 'workspaceNext',
+        m: 'minimize',
         p: 'screenshot',
         ' ': 'toggleFloat',
         Enter: 'terminal',
