@@ -15,6 +15,10 @@ dist-ssr
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
+
+# Claude Code: share the dev-server launch config, keep local settings out
+.claude/*
+!.claude/launch.json
 .idea
 .DS_Store
 *.suo
