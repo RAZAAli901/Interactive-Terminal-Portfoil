@@ -114,6 +114,12 @@ src/
 The tiling engine and the reducer are pure and fully unit-tested — the geometry is verified to
 never overlap and to keep exact gaps for any window count.
 
+## 📚 Docs
+
+- [Rice release notes](docs/rice-release-notes.md) — a guided tour of what to try first.
+- [Design parity](docs/design-parity.md) — the handoff spec mapped to the implementation.
+- [Revamp plan](docs/hyprland-revamp-plan.md) — how the desktop got here.
+
 ## 🤝 Contributing
 
 Contributions, issues and feature requests are welcome — see the
