@@ -59,7 +59,7 @@ describe('App smoke', () => {
     renderApp();
     await bootToDesktop();
 
-    expect(screen.getAllByRole('tab')).toHaveLength(5);
+    expect(screen.getAllByRole('button', { name: /^Workspace \d$/ })).toHaveLength(5);
     expect(screen.getByLabelText('Launch kitty')).toBeInTheDocument();
     expect(screen.getByLabelText('Toggle window overview')).toBeInTheDocument();
   });

@@ -8,46 +8,46 @@ const STATS = { cpu: 42, ram: 71, temp: 55, net: '1.2M', volume: 30, battery: 88
 describe('<TopBar> workspaces', () => {
   it('renders one tab per workspace inside a labelled tablist', () => {
     render(<TopBar />);
-    const list = screen.getByRole('tablist', { name: 'Workspaces' });
-    expect(within(list).getAllByRole('tab')).toHaveLength(5);
-    expect(within(list).getByRole('tab', { name: 'Workspace 4' })).toBeInTheDocument();
+    const list = screen.getByRole('group', { name: 'Workspaces' });
+    expect(within(list).getAllByRole('button', { name: /^Workspace \d$/ })).toHaveLength(5);
+    expect(within(list).getByRole('button', { name: 'Workspace 4' })).toBeInTheDocument();
   });
 
-  it('marks exactly the active workspace as selected', () => {
+  it('marks exactly the active workspace as pressed', () => {
     render(<TopBar activeWorkspace={3} />);
-    const selected = screen.getAllByRole('tab', { selected: true });
-    expect(selected).toHaveLength(1);
-    expect(selected[0]).toHaveAccessibleName('Workspace 3');
+    const pressed = screen.getAllByRole('button', { pressed: true, name: /^Workspace \d$/ });
+    expect(pressed).toHaveLength(1);
+    expect(pressed[0]).toHaveAccessibleName('Workspace 3');
   });
 
-  it('moves aria-selected when the active workspace changes', () => {
+  it('moves the pressed state when the active workspace changes', () => {
     const { rerender } = render(<TopBar activeWorkspace={1} />);
-    expect(screen.getByRole('tab', { name: 'Workspace 1' })).toHaveAttribute('aria-selected', 'true');
+    expect(screen.getByRole('button', { name: 'Workspace 1' })).toHaveAttribute('aria-pressed', 'true');
 
     rerender(<TopBar activeWorkspace={5} />);
-    expect(screen.getByRole('tab', { name: 'Workspace 1' })).toHaveAttribute('aria-selected', 'false');
-    expect(screen.getByRole('tab', { name: 'Workspace 5' })).toHaveAttribute('aria-selected', 'true');
+    expect(screen.getByRole('button', { name: 'Workspace 1' })).toHaveAttribute('aria-pressed', 'false');
+    expect(screen.getByRole('button', { name: 'Workspace 5' })).toHaveAttribute('aria-pressed', 'true');
   });
 
   it('reports the clicked workspace number', () => {
     const onWorkspace = vi.fn();
     render(<TopBar activeWorkspace={1} onWorkspace={onWorkspace} />);
 
-    fireEvent.click(screen.getByRole('tab', { name: 'Workspace 4' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Workspace 4' }));
     expect(onWorkspace).toHaveBeenCalledWith(4);
   });
 
   it('flags occupied workspaces without selecting them', () => {
     render(<TopBar activeWorkspace={1} occupied={new Set([2])} />);
-    const ws2 = screen.getByRole('tab', { name: 'Workspace 2' });
+    const ws2 = screen.getByRole('button', { name: 'Workspace 2' });
     expect(ws2.className).toMatch(/occupied/);
-    expect(ws2).toHaveAttribute('aria-selected', 'false');
+    expect(ws2).toHaveAttribute('aria-pressed', 'false');
   });
 });
 
 describe('<TopBar> workspace wheel', () => {
   const wheel = (deltaY) => {
-    fireEvent.wheel(screen.getByRole('tablist', { name: 'Workspaces' }), { deltaY });
+    fireEvent.wheel(screen.getByRole('group', { name: 'Workspaces' }), { deltaY });
   };
 
   it('steps forward on a downward wheel', () => {
