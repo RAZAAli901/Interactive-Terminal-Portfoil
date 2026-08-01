@@ -47,7 +47,15 @@ export default function Launcher({ isOpen, onLaunch, onClose }) {
 
   return (
     <div className={styles.overlay} onMouseDown={onClose} role="presentation">
-      <div ref={panelRef} className={styles.panel} onMouseDown={(e) => e.stopPropagation()} role="dialog" aria-modal="true" aria-label="Application launcher">
+      <div
+        ref={panelRef}
+        className={styles.panel}
+        onMouseDown={(e) => e.stopPropagation()}
+        onKeyDown={onKeyDown}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Application launcher"
+      >
         <div className={styles.searchRow}>
           <span className={styles.searchIcon} aria-hidden="true">⌕</span>
           <input
@@ -55,9 +63,13 @@ export default function Launcher({ isOpen, onLaunch, onClose }) {
             className={styles.search}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            onKeyDown={onKeyDown}
             placeholder="Search applications…"
             aria-label="Search applications"
+            role="combobox"
+            aria-expanded="true"
+            aria-controls="launcher-results"
+            aria-autocomplete="list"
+            aria-activedescendant={results[sel] ? `launcher-opt-${results[sel].id}` : undefined}
           />
         </div>
         <div className={styles.hintbar} aria-hidden="true">
@@ -66,11 +78,12 @@ export default function Launcher({ isOpen, onLaunch, onClose }) {
           <span>esc close</span>
           <span className={styles.count}>{results.length} apps</span>
         </div>
-        <div className={styles.list} role="listbox">
+        <div className={styles.list} id="launcher-results" role="listbox" aria-label="Applications">
           {results.length === 0 && <div className={styles.empty}>No matching applications</div>}
           {results.map((app, i) => (
             <div
               key={app.id}
+              id={`launcher-opt-${app.id}`}
               role="option"
               aria-selected={i === sel}
               className={`${styles.row} ${i === sel ? styles.selected : ''}`}
