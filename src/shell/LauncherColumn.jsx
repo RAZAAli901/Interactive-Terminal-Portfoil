@@ -30,7 +30,7 @@ export default function LauncherColumn({ onLaunch }) {
           onClick={() => onLaunch?.(item.app)}
         >
           <span
-            className={`${styles.tile} ${item.mono ? styles.mono : ''} ${item.italic ? styles.italic : ''}`}
+            className={[styles.tile, item.mono && styles.mono, item.italic && styles.italic].filter(Boolean).join(' ')}
             style={{ color: item.color, fontSize: `${item.size}px` }}
             aria-hidden="true"
           >
