@@ -261,6 +261,11 @@ export default function Terminal({ setTheme, setWallpaper, initialCommand, setIn
                     setTheme(output.theme);
                     setHistory(prev => [...prev, { command: input, output: { type: 'text', content: [formatSuccess(`Theme switched to '${output.theme}'.`)] } }]);
                 }
+            } else if (output.action === 'wallpaper') {
+                if (setWallpaper) {
+                    setWallpaper(output.wallpaper);
+                    setHistory(prev => [...prev, { command: input, output: { type: 'text', content: [formatSuccess(`Wallpaper set to '${output.wallpaper}'.`)] } }]);
+                }
             } else if (output.action === 'cd') {
                 setCurrentPath(output.path);
                 setHistory(prev => [...prev, { command: input, output: { type: 'text', content: [`Directory changed to: ${output.path}`] } }]);
