@@ -61,7 +61,7 @@ export default function TopBar({
       <div className={styles.left}>
         <div
           className={styles.workspaces}
-          role="tablist"
+          role="group"
           aria-label="Workspaces"
           onWheel={(e) => {
             const next = clampWs(activeWorkspace + (e.deltaY > 0 ? 1 : -1));
@@ -74,8 +74,7 @@ export default function TopBar({
             <button
               key={n}
               type="button"
-              role="tab"
-              aria-selected={n === activeWorkspace}
+              aria-pressed={n === activeWorkspace}
               aria-label={`Workspace ${n}`}
               title={`Workspace ${n}`}
               className={[
