@@ -13,6 +13,6 @@
 <polygon points="960,318 1218,762 702,762" fill="url(#fill)"/>
 <polygon points="960,318 1218,762 702,762" fill="none" stroke="url(#edge)" stroke-width="9" opacity=".45" filter="url(#gb)"/>
 <polygon points="960,318 1218,762 702,762" fill="none" stroke="url(#edge)" stroke-width="3" opacity=".8" stroke-linejoin="round"/>
-<polygon points="960,516 1088,762 832,762" fill="none" stroke="#7dcfff" stroke-width="1.4" opacity=".22" stroke-linejoin="round"/>
+<polygon points="960,516 1088,762 832,762" fill="none" stroke="#7dcfff" stroke-width="1.6" opacity=".3" stroke-linejoin="round"/>
 <rect width="1920" height="1080" fill="url(#v)"/>
 </svg>

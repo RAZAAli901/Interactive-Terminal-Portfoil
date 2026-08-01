@@ -1,9 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice">
 <defs>
-<linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#191d26"/><stop offset="0.55" stop-color="#242933"/><stop offset="1" stop-color="#2e3440"/></linearGradient>
-<linearGradient id="r1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a3be8c" stop-opacity="0"/><stop offset="0.45" stop-color="#a3be8c" stop-opacity=".5"/><stop offset="1" stop-color="#88c0d0" stop-opacity="0"/></linearGradient>
-<linearGradient id="r2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#88c0d0" stop-opacity="0"/><stop offset="0.4" stop-color="#81a1c1" stop-opacity=".44"/><stop offset="1" stop-color="#b48ead" stop-opacity="0"/></linearGradient>
-<linearGradient id="r3" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b48ead" stop-opacity="0"/><stop offset="0.5" stop-color="#8fbcbb" stop-opacity=".4"/><stop offset="1" stop-color="#5e81ac" stop-opacity="0"/></linearGradient>
+<linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0f1219"/><stop offset="0.55" stop-color="#1a1e28"/><stop offset="1" stop-color="#252b36"/></linearGradient>
+<linearGradient id="r1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a3be8c" stop-opacity="0"/><stop offset="0.45" stop-color="#a3be8c" stop-opacity=".42"/><stop offset="1" stop-color="#88c0d0" stop-opacity="0"/></linearGradient>
+<linearGradient id="r2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#88c0d0" stop-opacity="0"/><stop offset="0.4" stop-color="#81a1c1" stop-opacity=".36"/><stop offset="1" stop-color="#b48ead" stop-opacity="0"/></linearGradient>
+<linearGradient id="r3" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b48ead" stop-opacity="0"/><stop offset="0.5" stop-color="#8fbcbb" stop-opacity=".32"/><stop offset="1" stop-color="#5e81ac" stop-opacity="0"/></linearGradient>
 <filter id="ab" x="-10%" y="-40%" width="120%" height="200%"><feGaussianBlur stdDeviation="26"/></filter>
 <radialGradient id="ground"><stop offset="0" stop-color="#88c0d0" stop-opacity="0.12"/><stop offset=".5" stop-color="#88c0d0" stop-opacity="0.036"/><stop offset="1" stop-color="#88c0d0" stop-opacity="0"/></radialGradient>
 <radialGradient id="v" cx=".5" cy=".5" r=".78"><stop offset="0.45" stop-color="#242933" stop-opacity="0"/><stop offset="1" stop-color="#0f1219" stop-opacity="0.66"/></radialGradient>
