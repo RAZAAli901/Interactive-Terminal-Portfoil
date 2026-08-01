@@ -1,0 +1,115 @@
+.root {
+  min-height: 100%;
+  padding: 18px 20px;
+  /* Semi-transparent tint over the window glass (design: rgba(26,27,38,0.32)). */
+  background: color-mix(in srgb, var(--hypr-mantle, #1a1b26) 32%, transparent);
+  font-family: var(--hypr-font-ui, 'Inter', system-ui, sans-serif);
+  color: var(--hypr-text, #c0caf5);
+}
+
+.prompt {
+  margin-bottom: 14px;
+  font-family: var(--hypr-font-mono, 'JetBrains Mono', monospace);
+  font-size: 12px;
+  color: var(--hypr-muted, #565f89);
+}
+
+.note {
+  color: color-mix(in srgb, var(--hypr-accent, #7aa2f7) 40%, transparent);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.card {
+  display: block;
+  width: 100%;
+  padding: 14px 16px;
+  text-align: left;
+  border: 1px solid color-mix(in srgb, var(--hypr-accent, #7aa2f7) 14%, transparent);
+  border-left: 3px solid var(--proj-color, var(--hypr-accent, #7aa2f7));
+  border-radius: 9px;
+  background: color-mix(in srgb, var(--hypr-surface, #1f2335) 55%, transparent);
+  color: var(--hypr-text, #c0caf5);
+  font-family: inherit;
+  cursor: pointer;
+  transition:
+    background var(--hypr-dur-fast, 160ms) var(--hypr-ease-out, ease),
+    border-color var(--hypr-dur-fast, 160ms) var(--hypr-ease-out, ease),
+    transform var(--hypr-dur-fast, 160ms) var(--hypr-ease-out, ease);
+}
+
+.card:hover {
+  background: color-mix(in srgb, var(--hypr-surface-alt, #24283b) 80%, transparent);
+  border-left-color: var(--hypr-info, #7dcfff);
+  transform: translateY(-2px);
+}
+
+.card:focus-visible {
+  outline: 2px solid var(--hypr-accent, #7aa2f7);
+  outline-offset: 2px;
+}
+
+.card:active {
+  transform: translateY(0);
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--hypr-font-mono, 'JetBrains Mono', monospace);
+  font-size: 14px;
+  color: var(--hypr-info, #7dcfff);
+}
+
+.diamond {
+  color: var(--proj-color, var(--hypr-accent, #7aa2f7));
+}
+
+.desc {
+  display: block;
+  margin: 7px 0 10px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--hypr-subtext, #a9b1d6);
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tag {
+  padding: 2px 9px;
+  border: 1px solid color-mix(in srgb, var(--hypr-accent, #7aa2f7) 14%, transparent);
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--hypr-crust, #0e0e16) 50%, transparent);
+  font-family: var(--hypr-font-mono, 'JetBrains Mono', monospace);
+  font-size: 11px;
+  line-height: 1.6;
+  color: var(--hypr-muted, #565f89);
+}
+
+@media (max-width: 480px) {
+  .root { padding: 16px 14px; }
+  .card { padding: 12px 13px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card { transition: none; }
+  .card:hover, .card:active { transform: none; }
+}
+
+/* Low-power mode: the global token rule kills blur/transitions but not the
+   hover lift, and the translucent fills get flattened here. */
+:root[data-perf="low"] .root { background: var(--hypr-mantle, #1a1b26); }
+:root[data-perf="low"] .card { background: var(--hypr-surface, #1f2335); }
+:root[data-perf="low"] .card:hover { transform: none; }
