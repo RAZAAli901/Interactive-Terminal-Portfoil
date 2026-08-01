@@ -2,9 +2,9 @@ import { describe, it, expect } from 'vitest';
 import { THEMES, DEFAULT_THEME, getTheme, toCssVars } from '../theme/themes';
 
 describe('themes', () => {
-  it('has a valid default theme', () => {
+  it('defaults to the Tokyo Night rice', () => {
     expect(THEMES[DEFAULT_THEME]).toBeDefined();
-    expect(DEFAULT_THEME).toBe('catppuccin-mocha');
+    expect(DEFAULT_THEME).toBe('tokyo-night');
   });
 
   it('getTheme falls back to the default for unknown ids', () => {
