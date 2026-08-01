@@ -2,12 +2,14 @@
 
 <p align="center">
   <a href="https://razaali901.github.io/Interactive-Terminal-Portfoil/" target="_blank">
-    <img src="https://img.shields.io/badge/LAUNCH_PORTFOLIO-Arch_%2B_Hyprland-cba6f7?style=for-the-badge&logo=archlinux&logoColor=white" height="45">
+    <img src="https://img.shields.io/badge/LAUNCH_PORTFOLIO-Arch_%2B_Hyprland-7aa2f7?style=for-the-badge&logo=archlinux&logoColor=white" height="45">
   </a>
 </p>
 
 <p align="center">
-  <i>A ricer-grade Arch Linux + Hyprland desktop, recreated in the browser — dwindle tiling, waybar, wofi launcher, a full boot sequence, and a kitty terminal shell.</i>
+  <i>A Tokyo Night Linux rice, rebuilt in the browser — BSP dwindle tiling, a waybar, a wofi
+  launcher, a hyprexpo window overview, an animated neural-network wallpaper, and a real
+  interactive kitty shell.</i>
 </p>
 
 ---
@@ -15,28 +17,71 @@
 ## 📸 Screenshots
 *(Add screenshots here)*
 - `Boot` — fake BIOS/POST → systemd log → SDDM login.
-- `Desktop` — Catppuccin desktop with waybar, dwindle-tiled windows and animated gradient borders.
-- `Launcher` — wofi-style fuzzy app launcher (`Super+D`).
-- `Terminal` — kitty running a fastfetch landing card.
+- `Desktop` — dwindle-tiled glass windows over the neural-network canvas.
+- `Overview` — every window scaled into a grid (`Ctrl+\``).
+- `Terminal` — kitty with the neofetch landing card.
 
 ## ✨ Features
 
-- **Full boot experience**: fake BIOS/POST, streaming systemd `[ OK ]` log, and an SDDM-style login before the Hyprland startup fade. Every stage is skippable.
-- **Hyprland window manager**: dwindle **tiling** across **5 workspaces**, a **floating** toggle, animated **gradient focus borders**, blur, gaps, rounded corners, and scale/fade **spawn animations**.
-- **Waybar**: Arch launcher, workspace pills, focused-window title, live CPU/RAM/temp/network telemetry, clock and power menu.
-- **Wofi launcher**: fuzzy-searchable app grid (`Super+D`).
-- **Super-key bindings**: `Super+D` launcher · `Super+Return` terminal · `Super+Q` close · `Super+Space` float · `Super+1-5` workspace · `Super+Shift+1-5` move · `Super+Esc` power · `Super+/` cheatsheet.
-- **Runtime theming**: Catppuccin Mocha/Latte, Tokyo Night, Gruvbox, Nord and Dracula — switch live with `theme <name>`.
-- **kitty terminal**: full command shell with auto-complete, history, a `fastfetch` profile card, an AI/RAG query parser, and live GitHub API stats.
-- **Curated Linux apps**: Files (thunar), Firefox, VS Code, Image Viewer, Settings, Calculator, Clocks, plus games behind the launcher.
-- **Responsive & accessible**: focused terminal experience on mobile, `prefers-reduced-motion` support, and full keyboard operation.
+### Window manager
+- **BSP dwindle tiling** — a real binary-space-partition tree, not a fixed grid. Each new window
+  splits the focused pane along its longer axis, producing the classic dwindle cascade.
+- **Drag a gap to resize** — every split renders a 12px grab strip; dragging live-updates that
+  node's ratio (clamped 0.12–0.88).
+- **Drag a title bar to swap** — a ghost chip follows the cursor and the pane underneath is
+  outlined; releasing exchanges the two windows in the tree.
+- **Floating mode** — toggle to free-drag and corner-resize windows; switching back re-tiles them.
+- **Five workspaces**, each with its own independent tree.
+- **Window overview** (hyprexpo) — every window scaled into a grid, click to focus.
+
+### Desktop shell
+- **Top bar** — workspace pills, overview button, layout toggle, clock, and live CPU / RAM / temp /
+  network / volume / battery pills.
+- **Dock** — a pill per open window, including minimized ones.
+- **Launcher column** + a **wofi-style fuzzy search launcher** (`Super+D`).
+- **Neural-network wallpaper** — a DPR-aware canvas of drifting nodes linked by accent-coloured
+  edges, driven by `requestAnimationFrame`.
+- **20 bundled wallpapers** — original SVG rice art across Tokyo Night, Catppuccin, Gruvbox, Nord,
+  Everforest, Rosé Pine, Dracula and minimal/terminal styles.
+- **7 runtime colorschemes** — switch live with `theme <name>` or from Settings.
+
+### Apps
+`kitty` (interactive shell) · `Files` · `Firefox` (renders the real GitHub repos) · `Code`
+(VS Code look) · `about.md` · `projects` · plus Settings, Calculator, Clocks, Image Viewer,
+Discord and games behind the search launcher.
+
+### Terminal
+A real command shell — auto-complete, history, an AI/RAG query parser, live GitHub API stats, and
+a simulated filesystem. Linux commands included: `fastfetch`, `hyprctl`, `htop`, `cava`, `pacman`,
+`uname`, `uptime`, `free`, `df`, `sensors`, `ip`, `systemctl`, `wallpaper`/`swww`.
+
+## ⌨️ Keybindings
+
+| Keys | Action |
+| :--- | :--- |
+| `Ctrl + Q` | New terminal — becomes the overview once you have windows tiled |
+| `Ctrl + \`` | Toggle window overview |
+| `Esc` | Exit overview |
+| `Super + D` | Open the search launcher |
+| `Super + Return` | Open a terminal |
+| `Super + Q` | Close the focused window |
+| `Super + J` / `K` | Cycle window focus |
+| `Super + Space` | Toggle dwindle / floating |
+| `Super + 1…5` | Switch workspace |
+| `Super + Shift + 1…5` | Move window to workspace |
+| `Super + H` / `L` | Previous / next workspace |
+| `Super + Esc` | Power menu |
+| `Super + /` | Keybind cheatsheet |
+
+> `Super` is the `⌘` / Windows key (Alt works as a fallback).
+> **Mouse:** drag a gap to resize · drag a title bar to swap two windows.
 
 ## 🛠️ Technology Stack
 
 - **Core**: React 19, JavaScript (ES6+), CSS Modules
-- **Animation**: anime.js (draggable + physics), CSS keyframes with Hyprland easing curves
 - **Build**: Vite (rolldown), Tailwind CSS 4
 - **Testing**: Vitest, React Testing Library
+- **Type**: JetBrains Mono + Inter
 - **Deployment**: GitHub Pages / Vercel
 
 ## 🚀 Quick Setup
@@ -50,40 +95,28 @@ npm run build    # production build
 npm run test     # run the test suite
 ```
 
-## ⌨️ Keybindings
+## 🧱 Architecture
 
-| Keys | Action |
-| :--- | :--- |
-| `Super + D` | Open the app launcher |
-| `Super + Return` | Open a terminal |
-| `Super + Q` | Close the focused window |
-| `Super + Space` | Toggle floating / tiled |
-| `Super + 1…5` | Switch workspace |
-| `Super + Shift + 1…5` | Move window to workspace |
-| `Super + Esc` | Power menu |
-| `Super + /` | Keybind cheatsheet |
+```
+src/
+  layout/bsp.js      pure BSP tiling engine (split, insert, remove, swap, layout)
+  wm/                wmReducer (per-workspace trees) · useRiceWM (gestures) · WindowFrame
+  shell/             TopBar · Dock · Overview · LauncherColumn · Launcher · NeuralCanvas
+  apps/              Neofetch · About · Projects · Files · Code · Browser · Power
+  boot/  login/      BIOS → systemd → SDDM
+  theme/             7 palettes, design tokens, low-power mode
+  data/              projects, wallpapers manifest
+```
 
-> `Super` is the `⌘` / Windows key (Alt also works as a fallback).
-
-## 🖥️ Terminal Commands
-
-| Command | Description |
-| :--- | :--- |
-| `fastfetch` | Arch-logo system-info card (aka `neofetch`) |
-| `about` | Info about the developer |
-| `projects` | View portfolio projects |
-| `skills` | ASCII bar chart of core skills |
-| `theme [name]` | Switch palette (`catppuccin-mocha`, `tokyo-night`, `gruvbox`, `nord`, `dracula`, …) |
-| `wallpaper [1-12]` | Change the desktop background |
-| `ask [query]` | Query the integrated AI assistant |
-| `github` | Fetch live repository stats over the GitHub API |
-| `sudo` | Elevate session to admin mode |
-| `clear` | Clear the terminal screen |
+The tiling engine and the reducer are pure and fully unit-tested — the geometry is verified to
+never overlap and to keep exact gaps for any window count.
 
 ## 🤝 Contributing
 
-Contributions, issues, and feature requests are welcome — see the [issues page](https://github.com/RAZAAli901/Interactive-Terminal-Portfoil/issues).
+Contributions, issues and feature requests are welcome — see the
+[issues page](https://github.com/RAZAAli901/Interactive-Terminal-Portfoil/issues).
 
 ## 📝 License
 
-Open-source under the [MIT License](LICENSE).
+Open-source under the [MIT License](LICENSE). The bundled wallpapers are original artwork created
+for this project.
