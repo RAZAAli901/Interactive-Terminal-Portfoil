@@ -14,22 +14,22 @@ export const WALLPAPERS = [
   { id: 'tokyo-night-skyline', name: 'Night Skyline', palette: 'Tokyo Night', file: 'tokyo-night-skyline.svg' },
   { id: 'tokyo-night-grid', name: 'Neon Grid', palette: 'Tokyo Night', file: 'tokyo-night-grid.svg' },
   { id: 'tokyo-night-stars', name: 'Starfield', palette: 'Tokyo Night', file: 'tokyo-night-stars.svg' },
-  { id: 'catppuccin-mesh', name: 'Mesh', palette: 'Catppuccin Mocha', file: 'catppuccin-mesh.svg' },
-  { id: 'catppuccin-peaks', name: 'Peaks', palette: 'Catppuccin Mocha', file: 'catppuccin-peaks.svg' },
+  { id: 'catppuccin-mesh', name: 'Gradient Mesh', palette: 'Catppuccin Mocha', file: 'catppuccin-mesh.svg' },
+  { id: 'catppuccin-peaks', name: 'Moonlit Peaks', palette: 'Catppuccin Mocha', file: 'catppuccin-peaks.svg' },
   { id: 'gruvbox-sun', name: 'Retro Sun', palette: 'Gruvbox', file: 'gruvbox-sun.svg' },
   { id: 'gruvbox-dunes', name: 'Dunes', palette: 'Gruvbox', file: 'gruvbox-dunes.svg' },
   { id: 'nord-aurora', name: 'Aurora', palette: 'Nord', file: 'nord-aurora.svg' },
   { id: 'nord-peaks', name: 'Arctic Peaks', palette: 'Nord', file: 'nord-peaks.svg' },
   { id: 'everforest-layers', name: 'Forest Layers', palette: 'Everforest', file: 'everforest-layers.svg' },
-  { id: 'everforest-mist', name: 'Mist', palette: 'Everforest', file: 'everforest-mist.svg' },
+  { id: 'everforest-mist', name: 'Valley Mist', palette: 'Everforest', file: 'everforest-mist.svg' },
   { id: 'rose-pine-dawn', name: 'Dawn', palette: 'Rosé Pine', file: 'rose-pine-dawn.svg' },
-  { id: 'rose-pine-waves', name: 'Waves', palette: 'Rosé Pine', file: 'rose-pine-waves.svg' },
+  { id: 'rose-pine-waves', name: 'Muted Waves', palette: 'Rosé Pine', file: 'rose-pine-waves.svg' },
   { id: 'dracula-abstract', name: 'Abstract', palette: 'Dracula', file: 'dracula-abstract.svg' },
-  { id: 'minimal-triangle', name: 'Minimal Arch', palette: 'Minimal', file: 'minimal-triangle.svg' },
+  { id: 'minimal-triangle', name: 'Minimal Triangle', palette: 'Minimal', file: 'minimal-triangle.svg' },
   { id: 'low-poly', name: 'Low Poly', palette: 'Minimal', file: 'low-poly.svg' },
   { id: 'topographic', name: 'Topographic', palette: 'Minimal', file: 'topographic.svg' },
-  { id: 'concentric-arcs', name: 'Concentric', palette: 'Minimal', file: 'concentric-arcs.svg' },
-  { id: 'isometric-grid', name: 'Isometric', palette: 'Minimal', file: 'isometric-grid.svg' },
+  { id: 'concentric-arcs', name: 'Concentric Arcs', palette: 'Minimal', file: 'concentric-arcs.svg' },
+  { id: 'isometric-grid', name: 'Isometric Horizon', palette: 'Minimal', file: 'isometric-grid.svg' },
   { id: 'scanlines', name: 'Scanlines', palette: 'Terminal', file: 'scanlines.svg' },
 ];
 
@@ -38,7 +38,8 @@ export const DEFAULT_WALLPAPER = 'tokyo-night-skyline';
 /** Look up a wallpaper by id, falling back to the default. */
 export function getWallpaper(id) {
   return WALLPAPERS.find((w) => w.id === id)
-    || WALLPAPERS.find((w) => w.id === DEFAULT_WALLPAPER);
+    || WALLPAPERS.find((w) => w.id === DEFAULT_WALLPAPER)
+    || WALLPAPERS[0];
 }
 
 /**
@@ -46,6 +47,7 @@ export function getWallpaper(id) {
  * working when the site is served from a GitHub Pages sub-path.
  */
 export function wallpaperUrl(id) {
-  const base = import.meta.env?.BASE_URL ?? '/';
-  return `${base}wallpapers/${getWallpaper(id).file}`;
+  const base = import.meta.env?.BASE_URL || '/';
+  const prefix = base.endsWith('/') ? base : `${base}/`;
+  return `${prefix}wallpapers/${getWallpaper(id).file}`;
 }
