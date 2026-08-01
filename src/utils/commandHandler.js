@@ -659,6 +659,31 @@ const sensorsHandler = () => ({ type: 'text', content: [
   'fan1:         1180 RPM',
 ] });
 
+// btop — a snapshot of the TUI resource monitor.
+const btopHandler = () => {
+  const bar = (pct, width = 24, color = '#a6e3a1') => {
+    const filled = Math.round((pct / 100) * width);
+    return `<span style="color:${color}">${'█'.repeat(filled)}</span>`
+      + `<span style="color:#45475a">${'░'.repeat(width - filled)}</span>`;
+  };
+  const cpu = 23; const mem = 41; const swap = 0;
+  const cores = [31, 18, 44, 12, 27, 9, 38, 15];
+  return {
+    type: 'text',
+    content: [
+      '<span style="color:#7aa2f7">┌─ cpu ────────────────────────────────────────┐</span>',
+      `  CPU  ${bar(cpu)} ${cpu}%   AMD Ryzen 9 5900X`,
+      ...cores.map((c, i) => `  core${i}  ${bar(c, 16, '#7dcfff')} ${String(c).padStart(2)}%`),
+      '<span style="color:#7aa2f7">├─ mem ────────────────────────────────────────┤</span>',
+      `  RAM  ${bar(mem, 24, '#bb9af7')} ${mem}%   13.1G / 32.0G`,
+      `  SWP  ${bar(swap, 24, '#f9e2af')} ${swap}%   0B / 8.0G`,
+      '<span style="color:#7aa2f7">└──────────────────────────────────────────────┘</span>',
+      '',
+      formatInfo("A real btop refreshes continuously — run 'htop' for the process table."),
+    ],
+  };
+};
+
 const lsHandler = (args, context) => {
   const isLa = args.includes('-la') || args.includes('-a');
   const pathArg = args.filter(a => !a.startsWith('-'))[0];
@@ -1555,6 +1580,13 @@ export const commands = [
     usage: 'hyprctl [version|monitors|workspaces|clients|activewindow|getoption]',
     examples: ['hyprctl version', 'hyprctl clients', 'hyprctl getoption'],
     handler: hyprctlHandler
+  },
+  {
+    name: 'btop',
+    description: 'Resource monitor with CPU, core and memory gauges',
+    usage: 'btop',
+    examples: ['btop'],
+    handler: btopHandler
   },
   {
     name: 'htop',
