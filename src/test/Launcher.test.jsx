@@ -28,6 +28,14 @@ describe('<Launcher>', () => {
     const input = screen.getByLabelText('Search applications');
     fireEvent.change(input, { target: { value: 'firefox' } });
     fireEvent.keyDown(input, { key: 'Enter' });
-    expect(onLaunch).toHaveBeenCalledWith('firefox');
+    // Searching the exec name resolves to the app's window id.
+    expect(onLaunch).toHaveBeenCalledWith('browser');
+  });
+
+  it('matches on the exec command as well as the title', () => {
+    render(<Launcher isOpen onLaunch={() => {}} onClose={() => {}} />);
+    const input = screen.getByLabelText('Search applications');
+    fireEvent.change(input, { target: { value: 'thunar' } });
+    expect(screen.getByText('Files')).toBeInTheDocument();
   });
 });
