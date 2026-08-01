@@ -93,6 +93,21 @@ export function useRiceWM(appDefs) {
     focusWindow(openIds[((idx === -1 ? 0 : idx) + dir + openIds.length) % openIds.length]);
   }, [openIds, state.focusedId, focusWindow]);
 
+  /**
+   * Toggle the overview. Opening is a no-op with nothing to show, and it closes
+   * itself if the last window is closed while it is open.
+   */
+  const toggleOverview = useCallback((next) => {
+    setOverview((cur) => {
+      const want = typeof next === 'boolean' ? next : !cur;
+      return want && openIds.length === 0 ? false : want;
+    });
+  }, [openIds.length]);
+
+  useEffect(() => {
+    if (overview && openIds.length === 0) setOverview(false);
+  }, [overview, openIds.length]);
+
   // ── gesture starts ───────────────────────────────────────────────────────
   const startMove = useCallback((id, e) => {
     const win = state.windows[id];
@@ -233,7 +248,7 @@ export function useRiceWM(appDefs) {
     tiling,
     tree, rects, dividers, geometry, openIds, occupied, dockWindows,
     area, viewport,
-    overview, setOverview,
+    overview, setOverview: toggleOverview,
     drag,
     // False mid-gesture so window frames drop their transition and track 1:1.
     animated: !actionRef.current,
