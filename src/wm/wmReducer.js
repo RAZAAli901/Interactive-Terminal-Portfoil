@@ -209,7 +209,12 @@ export function wmReducer(state, action) {
     case 'swap': {
       const ws = action.ws ?? state.activeWorkspace;
       if (!action.a || !action.b || action.a === action.b) return state;
-      return { ...state, trees: { ...state.trees, [ws]: swapLeaves(state.trees[ws], action.a, action.b) } };
+      const tree = state.trees[ws];
+      // Both ids must live in THIS tree. Swapping when only one is present would
+      // rename the other's leaf, losing a window and leaving a phantom id behind
+      // — reachable by switching workspace mid-drag.
+      if (!hasLeaf(tree, action.a) || !hasLeaf(tree, action.b)) return state;
+      return { ...state, trees: { ...state.trees, [ws]: swapLeaves(tree, action.a, action.b) } };
     }
 
     default:
