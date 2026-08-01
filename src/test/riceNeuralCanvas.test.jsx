@@ -88,9 +88,13 @@ describe('<NeuralCanvas>', () => {
       ({ container } = render(<NeuralCanvas enabled={false} />));
     }).not.toThrow();
     expect(canvasIn(container)).toBeInTheDocument();
-    // The canvas is still sized, but the draw loop never runs.
+    // The canvas is still sized, and it is explicitly cleared so nothing is
+    // left frozen on screen — but no nodes or links are ever painted.
     expect(ctx.setTransform).toHaveBeenCalled();
-    expect(ctx.clearRect).not.toHaveBeenCalled();
+    expect(ctx.clearRect).toHaveBeenCalledTimes(1);
+    expect(ctx.stroke).not.toHaveBeenCalled();
+    expect(ctx.arc).not.toHaveBeenCalled();
+    expect(ctx.fill).not.toHaveBeenCalled();
   });
 
   it('does not throw and stays still when :root[data-perf="low"] is set', () => {
@@ -100,7 +104,10 @@ describe('<NeuralCanvas>', () => {
       ({ container } = render(<NeuralCanvas />));
     }).not.toThrow();
     expect(canvasIn(container)).toBeInTheDocument();
-    expect(ctx.clearRect).not.toHaveBeenCalled();
+    // Cleared once, then nothing painted.
+    expect(ctx.clearRect).toHaveBeenCalledTimes(1);
+    expect(ctx.stroke).not.toHaveBeenCalled();
+    expect(ctx.arc).not.toHaveBeenCalled();
   });
 
   it('cancels its rAF loop on unmount', () => {
