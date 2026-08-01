@@ -1,0 +1,85 @@
+.dock {
+  position: fixed;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 8000;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 9px;
+  border-radius: 14px;
+  border: 1px solid color-mix(in srgb, var(--hypr-accent, #7aa2f7) 16%, transparent);
+  background: color-mix(in srgb, var(--hypr-crust, #10101a) 70%, transparent);
+  backdrop-filter: blur(var(--hypr-blur, 12px));
+  -webkit-backdrop-filter: blur(var(--hypr-blur, 12px));
+  box-shadow: var(--hypr-shadow);
+  /* Degrade to a scroll strip rather than growing past the viewport. */
+  max-width: min(900px, calc(100vw - 32px));
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.dock::-webkit-scrollbar { display: none; }
+
+.pill {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 12px;
+  border-radius: 9px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--hypr-muted, #565f89);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  line-height: 1.2;
+  cursor: pointer;
+  transition:
+    background var(--hypr-dur-fast, 160ms) var(--hypr-ease-out, ease),
+    border-color var(--hypr-dur-fast, 160ms) var(--hypr-ease-out, ease),
+    color var(--hypr-dur-fast, 160ms) var(--hypr-ease-out, ease);
+}
+
+.pill:hover { filter: brightness(1.2); }
+.pill:focus-visible {
+  outline: 2px solid var(--hypr-accent, #7aa2f7);
+  outline-offset: 2px;
+}
+
+.active {
+  border-color: color-mix(in srgb, var(--hypr-accent, #7aa2f7) 18%, transparent);
+  background: color-mix(in srgb, var(--hypr-surface, #1f2335) 70%, transparent);
+  color: var(--hypr-text, #c0caf5);
+}
+
+/* The focused window gets a brighter rim so the state is not ARIA-only. */
+.focused {
+  border-color: color-mix(in srgb, var(--hypr-accent, #7aa2f7) 45%, transparent);
+}
+
+.minimized {
+  border-color: transparent;
+  background: transparent;
+  color: var(--hypr-muted, #565f89);
+}
+
+.dot {
+  width: 9px;
+  height: 9px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+}
+
+.label {
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pill { transition: none; }
+}
