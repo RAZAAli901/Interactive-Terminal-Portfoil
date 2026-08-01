@@ -79,6 +79,22 @@ export function useRiceWM(appDefs) {
     [rects, area],
   );
 
+  /**
+   * Signature of only the fields the bar and dock actually care about.
+   *
+   * Dragging a floating window rewrites `state.windows` on every pointer move.
+   * Keying the derived views on this string instead of the object means the top
+   * bar and dock re-render when a window really changes workspace/minimised/
+   * focus state — not once per mouse event.
+   */
+  const shellSig = useMemo(
+    () => Object.values(state.windows)
+      .map((w) => `${w.id}:${w.ws}:${w.min ? 1 : 0}:${w.app}`)
+      .sort()
+      .join('|'),
+    [state.windows],
+  );
+
   const openIds = useMemo(
     () => Object.values(state.windows)
       .filter((w) => !w.min && w.ws === state.activeWorkspace)
@@ -100,7 +116,8 @@ export function useRiceWM(appDefs) {
       .filter((w) => !w.min)
       .map((w) => w.id)
       .sort(),
-    [state.windows],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [shellSig],
   );
 
   const cycleFocus = useCallback((dir = 1) => {
@@ -240,7 +257,8 @@ export function useRiceWM(appDefs) {
 
   const occupied = useMemo(
     () => new Set(Object.values(state.windows).filter((w) => !w.min).map((w) => w.ws)),
-    [state.windows],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [shellSig],
   );
 
   /** Every window on the active workspace, minimized included — the dock list. */
@@ -255,7 +273,8 @@ export function useRiceWM(appDefs) {
         minimized: w.min,
         focused: w.id === state.focusedId,
       })),
-    [state.windows, state.activeWorkspace, state.focusedId, appDefs],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [shellSig, state.activeWorkspace, state.focusedId, appDefs],
   );
 
   return {
