@@ -152,12 +152,21 @@ describe('<TopBar> stat pills', () => {
     expect(within(screen.getByTitle('Network down')).getByText('840K')).toBeInTheDocument();
   });
 
-  it('falls back to zeroes and a default volume with no stats', () => {
-    render(<TopBar />);
+  it('falls back to zeroes and a default volume for an empty stats object', () => {
+    // An explicit empty object exercises the fallbacks; omitting the prop makes
+    // the bar source its own live telemetry instead.
+    render(<TopBar stats={{}} />);
 
     expect(within(screen.getByTitle('CPU load')).getByText('0%')).toBeInTheDocument();
     expect(within(screen.getByTitle('CPU temperature')).getByText('0°C')).toBeInTheDocument();
     expect(within(screen.getByTitle('Volume')).getByText('65%')).toBeInTheDocument();
+  });
+
+  it('sources its own telemetry when no stats prop is given', () => {
+    render(<TopBar />);
+    // Live values are randomised, so just assert the pills render a percentage.
+    expect(within(screen.getByTitle('CPU load')).getByText(/^\d+%$/)).toBeInTheDocument();
+    expect(within(screen.getByTitle('Memory usage')).getByText(/^\d+%$/)).toBeInTheDocument();
   });
 
   it('keeps screen-reader names on the glyph-only pills', () => {
