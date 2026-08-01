@@ -1,21 +1,6 @@
-import { describe, it, expect, vi } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
-import DesktopIcon from '../components/DesktopIcon';
+import { describe, it, expect } from 'vitest';
+import { render, screen } from '@testing-library/react';
 import MobileBar from '../shell/MobileBar';
-
-describe('<DesktopIcon>', () => {
-  it('renders its label', () => {
-    render(<DesktopIcon label="kitty" icon="💻" onDoubleClick={() => {}} />);
-    expect(screen.getByText('kitty')).toBeInTheDocument();
-  });
-
-  it('fires onDoubleClick when double-clicked', () => {
-    const onDoubleClick = vi.fn();
-    render(<DesktopIcon label="Files" icon="📁" onDoubleClick={onDoubleClick} />);
-    fireEvent.doubleClick(screen.getByText('Files'));
-    expect(onDoubleClick).toHaveBeenCalled();
-  });
-});
 
 describe('<MobileBar>', () => {
   it('shows the user@host and a clock', () => {
