@@ -30,3 +30,23 @@ describe('Arch-flavoured terminal commands', () => {
     expect(text).toMatch(/hyprland|kitty|firefox/i);
   });
 });
+
+describe('btop', () => {
+  it('renders CPU, per-core and memory gauges', () => {
+    const text = flat(run('btop'));
+    expect(text).toMatch(/CPU/);
+    expect(text).toMatch(/core0/);
+    expect(text).toMatch(/RAM/);
+    expect(text).toMatch(/SWP/);
+  });
+
+  it('draws proportional bars', () => {
+    const text = flat(run('btop'));
+    expect(text).toMatch(/█/);
+    expect(text).toMatch(/░/);
+  });
+
+  it('points at htop for the process table', () => {
+    expect(flat(run('btop'))).toMatch(/htop/);
+  });
+});
