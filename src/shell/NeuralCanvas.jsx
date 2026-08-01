@@ -153,6 +153,11 @@ export default function NeuralCanvas({ enabled = true, accent }) {
         raf = requestAnimationFrame(loop);
       };
       loop();
+    } else {
+      // Disabled at runtime (low-power mode, reduced motion): leave the canvas
+      // genuinely blank rather than frozen on the last painted frame.
+      const ctx = canvas.getContext('2d');
+      ctx?.clearRect(0, 0, window.innerWidth, window.innerHeight);
     }
 
     return () => {
