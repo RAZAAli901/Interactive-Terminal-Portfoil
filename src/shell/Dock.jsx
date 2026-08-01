@@ -21,7 +21,7 @@ export default function Dock({ windows = [], onSelect }) {
           ].filter(Boolean).join(' ')}
           onClick={() => onSelect?.(w.id)}
           aria-label={w.minimized ? `Restore ${w.title}` : `Focus ${w.title}`}
-          aria-pressed={Boolean(w.focused)}
+          aria-pressed={Boolean(w.focused) && !w.minimized}
           title={w.title}
         >
           <span className={styles.dot} style={{ background: w.color }} aria-hidden="true" />
