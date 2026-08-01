@@ -12,10 +12,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
-    <meta name="description" content="Raza Ali Murtaza's interactive developer portfolio — an Arch Linux + Hyprland desktop in the browser with dwindle tiling, a waybar, a wofi launcher, a full boot sequence, and a kitty terminal shell. Built with React 19 and Vite." />
+    <meta name="description" content="Raza Ali Murtaza's interactive developer portfolio — a Tokyo Night Linux rice in the browser with BSP dwindle tiling, drag-to-resize gaps, a hyprexpo window overview, a waybar, a wofi launcher and a real kitty shell. Built with React 19 and Vite." />
     <!-- Open Graph -->
     <meta property="og:title" content="Arch + Hyprland Portfolio — Raza Ali Murtaza" />
-    <meta property="og:description" content="An Arch Linux + Hyprland desktop portfolio with dwindle tiling, waybar, wofi launcher, a full boot sequence, and a kitty terminal. Built with React 19 + Vite." />
+    <meta property="og:description" content="A Tokyo Night Linux rice with BSP dwindle tiling, a window overview, waybar, wofi launcher and a real kitty shell. Built with React 19 + Vite." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://razaali901.github.io/Interactive-Terminal-Portfoil/" />
     <meta property="og:image" content="https://razaali901.github.io/Interactive-Terminal-Portfoil/preview.png" />
@@ -24,7 +24,7 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Arch + Hyprland Portfolio — Raza Ali Murtaza" />
-    <meta name="twitter:description" content="An Arch Linux + Hyprland desktop portfolio with dwindle tiling, waybar, wofi launcher, a full boot sequence, and a kitty terminal. Built with React 19 + Vite." />
+    <meta name="twitter:description" content="A Tokyo Night Linux rice with BSP dwindle tiling, a window overview, waybar, wofi launcher and a real kitty shell. Built with React 19 + Vite." />
     <meta name="twitter:image" content="https://razaali901.github.io/Interactive-Terminal-Portfoil/preview.png" />
     <meta name="twitter:site" content="@RAZAAli901" />
     <title>Arch + Hyprland Portfolio — Raza Ali Murtaza</title>
@@ -146,7 +146,7 @@ h2{font-size:18px;font-weight:500;color:var(--text)}
       <div style="margin-top:8px"><span class="t-prompt">[razaali@arch ~]$ </span><span class="t-cmd">cat description.txt</span></div>
       <div class="t-out">A fully interactive <span style="color:var(--amber)">Arch Linux + Hyprland desktop</span></div>
       <div class="t-out">built as a developer portfolio. Tile windows,</div>
-      <div class="t-out">run terminal commands, switch Catppuccin themes.</div>
+      <div class="t-out">run terminal commands, switch colorschemes.</div>
       <div style="margin-top:8px"><span class="t-prompt">[razaali@arch ~]$ </span><span class="t-cmd">fastfetch --stack</span></div>
       <div class="t-out bl">React 19 + Vite + anime.js + CSS Modules</div>
       <div style="margin-top:8px"><span class="t-prompt">[razaali@arch ~]$ </span><span class="cursor"></span></div>
@@ -158,7 +158,7 @@ h2{font-size:18px;font-weight:500;color:var(--text)}
     <span class="badge b-vite">Vite / Rolldown</span>
     <span class="badge b-css">CSS Modules</span>
     <span class="badge b-js">JavaScript</span>
-    <span class="badge b-win">Hyprland WM · Catppuccin</span>
+    <span class="badge b-win">Hyprland WM · Tokyo Night</span>
   </div>
 
   <hr class="divider">
@@ -169,7 +169,7 @@ h2{font-size:18px;font-weight:500;color:var(--text)}
     <div class="feat">
       <div class="feat-icon">🪟</div>
       <div class="feat-name">Tiling window manager</div>
-      <div class="feat-desc">Hyprland-style dwindle tiling with a floating toggle, gaps and animated gradient borders</div>
+      <div class="feat-desc">Real BSP dwindle tiling — drag gaps to resize, drag title bars to swap panes</div>
     </div>
     <div class="feat">
       <div class="feat-icon">💻</div>
@@ -184,12 +184,12 @@ h2{font-size:18px;font-weight:500;color:var(--text)}
     <div class="feat">
       <div class="feat-icon">🎨</div>
       <div class="feat-name">Runtime theming</div>
-      <div class="feat-desc">Catppuccin, Tokyo Night, Gruvbox, Nord and Dracula — switch live with a command</div>
+      <div class="feat-desc">Seven palettes and twenty bundled rice wallpapers — switch live</div>
     </div>
     <div class="feat">
       <div class="feat-icon">🗂️</div>
       <div class="feat-name">Workspaces</div>
-      <div class="feat-desc">Five virtual workspaces with slide transitions and Super-key navigation</div>
+      <div class="feat-desc">Five workspaces, each with its own independent tiling tree</div>
     </div>
     <div class="feat">
       <div class="feat-icon">⚡</div>
@@ -267,8 +267,8 @@ h2{font-size:18px;font-weight:500;color:var(--text)}
         <tr><td class="cmd-mono">fastfetch</td><td class="cmd-desc">Show the Arch-logo system-info card</td></tr>
         <tr><td class="cmd-mono">about</td><td class="cmd-desc">Display info about me</td></tr>
         <tr><td class="cmd-mono">projects</td><td class="cmd-desc">View my projects</td></tr>
-        <tr><td class="cmd-mono">theme [name]</td><td class="cmd-desc">Switch palette (catppuccin-mocha, tokyo-night, gruvbox…)</td></tr>
-        <tr><td class="cmd-mono">wallpaper [1-12]</td><td class="cmd-desc">Change the desktop wallpaper</td></tr>
+        <tr><td class="cmd-mono">theme [name]</td><td class="cmd-desc">Switch palette (tokyo-night, catppuccin-mocha, gruvbox…)</td></tr>
+        <tr><td class="cmd-mono">wallpaper [name]</td><td class="cmd-desc">Switch between the 20 bundled rice wallpapers</td></tr>
         <tr><td class="cmd-mono">clear</td><td class="cmd-desc">Clear the terminal screen</td></tr>
       </tbody>
     </table>
@@ -277,16 +277,16 @@ h2{font-size:18px;font-weight:500;color:var(--text)}
   <hr class="divider">
 
   <!-- Wallpapers -->
-  <div class="sec"><div class="sec-label">Wallpapers</div><h2>12 built-in wallpapers</h2></div>
+  <div class="sec"><div class="sec-label">Wallpapers</div><h2>20 bundled rice wallpapers</h2></div>
   <div class="wp-grid">
-    <div class="wp" style="background-image:url('https://images.unsplash.com/photo-1496247749665-49cf5b1022e9?w=200&q=60')"></div>
-    <div class="wp" style="background-image:url('https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=200&q=60')"></div>
-    <div class="wp" style="background-image:url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=200&q=60')"></div>
-    <div class="wp" style="background-image:url('https://images.unsplash.com/photo-1518770660439-4636190af475?w=200&q=60')"></div>
-    <div class="wp" style="background-image:url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=200&q=60')"></div>
-    <div class="wp" style="background-image:url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=200&q=60')"></div>
-    <div class="wp" style="background-image:url('https://images.unsplash.com/photo-1519681393784-d120267933ba?w=200&q=60')"></div>
-    <div class="wp" style="background-image:url('https://images.unsplash.com/photo-1511512578047-dfb367046420?w=200&q=60')"></div>
+    <div class="wp" style="background-image:url('wallpapers/tokyo-night-skyline.svg')"></div>
+    <div class="wp" style="background-image:url('wallpapers/catppuccin-mesh.svg')"></div>
+    <div class="wp" style="background-image:url('wallpapers/gruvbox-sun.svg')"></div>
+    <div class="wp" style="background-image:url('wallpapers/nord-aurora.svg')"></div>
+    <div class="wp" style="background-image:url('wallpapers/everforest-layers.svg')"></div>
+    <div class="wp" style="background-image:url('wallpapers/rose-pine-dawn.svg')"></div>
+    <div class="wp" style="background-image:url('wallpapers/dracula-abstract.svg')"></div>
+    <div class="wp" style="background-image:url('wallpapers/topographic.svg')"></div>
   </div>
 
   <hr class="divider">
