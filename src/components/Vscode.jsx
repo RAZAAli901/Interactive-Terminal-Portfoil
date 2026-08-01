@@ -143,6 +143,9 @@ export const handleCommand = (command, { setTheme, setWallpaper } = {}) => {
                 editorRef.current.dispose();
             }
         };
+        // Monaco is created once the loader resolves and reads whatever file is
+        // active at that moment; later file changes go through the effect below.
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [monacoLoaded]);
 
     useEffect(() => {
@@ -154,6 +157,9 @@ export const handleCommand = (command, { setTheme, setWallpaper } = {}) => {
                 window.monaco.editor.setModelLanguage(model, lang);
             }
         }
+        // Keyed on the active file: `files` is static content, so including it
+        // would only add churn.
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [activeFile, monacoLoaded]);
 
     return (
