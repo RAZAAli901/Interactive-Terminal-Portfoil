@@ -1,5 +1,5 @@
 import styles from './FilesApp.module.css';
-import PROJECTS from '../data/projects';
+import { PROJECTS } from '../data/projects';
 
 /**
  * Files window — spec README "Window content → files".
