@@ -1,0 +1,85 @@
+.column {
+  position: absolute;
+  top: 62px;
+  left: 20px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  width: 92px;
+  padding: 12px 6px;
+  background: transparent;
+  /* Border is transparent rather than absent so :hover does not shift layout. */
+  border: 1px solid transparent;
+  border-radius: 10px;
+  color: var(--hypr-text, #c0caf5);
+  font-family: var(--hypr-font-ui, 'Inter', system-ui, sans-serif);
+  cursor: pointer;
+  transition:
+    background var(--hypr-dur-fast, 160ms) var(--hypr-ease-out, ease),
+    border-color var(--hypr-dur-fast, 160ms) var(--hypr-ease-out, ease),
+    transform var(--hypr-dur-fast, 160ms) var(--hypr-ease-out, ease);
+}
+
+.item:hover {
+  background: color-mix(in srgb, var(--hypr-accent, #7aa2f7) 10%, transparent);
+  border-color: color-mix(in srgb, var(--hypr-accent, #7aa2f7) 18%, transparent);
+}
+
+.item:focus-visible {
+  outline: 2px solid var(--hypr-accent, #7aa2f7);
+  outline-offset: 2px;
+}
+
+.item:active {
+  transform: scale(0.96);
+}
+
+.tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--hypr-surface, #1f2335) 55%, transparent);
+  border: 1px solid color-mix(in srgb, var(--hypr-accent, #7aa2f7) 16%, transparent);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  line-height: 1;
+  transition: border-color var(--hypr-dur-fast, 160ms) var(--hypr-ease-out, ease);
+}
+
+.item:hover .tile {
+  border-color: color-mix(in srgb, var(--hypr-accent, #7aa2f7) 30%, transparent);
+}
+
+.mono { font-family: var(--hypr-font-mono, 'JetBrains Mono', monospace); }
+.italic { font-style: italic; }
+
+.label {
+  font-size: 12.5px;
+  line-height: 1;
+  color: var(--hypr-subtext, #a9b1d6);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .item, .tile { transition: none; }
+  .item:active { transform: none; }
+}
+
+/* Low-power mode: the global token rule kills blur/transitions, but the press
+   transform is neither — drop it here and flatten the tile's translucency. */
+:root[data-perf="low"] .tile { background: var(--hypr-surface, #1f2335); }
+:root[data-perf="low"] .item:active { transform: none; }
+
+@media (max-width: 768px) {
+  .column { display: none; }
+}
