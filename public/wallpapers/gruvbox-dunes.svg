@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice">
+<defs>
+<linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#141617"/><stop offset="0.42" stop-color="#1f2122"/><stop offset="0.78" stop-color="#2f2a26"/><stop offset="1" stop-color="#3a2f26"/></linearGradient>
+<radialGradient id="sun"><stop offset="0" stop-color="#d79921" stop-opacity="0.28"/><stop offset=".5" stop-color="#d79921" stop-opacity="0.084"/><stop offset="1" stop-color="#d79921" stop-opacity="0"/></radialGradient>
+<radialGradient id="warm"><stop offset="0" stop-color="#b57614" stop-opacity="0.16"/><stop offset=".5" stop-color="#b57614" stop-opacity="0.048"/><stop offset="1" stop-color="#b57614" stop-opacity="0"/></radialGradient>
+<linearGradient id="dg0" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5c4d36"/><stop offset="1" stop-color="#453f3a"/></linearGradient>
+<linearGradient id="dg1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#53442e"/><stop offset="1" stop-color="#3a3430"/></linearGradient>
+<linearGradient id="dg2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#473a26"/><stop offset="1" stop-color="#2c2827"/></linearGradient>
+<linearGradient id="dg3" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3c3422"/><stop offset="1" stop-color="#1f2122"/></linearGradient>
+<radialGradient id="v" cx=".5" cy=".5" r=".78"><stop offset="0.45" stop-color="#1f2122" stop-opacity="0"/><stop offset="1" stop-color="#101112" stop-opacity="0.62"/></radialGradient>
+</defs>
+<rect width="1920" height="1080" fill="url(#sky)"/>
+<ellipse cx="1480" cy="250" rx="760" ry="620" fill="url(#sun)"/>
+<ellipse cx="700" cy="560" rx="900" ry="420" fill="url(#warm)"/>
+<path d="M-20 1080 L-20 620 C 300 500 560 700 900 636 C 1230 574 1520 668 1940 588 L1940 1080 Z" fill="url(#dg0)" opacity="0.5"/>
+<path d="M-20 1080 L-20 748 C 340 640 620 812 980 744 C 1330 678 1620 774 1940 706 L1940 1080 Z" fill="url(#dg1)" opacity="0.85"/>
+<path d="M-20 1080 L-20 866 C 280 794 640 924 1000 856 C 1360 788 1660 878 1940 826 L1940 1080 Z" fill="url(#dg2)" opacity="1"/>
+<path d="M-20 1080 L-20 968 C 380 916 700 1010 1060 962 C 1420 914 1720 976 1940 946 L1940 1080 Z" fill="url(#dg3)" opacity="1"/>
+<rect width="1920" height="1080" fill="url(#v)"/>
+</svg>

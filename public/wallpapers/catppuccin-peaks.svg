@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice">
+<defs>
+<linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#11111b"/><stop offset="0.45" stop-color="#1a1a29"/><stop offset="0.72" stop-color="#252438"/><stop offset="1" stop-color="#2b2740"/></linearGradient>
+<radialGradient id="moon"><stop offset="0" stop-color="#cdd6f4" stop-opacity="0.34"/><stop offset=".5" stop-color="#cdd6f4" stop-opacity="0.102"/><stop offset="1" stop-color="#cdd6f4" stop-opacity="0"/></radialGradient>
+<radialGradient id="halo"><stop offset="0" stop-color="#cba6f7" stop-opacity="0.2"/><stop offset=".5" stop-color="#cba6f7" stop-opacity="0.06"/><stop offset="1" stop-color="#cba6f7" stop-opacity="0"/></radialGradient>
+<linearGradient id="mist" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#cdd6f4" stop-opacity="0"/><stop offset=".5" stop-color="#cdd6f4" stop-opacity=".07"/><stop offset="1" stop-color="#cdd6f4" stop-opacity="0"/></linearGradient>
+<radialGradient id="v" cx=".5" cy=".5" r=".78"><stop offset="0.45" stop-color="#11111b" stop-opacity="0"/><stop offset="1" stop-color="#0c0c14" stop-opacity="0.62"/></radialGradient>
+</defs>
+<rect width="1920" height="1080" fill="url(#sky)"/>
+<ellipse cx="1420" cy="230" rx="420" ry="420" fill="url(#halo)"/>
+<ellipse cx="1420" cy="230" rx="190" ry="190" fill="url(#moon)"/>
+<circle cx="1420" cy="230" r="44" fill="#cdd6f4" opacity=".5"/>
+<ellipse cx="960" cy="760" rx="1100" ry="34" fill="url(#mist)"/>
+<polygon points="0,700 140,560 260,644 430,470 600,620 760,520 940,652 1120,500 1300,610 1480,488 1660,600 1810,540 1920,618 1920,1080 0,1080" fill="#313244" opacity="0.55"/>
+<ellipse cx="960" cy="838" rx="1100" ry="29" fill="url(#mist)"/>
+<polygon points="0,832 170,700 330,782 510,660 690,762 880,690 1060,790 1250,700 1440,800 1620,720 1800,802 1920,760 1920,1080 0,1080" fill="#262639" opacity="0.85"/>
+<ellipse cx="960" cy="916" rx="1100" ry="24" fill="url(#mist)"/>
+<polygon points="0,930 200,830 380,900 560,812 760,890 950,820 1140,900 1330,830 1520,912 1720,850 1920,900 1920,1080 0,1080" fill="#1b1b2a" opacity="1"/>
+<ellipse cx="960" cy="994" rx="1100" ry="19" fill="url(#mist)"/>
+<polygon points="0,1012 240,950 460,1000 700,940 940,1002 1180,940 1420,1000 1660,950 1920,1006 1920,1080 0,1080" fill="#131320" opacity="1"/>
+<rect width="1920" height="1080" fill="url(#v)"/>
+</svg>

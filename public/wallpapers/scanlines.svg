@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice">
+<defs>
+<radialGradient id="bg" cx=".5" cy=".48" r=".78"><stop offset="0" stop-color="#101a1c"/><stop offset=".6" stop-color="#0b1114"/><stop offset="1" stop-color="#05080a"/></radialGradient>
+<pattern id="scan" width="4" height="4" patternUnits="userSpaceOnUse"><rect width="4" height="1.4" fill="#7dcfff" opacity=".085"/></pattern>
+<pattern id="vert" width="6" height="6" patternUnits="userSpaceOnUse"><rect width="1" height="6" fill="#9ece6a" opacity=".035"/></pattern>
+<radialGradient id="phos"><stop offset="0" stop-color="#9ece6a" stop-opacity="0.16"/><stop offset=".5" stop-color="#9ece6a" stop-opacity="0.048"/><stop offset="1" stop-color="#9ece6a" stop-opacity="0"/></radialGradient>
+<radialGradient id="phos2"><stop offset="0" stop-color="#7dcfff" stop-opacity="0.14"/><stop offset=".5" stop-color="#7dcfff" stop-opacity="0.042"/><stop offset="1" stop-color="#7dcfff" stop-opacity="0"/></radialGradient>
+<linearGradient id="sweep" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7dcfff" stop-opacity="0"/><stop offset=".5" stop-color="#c0caf5" stop-opacity="1"/><stop offset="1" stop-color="#7dcfff" stop-opacity="0"/></linearGradient>
+<radialGradient id="crt" cx=".5" cy=".5" r=".62"><stop offset=".55" stop-color="#fff" stop-opacity="1"/><stop offset="1" stop-color="#fff" stop-opacity=".25"/></radialGradient>
+<mask id="cm"><rect width="1920" height="1080" fill="url(#crt)"/></mask>
+<radialGradient id="v" cx=".5" cy=".5" r=".78"><stop offset="0.32" stop-color="#0b1114" stop-opacity="0"/><stop offset="1" stop-color="#030506" stop-opacity="0.82"/></radialGradient>
+</defs>
+<rect width="1920" height="1080" fill="url(#bg)"/>
+<ellipse cx="820" cy="480" rx="900" ry="620" fill="url(#phos)"/>
+<ellipse cx="1280" cy="700" rx="800" ry="520" fill="url(#phos2)"/>
+<g mask="url(#cm)"><rect width="1920" height="1080" fill="url(#scan)"/><rect width="1920" height="1080" fill="url(#vert)"/></g>
+<rect x="0" y="180" width="1920" height="26" fill="url(#sweep)" opacity="0.1"/><rect x="0" y="470" width="1920" height="16" fill="url(#sweep)" opacity="0.07"/><rect x="0" y="760" width="1920" height="34" fill="url(#sweep)" opacity="0.06"/><rect x="0" y="980" width="1920" height="20" fill="url(#sweep)" opacity="0.05"/>
+<rect width="1920" height="1080" fill="url(#v)"/>
+</svg>

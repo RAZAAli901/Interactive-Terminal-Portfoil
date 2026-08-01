@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice">
+<defs>
+<linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1b2124"/><stop offset="0.44" stop-color="#232a2e"/><stop offset="0.8" stop-color="#33383a"/><stop offset="1" stop-color="#3d403c"/></linearGradient>
+<radialGradient id="sun"><stop offset="0" stop-color="#dbbc7f" stop-opacity="0.24"/><stop offset=".5" stop-color="#dbbc7f" stop-opacity="0.072"/><stop offset="1" stop-color="#dbbc7f" stop-opacity="0"/></radialGradient>
+<radialGradient id="aq"><stop offset="0" stop-color="#83c092" stop-opacity="0.13"/><stop offset=".5" stop-color="#83c092" stop-opacity="0.039"/><stop offset="1" stop-color="#83c092" stop-opacity="0"/></radialGradient>
+<linearGradient id="mistg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#d3c6aa" stop-opacity="0"/><stop offset=".5" stop-color="#d3c6aa" stop-opacity=".12"/><stop offset="1" stop-color="#d3c6aa" stop-opacity="0"/></linearGradient>
+<radialGradient id="v" cx=".5" cy=".5" r=".78"><stop offset="0.45" stop-color="#232a2e" stop-opacity="0"/><stop offset="1" stop-color="#12171a" stop-opacity="0.62"/></radialGradient>
+</defs>
+<rect width="1920" height="1080" fill="url(#sky)"/>
+<ellipse cx="820" cy="360" rx="560" ry="500" fill="url(#sun)"/>
+<circle cx="820" cy="360" r="86" fill="#dbbc7f" opacity=".16"/>
+<ellipse cx="1500" cy="600" rx="820" ry="420" fill="url(#aq)"/>
+<path d="M-20 1080 L-20 604 C 320 494 600 662 940 596 C 1270 532 1580 620 1940 552 L1940 1080 Z" fill="#46534f" opacity="0.55"/>
+<path d="M-20 1080 L-20 726 C 300 640 640 786 980 720 C 1310 656 1620 744 1940 682 L1940 1080 Z" fill="#3a4541" opacity="0.85"/>
+<path d="M-20 1080 L-20 850 C 340 782 660 902 1000 842 C 1340 782 1660 862 1940 812 L1940 1080 Z" fill="#2e3835" opacity="1"/>
+<path d="M-20 1080 L-20 962 C 380 912 720 1004 1060 958 C 1400 912 1700 968 1940 940 L1940 1080 Z" fill="#222a29" opacity="1"/>
+<ellipse cx="420" cy="600" rx="640" ry="26" fill="url(#mistg)"/><ellipse cx="640" cy="662" rx="600" ry="24" fill="url(#mistg)"/><ellipse cx="860" cy="724" rx="560" ry="22" fill="url(#mistg)"/><ellipse cx="1080" cy="786" rx="520" ry="20" fill="url(#mistg)"/><ellipse cx="1300" cy="848" rx="480" ry="18" fill="url(#mistg)"/><ellipse cx="1520" cy="910" rx="440" ry="16" fill="url(#mistg)"/><ellipse cx="1740" cy="972" rx="400" ry="14" fill="url(#mistg)"/>
+<rect width="1920" height="1080" fill="url(#v)"/>
+</svg>

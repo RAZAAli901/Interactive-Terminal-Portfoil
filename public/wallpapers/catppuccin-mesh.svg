@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice">
+<defs>
+<linearGradient id="a" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#181825"/><stop offset=".5" stop-color="#1e1e2e"/><stop offset="1" stop-color="#11111b"/></linearGradient>
+<radialGradient id="b0"><stop offset="0" stop-color="#cba6f7" stop-opacity="0.36"/><stop offset=".5" stop-color="#cba6f7" stop-opacity="0.108"/><stop offset="1" stop-color="#cba6f7" stop-opacity="0"/></radialGradient>
+<radialGradient id="b1"><stop offset="0" stop-color="#89b4fa" stop-opacity="0.32"/><stop offset=".5" stop-color="#89b4fa" stop-opacity="0.096"/><stop offset="1" stop-color="#89b4fa" stop-opacity="0"/></radialGradient>
+<radialGradient id="b2"><stop offset="0" stop-color="#94e2d5" stop-opacity="0.2"/><stop offset=".5" stop-color="#94e2d5" stop-opacity="0.06"/><stop offset="1" stop-color="#94e2d5" stop-opacity="0"/></radialGradient>
+<radialGradient id="b3"><stop offset="0" stop-color="#f5c2e7" stop-opacity="0.18"/><stop offset=".5" stop-color="#f5c2e7" stop-opacity="0.054"/><stop offset="1" stop-color="#f5c2e7" stop-opacity="0"/></radialGradient>
+<radialGradient id="b4"><stop offset="0" stop-color="#fab387" stop-opacity="0.12"/><stop offset=".5" stop-color="#fab387" stop-opacity="0.036"/><stop offset="1" stop-color="#fab387" stop-opacity="0"/></radialGradient>
+<radialGradient id="v" cx=".5" cy=".5" r=".78"><stop offset="0.45" stop-color="#11111b" stop-opacity="0"/><stop offset="1" stop-color="#0b0b12" stop-opacity="0.75"/></radialGradient>
+</defs>
+<rect width="1920" height="1080" fill="url(#a)"/>
+<ellipse cx="380" cy="240" rx="740" ry="560" fill="url(#b0)"/>
+<ellipse cx="1560" cy="780" rx="780" ry="600" fill="url(#b1)"/>
+<ellipse cx="1440" cy="190" rx="600" ry="470" fill="url(#b2)"/>
+<ellipse cx="720" cy="930" rx="660" ry="460" fill="url(#b3)"/>
+<ellipse cx="1030" cy="500" rx="520" ry="420" fill="url(#b4)"/>
+<rect width="1920" height="1080" fill="url(#v)"/>
+</svg>
