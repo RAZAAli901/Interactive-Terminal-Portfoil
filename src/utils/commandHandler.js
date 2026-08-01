@@ -460,16 +460,51 @@ const hyprctlHandler = (args) => {
       '',
     ]) };
   }
+  if (sub === 'clients') {
+    return { type: 'text', content: [
+      accent('Window kitty -> raza@arch: ~'),
+      '  class: kitty   floating: 0   workspace: 1',
+      '  size: dwindle-managed   focusHistoryID: 0',
+      '',
+      accent('Window firefox -> Firefox'),
+      '  class: firefox   floating: 0   workspace: 1',
+      '  size: dwindle-managed   focusHistoryID: 1',
+    ] };
+  }
+  if (sub === 'activewindow') {
+    return { type: 'text', content: [
+      accent('Window kitty -> raza@arch: ~'),
+      '  class: kitty',
+      '  workspace: 1 (1)',
+      '  floating: 0   fullscreen: 0   pinned: 0',
+    ] };
+  }
+  if (sub === 'getoption') {
+    return { type: 'text', content: [
+      `${accent('general:gaps_in')} -> 8`,
+      `${accent('general:gaps_out')} -> 12`,
+      `${accent('general:border_size')} -> 1`,
+      `${accent('decoration:rounding')} -> 11`,
+      `${accent('decoration:blur:size')} -> 16`,
+      `${accent('general:layout')} -> dwindle`,
+    ] };
+  }
   if (sub === 'version' || !sub) {
     return { type: 'text', content: [
       accent('Hyprland 0.41.2 (web build)'),
       'Tag: v0.41.2, commit portfolio',
-      'flags: (built with anime.js + React 19)',
+      'flags: (built with React 19 + a hand-rolled BSP tiler)',
       '',
-      formatInfo("usage: hyprctl [monitors | workspaces | version]"),
+      formatInfo('usage: hyprctl [version | monitors | workspaces | clients | activewindow | getoption]'),
     ] };
   }
-  return { type: 'text', content: [formatError(`hyprctl: unknown request '${sub}'`), "Try: monitors, workspaces, version"] };
+  return {
+    type: 'text',
+    content: [
+      formatError(`hyprctl: unknown request '${sub}'`),
+      'Try: version, monitors, workspaces, clients, activewindow, getoption',
+    ],
+  };
 };
 
 // htop — a snapshot of the (fake) process table.
@@ -1516,9 +1551,9 @@ export const commands = [
   },
   {
     name: 'hyprctl',
-    description: 'Query the simulated Hyprland compositor (monitors, workspaces, version)',
-    usage: 'hyprctl [monitors|workspaces|version]',
-    examples: ['hyprctl version', 'hyprctl monitors', 'hyprctl workspaces'],
+    description: 'Query the simulated Hyprland compositor',
+    usage: 'hyprctl [version|monitors|workspaces|clients|activewindow|getoption]',
+    examples: ['hyprctl version', 'hyprctl clients', 'hyprctl getoption'],
     handler: hyprctlHandler
   },
   {
