@@ -11,77 +11,60 @@
   top: 0;
   display: flex;
   flex-direction: column;
-  background: var(--hypr-bg, #1e1e2e);
-  border-radius: var(--hypr-radius, 12px);
+  border-radius: var(--hypr-radius, 11px);
+  border: 1px solid var(--hypr-frame-border, rgba(122, 162, 247, 0.16));
+  background: var(--hypr-glass-window, rgba(23, 24, 34, 0.55));
+  backdrop-filter: blur(var(--hypr-blur-window, 16px)) saturate(1.3);
+  -webkit-backdrop-filter: blur(var(--hypr-blur-window, 16px)) saturate(1.3);
   box-shadow: var(--hypr-shadow);
-  opacity: var(--hypr-opacity-inactive, 0.9);
   overflow: hidden;
   user-select: none;
-  transition:
-    box-shadow var(--hypr-dur) var(--hypr-ease-out),
-    opacity var(--hypr-dur) var(--hypr-ease-out),
-    left var(--hypr-dur) var(--hypr-ease-out),
-    top var(--hypr-dur) var(--hypr-ease-out),
-    width var(--hypr-dur) var(--hypr-ease-out),
-    height var(--hypr-dur) var(--hypr-ease-out);
+  animation: winIn 0.16s ease-out;
 }
 
-/* Border ring drawn with a masked gradient so it can be a full gradient, not a
-   flat CSS border. Inactive = muted; active = animated accent gradient. */
-.frame::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  padding: var(--hypr-border-w, 2px);
-  background: var(--hypr-border, #45475a);
-  -webkit-mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  pointer-events: none;
-  transition: background var(--hypr-dur) var(--hypr-ease-out);
+/* Terminal windows are deliberately more transparent so the rice shows through. */
+.terminal {
+  background: var(--hypr-glass-terminal, rgba(20, 21, 30, 0.30));
+}
+
+/* Tiling re-layout easing. The orchestrator drops this class while a drag,
+   resize or divider action is live so dragging tracks the cursor 1:1. */
+.animated {
+  transition:
+    left 0.18s ease,
+    top 0.18s ease,
+    width 0.18s ease,
+    height 0.18s ease;
 }
 
 .frame.active {
-  opacity: var(--hypr-opacity-active, 0.96);
-  box-shadow: var(--hypr-shadow-active);
+  border-color: var(--hypr-frame-border-active, rgba(122, 162, 247, 0.42));
+  box-shadow:
+    var(--hypr-shadow-active),
+    0 0 0 1px color-mix(in srgb, var(--hypr-accent, #7aa2f7) 33%, transparent),
+    0 0 20px -4px color-mix(in srgb, var(--hypr-accent, #7aa2f7) 27%, transparent);
 }
 
-.frame.active::after {
-  background: conic-gradient(
-    from var(--hypr-angle),
-    var(--hypr-accent, #cba6f7),
-    var(--hypr-accent-2, #89b4fa),
-    var(--hypr-accent, #cba6f7)
-  );
-  animation: hyprBorderSpin 6s linear infinite;
+/* Dragged-to-swap windows fade so the drop target reads clearly. */
+.dragging {
+  opacity: 0.5;
 }
 
-@keyframes hyprBorderSpin {
-  to { --hypr-angle: 360deg; }
+@keyframes winIn {
+  from { opacity: 0; transform: scale(0.97); }
+  to { opacity: 1; transform: scale(1); }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .frame.active::after { animation: none; }
-  /* A 0s animation freezes on its first keyframe; disable outright instead so
-     the window rests at its real geometry (transform: none). */
-  .spawning, .closing { animation: none; }
-}
-
-/* Slim drag handle — Hyprland has no titlebar, but a portfolio needs a mouse
-   affordance for dragging + controls. Kept minimal and translucent. */
+/* ── Title bar ─────────────────────────────────────────────────────────── */
 .handle {
-  height: 34px;
+  height: var(--hypr-titlebar-h, 34px);
   flex: 0 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 8px 0 12px;
-  background: color-mix(in srgb, var(--hypr-mantle) 70%, transparent);
-  backdrop-filter: blur(var(--hypr-blur));
-  -webkit-backdrop-filter: blur(var(--hypr-blur));
+  padding: 0 10px 0 12px;
+  background: rgba(31, 35, 53, 0.5);
+  border-bottom: 1px solid rgba(122, 162, 247, 0.12);
   cursor: grab;
 }
 
@@ -91,95 +74,97 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  font-family: 'Segoe UI', system-ui, sans-serif;
-  font-size: 12px;
-  color: var(--hypr-subtext, #a6adc8);
+  min-width: 0;
+  font-family: var(--hypr-font-mono, 'JetBrains Mono', monospace);
+  font-size: 12.5px;
+  color: var(--hypr-subtext, #a9b1d6);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.frame.active .title { color: var(--hypr-text, #cdd6f4); }
+/* 9px colour dot carrying the app's accent — the design's app identity cue. */
+.dot {
+  width: 9px;
+  height: 9px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: var(--win-color, var(--hypr-accent, #7aa2f7));
+}
 
-.titleIcon { font-size: 13px; }
+.titleText {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
 .controls {
   display: flex;
   align-items: center;
-  gap: 4px;
-  opacity: 0;
-  transition: opacity var(--hypr-dur-fast) ease;
+  gap: 2px;
+  flex: 0 0 auto;
 }
 
-/* Reveal controls on hover — keyboard users use Super+Q etc. */
-.frame:hover .controls,
-.frame.active .controls { opacity: 1; }
-
-.dot {
-  width: 14px;
-  height: 14px;
+.ctl {
+  width: 22px;
+  height: 22px;
   display: grid;
   place-items: center;
-  border: none;
-  border-radius: 50%;
-  cursor: pointer;
   padding: 0;
-  color: transparent;
-  font-size: 8px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--hypr-subtext, #a9b1d6);
+  font-family: var(--hypr-font-mono, 'JetBrains Mono', monospace);
+  font-size: 13px;
   line-height: 1;
-  transition: color var(--hypr-dur-fast) ease, filter var(--hypr-dur-fast) ease;
+  cursor: pointer;
+  transition: background var(--hypr-dur-fast) ease, color var(--hypr-dur-fast) ease;
 }
 
-.dot:hover { color: rgba(0, 0, 0, 0.6); filter: brightness(1.1); }
-.float { background: var(--hypr-yellow, #f9e2af); }
-.max { background: var(--hypr-green, #a6e3a1); }
-.close { background: var(--hypr-red, #f38ba8); }
+.min:hover { background: rgba(122, 162, 247, 0.14); }
+.close:hover { background: rgba(247, 118, 142, 0.18); color: var(--hypr-red, #f7768e); }
 
+/* ── Body ──────────────────────────────────────────────────────────────── */
 .content {
   flex: 1;
   position: relative;
-  overflow: hidden;
-  background: var(--hypr-crust, #11111b);
+  overflow: auto;
+  min-height: 0;
 }
 
+/* Floating-mode corner grip. */
 .resizeHandle {
   position: absolute;
   bottom: 0;
   right: 0;
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
   cursor: se-resize;
   z-index: 10;
 }
 
-/* Spawn / close animations driven via classes (anime.js also hooks these). */
-.spawning {
-  animation: hyprSpawn var(--hypr-dur) var(--hypr-ease-pop);
+.resizeHandle::after {
+  content: '';
+  position: absolute;
+  right: 4px;
+  bottom: 4px;
+  width: 7px;
+  height: 7px;
+  border-right: 2px solid rgba(122, 162, 247, 0.4);
+  border-bottom: 2px solid rgba(122, 162, 247, 0.4);
+  border-bottom-right-radius: 2px;
 }
 
-.closing {
-  animation: hyprClose var(--hypr-dur-fast) var(--hypr-ease-out) forwards;
-  pointer-events: none;
-}
-
-@keyframes hyprSpawn {
-  from { opacity: 0; transform: translate(var(--tx, 0), var(--ty, 0)) scale(0.85); }
-  to { opacity: var(--hypr-opacity-active); transform: translate(var(--tx, 0), var(--ty, 0)) scale(1); }
-}
-
-@keyframes hyprClose {
-  to { opacity: 0; transform: translate(var(--tx, 0), var(--ty, 0)) scale(0.88); }
-}
-
-.maximized {
-  border-radius: 0;
-}
-
-.maximized::after { display: none; }
+.maximized { border-radius: 0; }
 
 .minimized {
   opacity: 0 !important;
   pointer-events: none !important;
   transform: scale(0.85) translateY(200px) !important;
   transition: transform var(--hypr-dur) var(--hypr-ease-out), opacity var(--hypr-dur) ease !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .frame { animation: none; }
+  .animated { transition: none; }
 }
