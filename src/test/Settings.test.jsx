@@ -36,3 +36,33 @@ describe('<Settings>', () => {
     expect(screen.getByText('Arch Linux (rolling)')).toBeInTheDocument();
   });
 });
+
+describe('<Settings> slideshow', () => {
+  it('toggles the slideshow via the callback', () => {
+    const onToggleSlideshow = vi.fn();
+    render(
+      <ThemeProvider>
+        <Settings setWallpaper={() => {}} currentWallpaper="tokyo-night-skyline"
+          slideshow={false} onToggleSlideshow={onToggleSlideshow}
+          slideshowInterval={30} onSlideshowInterval={() => {}} />
+      </ThemeProvider>,
+    );
+    fireEvent.click(screen.getByText(/Personalization/));
+    fireEvent.click(screen.getByRole('button', { name: 'Off' }));
+    expect(onToggleSlideshow).toHaveBeenCalled();
+  });
+
+  it('changes the interval via the select', () => {
+    const onSlideshowInterval = vi.fn();
+    render(
+      <ThemeProvider>
+        <Settings setWallpaper={() => {}} currentWallpaper="tokyo-night-skyline"
+          slideshow onToggleSlideshow={() => {}}
+          slideshowInterval={30} onSlideshowInterval={onSlideshowInterval} />
+      </ThemeProvider>,
+    );
+    fireEvent.click(screen.getByText(/Personalization/));
+    fireEvent.change(screen.getByLabelText('Slideshow interval'), { target: { value: '60' } });
+    expect(onSlideshowInterval).toHaveBeenCalledWith(60);
+  });
+});
