@@ -3,7 +3,7 @@ import styles from './CommandInput.module.css';
 
 import { commands } from '../utils/commandHandler';
 
-export default function CommandInput({ onSubmit, mode = 'command', history = [], isAdmin = false }) {
+export default function CommandInput({ onSubmit, mode = 'command', history = [], isAdmin = false, prompt = 'raza@arch:~$' }) {
     const [input, setInput] = useState('');
     const [historyIndex, setHistoryIndex] = useState(-1);
     const [suggestion, setSuggestion] = useState('');
@@ -96,7 +96,7 @@ export default function CommandInput({ onSubmit, mode = 'command', history = [],
         <div className={styles.commandInput} onClick={() => inputRef.current?.focus()}>
             {mode === 'command' && (
                 <span className={`${styles.prompt} ${isAdmin ? styles.adminPrompt : ''}`}>
-                    {isAdmin ? 'C:\\Users\\admin>' : 'C:\\Users\\lenovo>'}
+                    {prompt}
                 </span>
             )}
             {mode === 'password' && <span className={styles.prompt}>Password:</span>}

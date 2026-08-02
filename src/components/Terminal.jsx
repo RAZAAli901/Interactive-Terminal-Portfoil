@@ -391,11 +391,15 @@ export default function Terminal({ setTheme, setWallpaper, initialCommand, setIn
         }
     };
 
-    const getWinPath = (path) => {
-        if (path === '/') return 'C:\\';
-        const parts = path.split('/').filter(p => p !== '');
-        return 'C:\\' + parts.join('\\');
+    // Arch/zsh-style path: home (/portfolio) collapses to ~, everything else stays absolute.
+    const getArchPath = (path) => {
+        if (path === '/portfolio') return '~';
+        if (path.startsWith('/portfolio/')) return '~' + path.slice('/portfolio'.length);
+        return path || '~';
     };
+    const promptUser = isAdmin ? 'root@arch' : 'raza@arch';
+    const promptSymbol = isAdmin ? '#' : '$';
+    const shellPrompt = `${promptUser}:${getArchPath(currentPath)}${promptSymbol}`;
 
     useEffect(() => {
         bottomRef.current?.scrollIntoView?.({ behavior: 'smooth' });
@@ -475,9 +479,7 @@ export default function Terminal({ setTheme, setWallpaper, initialCommand, setIn
                         {entry.command && (
                             <div className={styles.commandLine}>
                                 <span className={`${styles.prompt} ${isAdmin ? styles.adminPrompt : ''}`}>
-                                    {inputMode === 'chat' 
-                                        ? 'RazaAI>' 
-                                        : (isAdmin ? 'C:\\Users\\admin>' : `${getWinPath(currentPath)}>`)}
+                                    {inputMode === 'chat' ? 'RazaAI>' : shellPrompt}
                                 </span>
                                 <span className={styles.command}>{entry.command}</span>
                             </div>
@@ -521,7 +523,7 @@ export default function Terminal({ setTheme, setWallpaper, initialCommand, setIn
                     mode={inputMode === 'chat' ? 'command' : inputMode}
                     history={sessionHistory}
                     isAdmin={isAdmin}
-                    currentPath={currentPath}
+                    prompt={inputMode === 'chat' ? 'RazaAI>' : shellPrompt}
                 />
             )}
             <div ref={bottomRef} />
