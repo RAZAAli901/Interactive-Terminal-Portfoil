@@ -242,6 +242,13 @@
   background: var(--hypr-mantle, #10101a);
 }
 
+/* Reserve the top-right band for the pinned WallpaperIsland capsule (168px +
+   its 12px offset + a gap) so the telemetry cluster never slides under it.
+   Only on desktop — the island is hidden below 768px. */
+@media (min-width: 769px) {
+  .bar { padding-right: 192px; }
+}
+
 @media (max-width: 768px) {
   .stats,
   .title {
