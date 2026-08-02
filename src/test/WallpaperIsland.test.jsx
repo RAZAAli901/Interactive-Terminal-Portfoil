@@ -76,6 +76,40 @@ describe('<WallpaperIsland> — thumbnails', () => {
   });
 });
 
+describe('<WallpaperIsland> — search & grouping', () => {
+  it('renders a section header per palette', () => {
+    const { capsule } = setup();
+    fireEvent.click(capsule);
+    const palettes = new Set(WALLPAPERS.map((w) => w.palette));
+    for (const p of palettes) {
+      expect(screen.getByRole('heading', { name: p })).toBeInTheDocument();
+    }
+  });
+
+  it('filters the options by name or palette', () => {
+    const { capsule } = setup();
+    fireEvent.click(capsule);
+    fireEvent.change(screen.getByLabelText('Search wallpapers'), { target: { value: 'anime' } });
+    const shown = screen.getAllByRole('option');
+    const animeCount = WALLPAPERS.filter((w) => w.palette === 'Anime').length;
+    expect(shown).toHaveLength(animeCount);
+    expect(screen.getByRole('heading', { name: 'Anime' })).toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: 'Tokyo Night' })).not.toBeInTheDocument();
+  });
+
+  it('shows an empty state and clears the query', () => {
+    const { capsule } = setup();
+    fireEvent.click(capsule);
+    const search = screen.getByLabelText('Search wallpapers');
+    fireEvent.change(search, { target: { value: 'zzzzz-nothing' } });
+    expect(screen.queryAllByRole('option')).toHaveLength(0);
+    expect(screen.getByText(/No wallpapers match/)).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Clear search' }));
+    expect(search).toHaveValue('');
+    expect(screen.getAllByRole('option')).toHaveLength(WALLPAPERS.length);
+  });
+});
+
 describe('<WallpaperIsland> — preview', () => {
   it('previews a wallpaper on hover and reverts when the pointer leaves the grid', () => {
     const { capsule, onPreview } = setup();
@@ -122,12 +156,22 @@ describe('<WallpaperIsland> — keyboard grid', () => {
   });
 
   it('jumps to the ends with Home and End', () => {
+    // The grid renders grouped by palette, so the last thumbnail is the last
+    // item of the last group — not WALLPAPERS[last]. Mirror that ordering here.
+    const byPalette = new Map();
+    const order = [];
+    for (const w of WALLPAPERS) {
+      if (!byPalette.has(w.palette)) { byPalette.set(w.palette, []); order.push(w.palette); }
+      byPalette.get(w.palette).push(w);
+    }
+    const visible = order.flatMap((p) => byPalette.get(p));
+
     const { capsule, onPreview } = setup();
     fireEvent.click(capsule);
     const grid = screen.getByRole('listbox');
     fireEvent.keyDown(grid, { key: 'End' });
-    expect(onPreview).toHaveBeenLastCalledWith(WALLPAPERS[WALLPAPERS.length - 1].id);
+    expect(onPreview).toHaveBeenLastCalledWith(visible[visible.length - 1].id);
     fireEvent.keyDown(grid, { key: 'Home' });
-    expect(onPreview).toHaveBeenLastCalledWith(WALLPAPERS[0].id);
+    expect(onPreview).toHaveBeenLastCalledWith(visible[0].id);
   });
 });

@@ -7,13 +7,13 @@ import { WALLPAPERS, DEFAULT_WALLPAPER, getWallpaper, wallpaperUrl } from '../da
 const DIR = resolve(process.cwd(), 'public/wallpapers');
 
 describe('wallpaper manifest', () => {
-  it('ships exactly 20 wallpapers', () => {
-    expect(WALLPAPERS).toHaveLength(20);
+  it('ships exactly 37 wallpapers', () => {
+    expect(WALLPAPERS).toHaveLength(37);
   });
 
   it('has unique ids and files', () => {
-    expect(new Set(WALLPAPERS.map((w) => w.id)).size).toBe(20);
-    expect(new Set(WALLPAPERS.map((w) => w.file)).size).toBe(20);
+    expect(new Set(WALLPAPERS.map((w) => w.id)).size).toBe(WALLPAPERS.length);
+    expect(new Set(WALLPAPERS.map((w) => w.file)).size).toBe(WALLPAPERS.length);
   });
 
   it('every manifest entry exists on disk', () => {
@@ -42,7 +42,7 @@ describe('wallpaper manifest', () => {
 
   it('covers several rice palettes', () => {
     const palettes = new Set(WALLPAPERS.map((w) => w.palette));
-    for (const p of ['Tokyo Night', 'Catppuccin Mocha', 'Gruvbox', 'Nord']) {
+    for (const p of ['Tokyo Night', 'Catppuccin Mocha', 'Gruvbox', 'Nord', 'Kanagawa', 'Synthwave', 'Anime']) {
       expect(palettes.has(p), `no ${p} wallpaper`).toBe(true);
     }
   });
