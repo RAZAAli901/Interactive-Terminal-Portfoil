@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { getWallpaper, wallpaperUrl } from '../data/wallpapers';
 import styles from './WallpaperIsland.module.css';
 
@@ -16,9 +16,28 @@ const COLS = 3;
 export default function WallpaperIsland({ wallpapers, current, onSelect, onPreview }) {
   const [open, setOpen] = useState(false);
   const [sel, setSel] = useState(0);
+  const [query, setQuery] = useState('');
   const rootRef = useRef(null);
   const thumbRefs = useRef([]);
   const active = getWallpaper(current);
+
+  // Filter by name/palette, then bucket into palette groups (first-seen order).
+  const groups = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    const match = (w) =>
+      !q || w.name.toLowerCase().includes(q) || w.palette.toLowerCase().includes(q);
+    const order = [];
+    const byPalette = new Map();
+    for (const w of wallpapers) {
+      if (!match(w)) continue;
+      if (!byPalette.has(w.palette)) { byPalette.set(w.palette, []); order.push(w.palette); }
+      byPalette.get(w.palette).push(w);
+    }
+    return order.map((palette) => ({ palette, items: byPalette.get(palette) }));
+  }, [wallpapers, query]);
+
+  // Flat, in-render-order list — the index space keyboard nav walks over.
+  const visible = useMemo(() => groups.flatMap((g) => g.items), [groups]);
 
   const preview = (id) => onPreview?.(id);
   const clearPreview = () => onPreview?.(null);
@@ -32,18 +51,20 @@ export default function WallpaperIsland({ wallpapers, current, onSelect, onPrevi
     onSelect(others[Math.floor(Math.random() * others.length)].id);
   };
 
-  /** Focus + preview the thumbnail at `i` (clamped into range). */
+  /** Focus + preview the thumbnail at flat index `i` (clamped into range). */
   const focusThumb = (i) => {
-    const n = wallpapers.length;
+    const n = visible.length;
+    if (!n) return;
     const idx = Math.max(0, Math.min(i, n - 1));
     setSel(idx);
-    preview(wallpapers[idx].id);
+    preview(visible[idx].id);
     thumbRefs.current[idx]?.focus();
   };
 
   // Roving grid navigation: arrows move by cell, Home/End jump, Enter selects.
   const onGridKeyDown = (e) => {
-    const n = wallpapers.length;
+    const n = visible.length;
+    if (!n) return;
     let next = null;
     switch (e.key) {
       case 'ArrowRight': next = Math.min(sel + 1, n - 1); break;
@@ -55,7 +76,7 @@ export default function WallpaperIsland({ wallpapers, current, onSelect, onPrevi
       case 'Enter':
       case ' ':
         e.preventDefault();
-        onSelect(wallpapers[sel].id);
+        onSelect(visible[sel].id);
         return;
       default: return;
     }
@@ -63,10 +84,18 @@ export default function WallpaperIsland({ wallpapers, current, onSelect, onPrevi
     focusThumb(next);
   };
 
+  // Typing filters; ArrowDown drops focus from the search box into the grid.
+  const onSearchKeyDown = (e) => {
+    if (e.key === 'ArrowDown' && visible.length) { e.preventDefault(); focusThumb(0); }
+  };
+
+  // Filtering reflows the grid — keep the roving selection in range.
+  useEffect(() => { setSel(0); }, [query]);
+
   // On open, land on the current wallpaper so keyboard users start there.
   useEffect(() => {
     if (!open) return;
-    const idx = Math.max(0, wallpapers.findIndex((w) => w.id === current));
+    const idx = Math.max(0, visible.findIndex((w) => w.id === current));
     setSel(idx);
     const t = setTimeout(() => thumbRefs.current[idx]?.scrollIntoView({ block: 'nearest' }), 60);
     return () => clearTimeout(t);
@@ -139,6 +168,31 @@ export default function WallpaperIsland({ wallpapers, current, onSelect, onPrevi
           </div>
         </div>
 
+        <div className={styles.searchRow}>
+          <span className={styles.searchIcon} aria-hidden="true">⌕</span>
+          <input
+            type="text"
+            className={styles.search}
+            placeholder="Search wallpapers…"
+            aria-label="Search wallpapers"
+            value={query}
+            tabIndex={open ? 0 : -1}
+            onChange={(e) => setQuery(e.target.value)}
+            onKeyDown={onSearchKeyDown}
+          />
+          {query && (
+            <button
+              type="button"
+              className={styles.clear}
+              aria-label="Clear search"
+              tabIndex={open ? 0 : -1}
+              onClick={() => setQuery('')}
+            >
+              ✕
+            </button>
+          )}
+        </div>
+
         <div
           className={styles.grid}
           role="listbox"
@@ -146,33 +200,45 @@ export default function WallpaperIsland({ wallpapers, current, onSelect, onPrevi
           onMouseLeave={clearPreview}
           onKeyDown={onGridKeyDown}
         >
-          {wallpapers.map((wp, i) => {
-            const isActive = wp.id === current;
-            return (
-              <button
-                key={wp.id}
-                ref={(el) => { thumbRefs.current[i] = el; }}
-                type="button"
-                role="option"
-                aria-selected={isActive}
-                aria-label={`${wp.name} — ${wp.palette}`}
-                title={`${wp.name} — ${wp.palette}`}
-                /* Roving tabindex: only the selected thumb is in the tab order. */
-                tabIndex={open && i === sel ? 0 : -1}
-                className={`${styles.thumb} ${isActive ? styles.active : ''}`}
-                style={{
-                  backgroundImage: `url(${wallpaperUrl(wp.id)})`,
-                  // Stagger the reveal so thumbnails cascade in.
-                  '--i': i,
-                }}
-                onMouseEnter={() => preview(wp.id)}
-                onFocus={() => preview(wp.id)}
-                onClick={() => onSelect(wp.id)}
-              >
-                {isActive && <span className={styles.check} aria-hidden="true">✓</span>}
-              </button>
-            );
-          })}
+          {groups.map((group) => (
+            <section key={group.palette} className={styles.section}>
+              <h3 className={styles.sectionLabel}>{group.palette}</h3>
+              <div className={styles.sectionGrid}>
+                {group.items.map((wp) => {
+                  // Flat index across all groups = this thumb's slot in `visible`.
+                  const i = visible.indexOf(wp);
+                  const isActive = wp.id === current;
+                  return (
+                    <button
+                      key={wp.id}
+                      ref={(el) => { thumbRefs.current[i] = el; }}
+                      type="button"
+                      role="option"
+                      aria-selected={isActive}
+                      aria-label={`${wp.name} — ${wp.palette}`}
+                      title={`${wp.name} — ${wp.palette}`}
+                      /* Roving tabindex: only the selected thumb is in the tab order. */
+                      tabIndex={open && i === sel ? 0 : -1}
+                      className={`${styles.thumb} ${isActive ? styles.active : ''}`}
+                      style={{
+                        backgroundImage: `url(${wallpaperUrl(wp.id)})`,
+                        // Stagger the reveal so thumbnails cascade in.
+                        '--i': i,
+                      }}
+                      onMouseEnter={() => preview(wp.id)}
+                      onFocus={() => preview(wp.id)}
+                      onClick={() => onSelect(wp.id)}
+                    >
+                      {isActive && <span className={styles.check} aria-hidden="true">✓</span>}
+                    </button>
+                  );
+                })}
+              </div>
+            </section>
+          ))}
+          {!visible.length && (
+            <p className={styles.empty}>No wallpapers match “{query}”.</p>
+          )}
         </div>
       </div>
     </div>

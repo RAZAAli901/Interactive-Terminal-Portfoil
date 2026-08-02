@@ -3,12 +3,15 @@
   --spring: cubic-bezier(0.22, 1, 0.36, 1);
   --morph: 480ms;
   position: fixed;
-  top: calc(var(--hypr-waybar-h, 40px) + 10px);
+  /* Collapsed, the capsule tucks INTO the 40px waybar strip (a reserved band
+     above every window) so it never sits over a window's title-bar close /
+     minimise buttons. The bar reserves matching right padding on desktop. */
+  top: 5px;
   right: 12px;
   z-index: 8600;
   width: 168px;
-  height: 44px;
-  border-radius: 22px;
+  height: 30px;
+  border-radius: 15px;
   overflow: hidden;
   background: color-mix(in srgb, var(--hypr-mantle, #181825) 82%, transparent);
   backdrop-filter: blur(16px) saturate(1.3);
@@ -26,7 +29,7 @@
 .island.open {
   width: 340px;
   height: min(64vh, 468px);
-  border-radius: 20px;
+  border-radius: 16px;
   box-shadow: var(--hypr-shadow-active);
 }
 
@@ -36,13 +39,13 @@
   inset: 0;
   display: flex;
   align-items: center;
-  gap: 9px;
-  padding: 0 12px;
+  gap: 8px;
+  padding: 0 11px;
   border: none;
   background: transparent;
   color: var(--hypr-subtext, #a9b1d6);
   font-family: var(--hypr-font-mono, 'JetBrains Mono', monospace);
-  font-size: 12.5px;
+  font-size: 12px;
   cursor: pointer;
   opacity: 1;
   transition: opacity 200ms var(--spring);
@@ -53,10 +56,10 @@
 }
 
 .swatch {
-  width: 26px;
-  height: 26px;
+  width: 20px;
+  height: 20px;
   flex: 0 0 auto;
-  border-radius: 8px;
+  border-radius: 6px;
   background-image: var(--island-swatch);
   background-size: cover;
   background-position: center;
@@ -124,14 +127,91 @@
 .action:hover { background: color-mix(in srgb, var(--hypr-accent, #7aa2f7) 20%, transparent); transform: rotate(-12deg); }
 .close:hover { background: color-mix(in srgb, var(--hypr-red, #f7768e) 18%, transparent); color: var(--hypr-red, #f7768e); }
 
+/* ── Search ────────────────────────────────────────────────────────────── */
+.searchRow {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 10px 12px 2px;
+  padding: 0 10px;
+  height: 32px;
+  border-radius: 9px;
+  background: color-mix(in srgb, var(--hypr-crust, #0a0a12) 55%, transparent);
+  border: 1px solid color-mix(in srgb, var(--hypr-border, #45475a) 55%, transparent);
+  transition: border-color var(--hypr-dur-fast) ease;
+}
+.searchRow:focus-within {
+  border-color: color-mix(in srgb, var(--hypr-accent, #7aa2f7) 60%, transparent);
+}
+.searchIcon { color: var(--hypr-muted, #7f849c); font-size: 14px; }
+.search {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  color: var(--hypr-text, #c0caf5);
+  font-family: var(--hypr-font-mono, 'JetBrains Mono', monospace);
+  font-size: 12.5px;
+}
+.search::placeholder { color: var(--hypr-muted, #7f849c); }
+.search:focus { outline: none; }
+.clear {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border: none;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--hypr-border, #45475a) 45%, transparent);
+  color: var(--hypr-subtext, #a9b1d6);
+  font-size: 9px;
+  cursor: pointer;
+}
+.clear:hover { background: color-mix(in srgb, var(--hypr-red, #f7768e) 30%, transparent); }
+
+/* ── Grouped grid ──────────────────────────────────────────────────────── */
 .grid {
   flex: 1;
   min-height: 0;
   overflow-y: auto;
+  padding: 8px 12px 12px;
+}
+
+.section { margin-top: 8px; }
+.section:first-child { margin-top: 4px; }
+
+.sectionLabel {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  margin: 0 0 6px;
+  padding: 4px 2px;
+  font-family: var(--hypr-font-mono, 'JetBrains Mono', monospace);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--hypr-muted, #7f849c);
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--hypr-mantle, #181825) 92%, transparent) 70%,
+    transparent
+  );
+}
+
+.sectionGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 8px;
-  padding: 12px;
+}
+
+.empty {
+  margin: 20px 4px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--hypr-muted, #7f849c);
 }
 
 .thumb {
