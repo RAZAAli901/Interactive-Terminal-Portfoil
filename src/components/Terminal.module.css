@@ -3,16 +3,18 @@
     height: 100%;
     padding: 8px 12px;
     box-sizing: border-box;
-    background-color: var(--terminal-bg);
+    /* Frosted glass: a translucent tint over a blurred backdrop so the rice
+       wallpaper reads faintly through the terminal. Text sits on top and stays
+       fully crisp — backdrop-filter only blurs what is behind the element. */
+    background-color: color-mix(in srgb, var(--terminal-bg, #11111b) 55%, transparent);
+    backdrop-filter: blur(10px) saturate(1.25);
+    -webkit-backdrop-filter: blur(10px) saturate(1.25);
     background-image: repeating-linear-gradient(
-        
         0deg,
         transparent,
         transparent 2px,
-        rgba(0, 0, 0, 0.15) 2px,
-        rgba(0, 0, 0, 0.15) 4px
-
-        
+        rgba(0, 0, 0, 0.10) 2px,
+        rgba(0, 0, 0, 0.10) 4px
     );
     color: var(--terminal-text);
     text-shadow: 0 0 5px var(--phosphor-color);
