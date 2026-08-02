@@ -5,7 +5,14 @@ import { getPerf, setPerf } from '../theme/perf';
 import { WALLPAPERS, wallpaperUrl } from '../data/wallpapers';
 import styles from './Settings.module.css';
 
-export default function Settings({ setWallpaper, currentWallpaper }) {
+export default function Settings({
+    setWallpaper,
+    currentWallpaper,
+    slideshow = false,
+    onToggleSlideshow,
+    slideshowInterval = 30,
+    onSlideshowInterval,
+}) {
     const [activeSection, setActiveSection] = useState('system');
     const { themeId, setTheme } = useTheme();
     const [lowPower, setLowPower] = useState(() => getPerf() === 'low');
@@ -129,9 +136,50 @@ export default function Settings({ setWallpaper, currentWallpaper }) {
                             ))}
                         </div>
 
-                        <div className={styles.title}>Desktop Wallpaper</div>
+                        <div className={styles.title}>Wallpaper Slideshow</div>
+                        <div className={styles.specRow}>
+                            <span className={styles.specLabel}>Auto-cycle wallpapers</span>
+                            <span className={styles.specValue}>
+                                <button
+                                    type="button"
+                                    onClick={onToggleSlideshow}
+                                    aria-pressed={slideshow}
+                                    style={{
+                                        cursor: 'pointer', fontSize: '12px', padding: '4px 12px', borderRadius: '999px',
+                                        border: `1px solid ${slideshow ? 'var(--hypr-green, #a6e3a1)' : 'var(--hypr-border, #45475a)'}`,
+                                        background: slideshow ? 'color-mix(in srgb, var(--hypr-green, #a6e3a1) 22%, transparent)' : 'transparent',
+                                        color: 'var(--hypr-text, #eee)',
+                                    }}
+                                >
+                                    {slideshow ? 'On' : 'Off'}
+                                </button>
+                            </span>
+                        </div>
+                        <div className={styles.specRow}>
+                            <span className={styles.specLabel}>Change every</span>
+                            <span className={styles.specValue}>
+                                <select
+                                    value={slideshowInterval}
+                                    onChange={(e) => onSlideshowInterval?.(Number(e.target.value))}
+                                    aria-label="Slideshow interval"
+                                    disabled={!slideshow}
+                                    style={{
+                                        background: 'var(--hypr-surface, #313244)', color: 'var(--hypr-text, #eee)',
+                                        border: '1px solid var(--hypr-border, #45475a)', padding: '4px 8px',
+                                        borderRadius: '6px', fontSize: '12px',
+                                    }}
+                                >
+                                    <option value={15}>15 seconds</option>
+                                    <option value={30}>30 seconds</option>
+                                    <option value={60}>1 minute</option>
+                                    <option value={300}>5 minutes</option>
+                                </select>
+                            </span>
+                        </div>
+
+                        <div className={styles.title} style={{ marginTop: '18px' }}>Desktop Wallpaper</div>
                         <p style={{ fontSize: '14px', color: 'var(--hypr-subtext, #ccc)' }}>
-                            Twenty bundled rice wallpapers — also settable from the terminal with <code>wallpaper &lt;name&gt;</code>:
+                            Twenty bundled rice wallpapers — each workspace keeps its own. Also settable from the terminal with <code>wallpaper &lt;name&gt;</code>:
                         </p>
                         <div className={styles.wallpaperGrid}>
                             {wallpapers.map((wp) => (
