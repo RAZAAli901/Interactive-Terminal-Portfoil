@@ -43,6 +43,9 @@
   edges, driven by `requestAnimationFrame`.
 - **20 bundled wallpapers** — original SVG rice art across Tokyo Night, Catppuccin, Gruvbox, Nord,
   Everforest, Rosé Pine, Dracula and minimal/terminal styles.
+- **Wallpaper island** — a dynamic-island-style switcher in the top-right corner that morphs open
+  into a grid of live thumbnails; hover to preview a wallpaper on the desktop, click to apply,
+  🎲 to shuffle. Arrow-key navigable.
 - **7 runtime colorschemes** — switch live with `theme <name>` or from Settings.
 
 ### Apps

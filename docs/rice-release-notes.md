@@ -12,7 +12,9 @@ what changed, and what to look at first.
    target outlines, and releasing swaps the two panes.
 5. **`Ctrl+\``** — hyprexpo overview. Arrow keys select, Enter focuses, Esc exits.
 6. **`Super+D`** — wofi launcher. **`Super+/`** — every keybinding.
-7. **`wallpaper random`** in the terminal, or `theme gruvbox`.
+7. **Wallpaper island** — top-right corner. Click the capsule; it morphs open into a grid of
+   thumbnails. Hover one to preview it live on the desktop, click to apply, 🎲 to shuffle.
+8. Or `wallpaper random` in the terminal, or `theme gruvbox`.
 
 ## What's new
 
