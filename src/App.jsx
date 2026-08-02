@@ -25,6 +25,7 @@ import PowerMenu from './shell/PowerMenu';
 import KeybindCheatsheet from './shell/KeybindCheatsheet';
 import MobileBar from './shell/MobileBar';
 import WallpaperIsland from './shell/WallpaperIsland';
+import DesktopMenu from './shell/DesktopMenu';
 import Notifications from './shell/Notifications';
 import { useNotifications } from './shell/useNotifications';
 
@@ -63,6 +64,7 @@ export default function App() {
   const [isCheatsheetOpen, setIsCheatsheetOpen] = useState(false);
   const [overviewSel, setOverviewSel] = useState(0);
   const [wallpaperPreview, setWallpaperPreview] = useState(null);
+  const [desktopMenu, setDesktopMenu] = useState(null);
   const [slideshow, setSlideshow] = useState(() => getPref('slideshow', 'off') === 'on');
   const [slideshowInterval, setSlideshowInterval] = useState(() => Number(getPref('slideshowInterval', '30')) || 30);
   const [terminalCommand, setTerminalCommand] = useState(null);
@@ -87,6 +89,20 @@ export default function App() {
     setWallpaper(WALLPAPERS[(i + 1) % WALLPAPERS.length].id);
   }, [wallpaper, setWallpaper]);
   useSlideshow(slideshow && !isLoading && !isMobile, slideshowInterval * 1000, advanceWallpaper);
+
+  const shuffleWallpaper = useCallback(() => {
+    const others = WALLPAPERS.filter((w) => w.id !== wallpaper);
+    setWallpaper(others[Math.floor(Math.random() * others.length)].id);
+  }, [wallpaper, setWallpaper]);
+
+  // Right-click the empty desktop (not a window or shell chrome) for the menu.
+  const onDesktopContextMenu = (e) => {
+    if (e.target.closest('[role="dialog"], nav, [role="menu"], [class*="dock"], [class*="island"], [class*="panel"], button')) {
+      return;
+    }
+    e.preventDefault();
+    setDesktopMenu({ x: e.clientX, y: e.clientY });
+  };
 
   useEffect(() => { if (wm.overview) setOverviewSel(0); }, [wm.overview]);
 
@@ -267,7 +283,7 @@ export default function App() {
   const shownWallpaper = wallpaperPreview || wallpaper;
 
   return (
-    <div className={styles.desktop}>
+    <div className={styles.desktop} onContextMenu={onDesktopContextMenu}>
       <div
         key={shownWallpaper}
         className={styles.wallpaperFade}
@@ -356,6 +372,19 @@ export default function App() {
         onSelect={(id) => { setWallpaper(id); setWallpaperPreview(null); }}
         onPreview={setWallpaperPreview}
       />
+
+      {desktopMenu && (
+        <DesktopMenu
+          x={desktopMenu.x}
+          y={desktopMenu.y}
+          wallpapers={WALLPAPERS}
+          current={wallpaper}
+          onSelect={setWallpaper}
+          onShuffle={shuffleWallpaper}
+          onNext={advanceWallpaper}
+          onClose={() => setDesktopMenu(null)}
+        />
+      )}
 
       <Launcher isOpen={isLauncherOpen} onLaunch={launch} onClose={() => setIsLauncherOpen(false)} />
       <PowerMenu isOpen={isPowerOpen} onClose={() => setIsPowerOpen(false)} onAction={handlePower} />
