@@ -11,23 +11,32 @@ import styles from './WallpaperIsland.module.css';
  * change is visible behind it. Click-away, Escape, or the close button collapse
  * it back into the capsule.
  */
-export default function WallpaperIsland({ wallpapers, current, onSelect }) {
+export default function WallpaperIsland({ wallpapers, current, onSelect, onPreview }) {
   const [open, setOpen] = useState(false);
   const rootRef = useRef(null);
   const active = getWallpaper(current);
 
-  // Click-away + Escape close the island.
+  const preview = (id) => onPreview?.(id);
+  const clearPreview = () => onPreview?.(null);
+
+  const close = () => { setOpen(false); clearPreview(); };
+
+  // Click-away + Escape close the island; closing also drops any hover preview.
   useEffect(() => {
     if (!open) return undefined;
-    const onDown = (e) => { if (!rootRef.current?.contains(e.target)) setOpen(false); };
-    const onKey = (e) => { if (e.key === 'Escape') { setOpen(false); } };
+    const onDown = (e) => { if (!rootRef.current?.contains(e.target)) close(); };
+    const onKey = (e) => { if (e.key === 'Escape') close(); };
     document.addEventListener('mousedown', onDown);
     window.addEventListener('keydown', onKey);
     return () => {
       document.removeEventListener('mousedown', onDown);
       window.removeEventListener('keydown', onKey);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
+
+  // A closed island must never leave a stale preview applied.
+  useEffect(() => { if (!open) clearPreview(); /* eslint-disable-next-line react-hooks/exhaustive-deps */ }, [open]);
 
   return (
     <div
@@ -60,13 +69,18 @@ export default function WallpaperIsland({ wallpapers, current, onSelect }) {
             className={styles.close}
             aria-label="Close"
             tabIndex={open ? 0 : -1}
-            onClick={() => setOpen(false)}
+            onClick={close}
           >
             ✕
           </button>
         </div>
 
-        <div className={styles.grid} role="listbox" aria-label="Wallpapers">
+        <div
+          className={styles.grid}
+          role="listbox"
+          aria-label="Wallpapers"
+          onMouseLeave={clearPreview}
+        >
           {wallpapers.map((wp, i) => {
             const isActive = wp.id === current;
             return (
@@ -84,6 +98,8 @@ export default function WallpaperIsland({ wallpapers, current, onSelect }) {
                   // Stagger the reveal so thumbnails cascade in.
                   '--i': i,
                 }}
+                onMouseEnter={() => preview(wp.id)}
+                onFocus={() => preview(wp.id)}
                 onClick={() => onSelect(wp.id)}
               >
                 {isActive && <span className={styles.check} aria-hidden="true">✓</span>}
