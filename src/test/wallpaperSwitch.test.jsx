@@ -58,7 +58,7 @@ describe('changing the wallpaper', () => {
     // Pick a clearly different wallpaper by its accessible label.
     const target = WALLPAPERS[7];
     await act(async () => {
-      fireEvent.click(screen.getByLabelText(`${target.name} — ${target.palette}`, { selector: 'button' }));
+      fireEvent.click(screen.getByRole('button', { name: `${target.name} — ${target.palette}` }));
     });
 
     expect(shownWallpaper(container)).toContain(target.file);
@@ -72,7 +72,7 @@ describe('changing the wallpaper', () => {
 
     const target = WALLPAPERS[3];
     await act(async () => {
-      fireEvent.click(screen.getByLabelText(`${target.name} — ${target.palette}`, { selector: 'button' }));
+      fireEvent.click(screen.getByRole('button', { name: `${target.name} — ${target.palette}` }));
     });
 
     const layer = container.querySelector('[class*="wallpaperFade"]');
@@ -89,7 +89,7 @@ describe('changing the wallpaper', () => {
     await bootToDesktop();
     await openWallpaperPicker();
     await act(async () => {
-      fireEvent.click(screen.getByLabelText(`${target.name} — ${target.palette}`, { selector: 'button' }));
+      fireEvent.click(screen.getByRole('button', { name: `${target.name} — ${target.palette}` }));
     });
     first.unmount();
 
