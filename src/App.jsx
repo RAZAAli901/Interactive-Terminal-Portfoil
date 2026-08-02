@@ -3,8 +3,8 @@ import { useRiceWM } from './wm/useRiceWM';
 import { useKeybindings } from './wm/useKeybindings';
 import { overviewLayout } from './shell/overviewGrid';
 import { RICE_APPS } from './config/riceApps';
-import { DEFAULT_WALLPAPER, WALLPAPERS, getWallpaper, wallpaperUrl } from './data/wallpapers';
-import { getPref, setPref } from './utils/prefs';
+import { DEFAULT_WALLPAPER, WALLPAPERS, wallpaperUrl } from './data/wallpapers';
+import { loadWorkspaceWallpapers, saveWorkspaceWallpapers } from './data/workspaceWallpapers';
 
 import ErrorBoundary from './components/ErrorBoundary';
 import Terminal from './components/Terminal';
@@ -52,10 +52,8 @@ const FALLBACK = <div style={{ padding: 20, color: 'var(--hypr-subtext)' }}>Load
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
-  // Wallpaper choice survives reloads, like a real desktop.
-  const [wallpaper, setWallpaper] = useState(
-    () => getWallpaper(getPref('wallpaper', DEFAULT_WALLPAPER)).id,
-  );
+  // Each workspace keeps its own wallpaper, like a real multi-workspace rice.
+  const [wsWallpapers, setWsWallpapers] = useState(loadWorkspaceWallpapers);
   const [browserProject, setBrowserProject] = useState(0);
   const [showStartup, setShowStartup] = useState(false);
   const [isLauncherOpen, setIsLauncherOpen] = useState(false);
@@ -69,7 +67,13 @@ export default function App() {
   const { items: notifications, notify, dismiss } = useNotifications();
   const wm = useRiceWM(RICE_APPS);
 
-  useEffect(() => { setPref('wallpaper', wallpaper); }, [wallpaper]);
+  // The current workspace's wallpaper, and a setter that targets it.
+  const wallpaper = wsWallpapers[wm.activeWorkspace] || DEFAULT_WALLPAPER;
+  const setWallpaper = useCallback((id) => {
+    setWsWallpapers((prev) => ({ ...prev, [wm.activeWorkspace]: id }));
+  }, [wm.activeWorkspace]);
+
+  useEffect(() => { saveWorkspaceWallpapers(wsWallpapers); }, [wsWallpapers]);
 
   useEffect(() => { if (wm.overview) setOverviewSel(0); }, [wm.overview]);
 
