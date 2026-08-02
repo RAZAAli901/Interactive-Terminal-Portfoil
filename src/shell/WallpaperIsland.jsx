@@ -105,7 +105,7 @@ export default function WallpaperIsland({ wallpapers, current, onSelect, onPrevi
         onClick={() => setOpen((o) => !o)}
       >
         <span className={styles.swatch} aria-hidden="true" />
-        <span className={styles.capsuleLabel}>Wallpaper</span>
+        <span className={styles.capsuleLabel}>{active.name}</span>
         <span className={styles.chevron} aria-hidden="true">▾</span>
       </button>
 
