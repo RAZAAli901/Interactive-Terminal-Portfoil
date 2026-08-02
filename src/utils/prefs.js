@@ -36,3 +36,24 @@ export function clearPref(key) {
     /* nothing to do */
   }
 }
+
+/** Read a JSON-encoded preference, falling back on any parse/storage error. */
+export function getJsonPref(key, fallback = null) {
+  const raw = getPref(key, null);
+  if (raw === null) return fallback;
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return fallback;
+  }
+}
+
+/** Persist a value as JSON. */
+export function setJsonPref(key, value) {
+  try {
+    setPref(key, JSON.stringify(value));
+  } catch {
+    /* value not serialisable / storage unavailable — ignore */
+  }
+  return value;
+}
