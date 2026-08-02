@@ -14,7 +14,6 @@ import BootSequence from './boot/BootSequence';
 import WindowFrame from './wm/WindowFrame';
 import { Dividers, DragGhost, SwapTarget } from './wm/TilingOverlays';
 
-import NeuralCanvas from './shell/NeuralCanvas';
 import TopBar from './shell/TopBar';
 import Dock from './shell/Dock';
 import EmptyHint from './shell/EmptyHint';
@@ -69,7 +68,7 @@ export default function App() {
   const [slideshowInterval, setSlideshowInterval] = useState(() => Number(getPref('slideshowInterval', '30')) || 30);
   const [terminalCommand, setTerminalCommand] = useState(null);
 
-  const { setTheme, theme } = useTheme();
+  const { setTheme } = useTheme();
   const { items: notifications, notify, dismiss } = useNotifications();
   const wm = useRiceWM(RICE_APPS);
 
@@ -290,7 +289,6 @@ export default function App() {
         style={{ backgroundImage: `url(${wallpaperUrl(shownWallpaper)})` }}
       />
       <div className={styles.ground} />
-      <NeuralCanvas accent={theme.role.accent} />
       {showStartup && <div className={styles.startupFade} />}
 
       <LauncherColumn onLaunch={launch} />
