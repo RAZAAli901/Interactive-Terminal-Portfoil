@@ -5,10 +5,35 @@
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  transition: background-image 0.5s ease-in-out;
+  /* NOTE: do not transition `background-image`. Two `url()` values are not
+     interpolable, and the transition leaves the computed style pinned to the
+     old image — the wallpaper would never visibly change. The swap is instant;
+     the fade lives on the `.wallpaperFade` layer below. */
   position: relative;
   overflow: hidden;
   font-family: var(--hypr-font-ui, 'Inter', system-ui, sans-serif);
+}
+
+/* Keyed per wallpaper: mounting a fresh layer fades the new rice in over the
+   ground colour, which is the cross-fade `background-image` cannot do. */
+.wallpaperFade {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  animation: wallpaperIn 420ms var(--hypr-ease-out, ease-out);
+}
+
+@keyframes wallpaperIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wallpaperFade { animation: none; }
 }
 
 /* Phones get a terminal-first shell — tiling does not translate to a 6" screen. */

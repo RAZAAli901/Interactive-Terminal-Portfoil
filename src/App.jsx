@@ -236,10 +236,12 @@ export default function App() {
   const dragWin = wm.drag.id ? wm.windows[wm.drag.id] : null;
 
   return (
-    <div
-      className={styles.desktop}
-      style={{ backgroundImage: `url(${wallpaperUrl(wallpaper)})` }}
-    >
+    <div className={styles.desktop}>
+      <div
+        key={wallpaper}
+        className={styles.wallpaperFade}
+        style={{ backgroundImage: `url(${wallpaperUrl(wallpaper)})` }}
+      />
       <div className={styles.ground} />
       <NeuralCanvas accent={theme.role.accent} />
       {showStartup && <div className={styles.startupFade} />}
