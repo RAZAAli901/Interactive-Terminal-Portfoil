@@ -3,7 +3,7 @@ import { useRiceWM } from './wm/useRiceWM';
 import { useKeybindings } from './wm/useKeybindings';
 import { overviewLayout } from './shell/overviewGrid';
 import { RICE_APPS } from './config/riceApps';
-import { DEFAULT_WALLPAPER, getWallpaper, wallpaperUrl } from './data/wallpapers';
+import { DEFAULT_WALLPAPER, WALLPAPERS, getWallpaper, wallpaperUrl } from './data/wallpapers';
 import { getPref, setPref } from './utils/prefs';
 
 import ErrorBoundary from './components/ErrorBoundary';
@@ -22,6 +22,7 @@ import Launcher from './shell/Launcher';
 import PowerMenu from './shell/PowerMenu';
 import KeybindCheatsheet from './shell/KeybindCheatsheet';
 import MobileBar from './shell/MobileBar';
+import WallpaperIsland from './shell/WallpaperIsland';
 import Notifications from './shell/Notifications';
 import { useNotifications } from './shell/useNotifications';
 
@@ -318,6 +319,8 @@ export default function App() {
       />
 
       <Dock windows={wm.dockWindows} onSelect={wm.focusWindow} />
+
+      <WallpaperIsland wallpapers={WALLPAPERS} current={wallpaper} onSelect={setWallpaper} />
 
       <Launcher isOpen={isLauncherOpen} onLaunch={launch} onClose={() => setIsLauncherOpen(false)} />
       <PowerMenu isOpen={isPowerOpen} onClose={() => setIsPowerOpen(false)} onAction={handlePower} />
