@@ -5,6 +5,8 @@ import { overviewLayout } from './shell/overviewGrid';
 import { RICE_APPS } from './config/riceApps';
 import { DEFAULT_WALLPAPER, WALLPAPERS, wallpaperUrl } from './data/wallpapers';
 import { loadWorkspaceWallpapers, saveWorkspaceWallpapers } from './data/workspaceWallpapers';
+import { getPref, setPref } from './utils/prefs';
+import { useSlideshow } from './shell/useSlideshow';
 
 import ErrorBoundary from './components/ErrorBoundary';
 import Terminal from './components/Terminal';
@@ -61,6 +63,8 @@ export default function App() {
   const [isCheatsheetOpen, setIsCheatsheetOpen] = useState(false);
   const [overviewSel, setOverviewSel] = useState(0);
   const [wallpaperPreview, setWallpaperPreview] = useState(null);
+  const [slideshow, setSlideshow] = useState(() => getPref('slideshow', 'off') === 'on');
+  const [slideshowInterval, setSlideshowInterval] = useState(() => Number(getPref('slideshowInterval', '30')) || 30);
   const [terminalCommand, setTerminalCommand] = useState(null);
 
   const { setTheme, theme } = useTheme();
@@ -74,6 +78,15 @@ export default function App() {
   }, [wm.activeWorkspace]);
 
   useEffect(() => { saveWorkspaceWallpapers(wsWallpapers); }, [wsWallpapers]);
+  useEffect(() => { setPref('slideshow', slideshow ? 'on' : 'off'); }, [slideshow]);
+  useEffect(() => { setPref('slideshowInterval', String(slideshowInterval)); }, [slideshowInterval]);
+
+  // Slideshow: cycle the active workspace's wallpaper on a timer.
+  const advanceWallpaper = useCallback(() => {
+    const i = WALLPAPERS.findIndex((w) => w.id === wallpaper);
+    setWallpaper(WALLPAPERS[(i + 1) % WALLPAPERS.length].id);
+  }, [wallpaper, setWallpaper]);
+  useSlideshow(slideshow && !isLoading && !isMobile, slideshowInterval * 1000, advanceWallpaper);
 
   useEffect(() => { if (wm.overview) setOverviewSel(0); }, [wm.overview]);
 
@@ -206,7 +219,16 @@ export default function App() {
       case 'code': return <CodeApp />;
       case 'browser': return <BrowserApp projectIndex={browserProject} />;
       case 'power': return <PowerApp />;
-      case 'settings': return <Settings setWallpaper={setWallpaper} currentWallpaper={wallpaper} />;
+      case 'settings': return (
+        <Settings
+          setWallpaper={setWallpaper}
+          currentWallpaper={wallpaper}
+          slideshow={slideshow}
+          onToggleSlideshow={() => setSlideshow((o) => !o)}
+          slideshowInterval={slideshowInterval}
+          onSlideshowInterval={setSlideshowInterval}
+        />
+      );;
       case 'editor': return <Notepad />;
       case 'images': return <Photos />;
       case 'chat': return <Chat />;
