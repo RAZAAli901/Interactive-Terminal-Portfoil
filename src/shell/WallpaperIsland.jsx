@@ -25,6 +25,13 @@ export default function WallpaperIsland({ wallpapers, current, onSelect, onPrevi
 
   const close = () => { setOpen(false); clearPreview(); };
 
+  /** Pick a random wallpaper that isn't the current one. */
+  const shuffle = () => {
+    const others = wallpapers.filter((w) => w.id !== current);
+    if (!others.length) return;
+    onSelect(others[Math.floor(Math.random() * others.length)].id);
+  };
+
   /** Focus + preview the thumbnail at `i` (clamped into range). */
   const focusThumb = (i) => {
     const n = wallpapers.length;
@@ -109,15 +116,27 @@ export default function WallpaperIsland({ wallpapers, current, onSelect, onPrevi
             <span className={styles.title}>{active.name}</span>
             <span className={styles.palette}>{active.palette}</span>
           </div>
-          <button
-            type="button"
-            className={styles.close}
-            aria-label="Close"
-            tabIndex={open ? 0 : -1}
-            onClick={close}
-          >
-            ✕
-          </button>
+          <div className={styles.headerActions}>
+            <button
+              type="button"
+              className={styles.action}
+              aria-label="Shuffle wallpaper"
+              title="Shuffle"
+              tabIndex={open ? 0 : -1}
+              onClick={shuffle}
+            >
+              🎲
+            </button>
+            <button
+              type="button"
+              className={styles.close}
+              aria-label="Close"
+              tabIndex={open ? 0 : -1}
+              onClick={close}
+            >
+              ✕
+            </button>
+          </div>
         </div>
 
         <div

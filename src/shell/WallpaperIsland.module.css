@@ -105,8 +105,10 @@
 }
 .palette { font-size: 11px; color: var(--hypr-muted, #7f849c); }
 
+.headerActions { display: flex; align-items: center; gap: 4px; flex: 0 0 auto; }
+
+.action,
 .close {
-  flex: 0 0 auto;
   width: 24px;
   height: 24px;
   display: grid;
@@ -115,9 +117,11 @@
   border-radius: 7px;
   background: transparent;
   color: var(--hypr-subtext, #a9b1d6);
+  font-size: 13px;
   cursor: pointer;
-  transition: background var(--hypr-dur-fast) ease, color var(--hypr-dur-fast) ease;
+  transition: background var(--hypr-dur-fast) ease, color var(--hypr-dur-fast) ease, transform var(--hypr-dur-fast) ease;
 }
+.action:hover { background: color-mix(in srgb, var(--hypr-accent, #7aa2f7) 20%, transparent); transform: rotate(-12deg); }
 .close:hover { background: color-mix(in srgb, var(--hypr-red, #f7768e) 18%, transparent); color: var(--hypr-red, #f7768e); }
 
 .grid {
