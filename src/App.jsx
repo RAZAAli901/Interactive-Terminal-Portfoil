@@ -62,6 +62,7 @@ export default function App() {
   const [isPowerOpen, setIsPowerOpen] = useState(false);
   const [isCheatsheetOpen, setIsCheatsheetOpen] = useState(false);
   const [overviewSel, setOverviewSel] = useState(0);
+  const [wallpaperPreview, setWallpaperPreview] = useState(null);
   const [terminalCommand, setTerminalCommand] = useState(null);
 
   const { setTheme, theme } = useTheme();
@@ -236,12 +237,15 @@ export default function App() {
   const swapRect = wm.drag.target ? wm.geometry[wm.drag.target] : null;
   const dragWin = wm.drag.id ? wm.windows[wm.drag.id] : null;
 
+  // The wallpaper island can preview a wallpaper on hover without committing it.
+  const shownWallpaper = wallpaperPreview || wallpaper;
+
   return (
     <div className={styles.desktop}>
       <div
-        key={wallpaper}
+        key={shownWallpaper}
         className={styles.wallpaperFade}
-        style={{ backgroundImage: `url(${wallpaperUrl(wallpaper)})` }}
+        style={{ backgroundImage: `url(${wallpaperUrl(shownWallpaper)})` }}
       />
       <div className={styles.ground} />
       <NeuralCanvas accent={theme.role.accent} />
@@ -320,7 +324,12 @@ export default function App() {
 
       <Dock windows={wm.dockWindows} onSelect={wm.focusWindow} />
 
-      <WallpaperIsland wallpapers={WALLPAPERS} current={wallpaper} onSelect={setWallpaper} />
+      <WallpaperIsland
+        wallpapers={WALLPAPERS}
+        current={wallpaper}
+        onSelect={(id) => { setWallpaper(id); setWallpaperPreview(null); }}
+        onPreview={setWallpaperPreview}
+      />
 
       <Launcher isOpen={isLauncherOpen} onLaunch={launch} onClose={() => setIsLauncherOpen(false)} />
       <PowerMenu isOpen={isPowerOpen} onClose={() => setIsPowerOpen(false)} onAction={handlePower} />
