@@ -1,0 +1,191 @@
+/* Springy morph curve — a gentle overshoot, like a dynamic island settling. */
+.island {
+  --spring: cubic-bezier(0.22, 1, 0.36, 1);
+  --morph: 480ms;
+  position: fixed;
+  top: calc(var(--hypr-waybar-h, 40px) + 10px);
+  right: 12px;
+  z-index: 8600;
+  width: 168px;
+  height: 44px;
+  border-radius: 22px;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--hypr-mantle, #181825) 82%, transparent);
+  backdrop-filter: blur(16px) saturate(1.3);
+  -webkit-backdrop-filter: blur(16px) saturate(1.3);
+  border: 1px solid color-mix(in srgb, var(--hypr-border, #45475a) 70%, transparent);
+  box-shadow: var(--hypr-shadow);
+  will-change: width, height, border-radius;
+  transition:
+    width var(--morph) var(--spring),
+    height var(--morph) var(--spring),
+    border-radius var(--morph) var(--spring),
+    box-shadow var(--morph) var(--spring);
+}
+
+.island.open {
+  width: 340px;
+  height: min(64vh, 468px);
+  border-radius: 20px;
+  box-shadow: var(--hypr-shadow-active);
+}
+
+/* ── Collapsed capsule ─────────────────────────────────────────────────── */
+.capsule {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 0 12px;
+  border: none;
+  background: transparent;
+  color: var(--hypr-subtext, #a9b1d6);
+  font-family: var(--hypr-font-mono, 'JetBrains Mono', monospace);
+  font-size: 12.5px;
+  cursor: pointer;
+  opacity: 1;
+  transition: opacity 200ms var(--spring);
+}
+.island.open .capsule {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.swatch {
+  width: 26px;
+  height: 26px;
+  flex: 0 0 auto;
+  border-radius: 8px;
+  background-image: var(--island-swatch);
+  background-size: cover;
+  background-position: center;
+  border: 1px solid color-mix(in srgb, var(--hypr-border, #45475a) 80%, transparent);
+}
+
+.capsuleLabel { flex: 1; text-align: left; white-space: nowrap; }
+.chevron { color: var(--hypr-muted, #7f849c); font-size: 11px; }
+
+/* ── Expanded panel ────────────────────────────────────────────────────── */
+.panel {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  opacity: 0;
+  transform: scale(0.98);
+  pointer-events: none;
+  transition: opacity 220ms var(--spring) 60ms, transform 220ms var(--spring) 60ms;
+}
+.island.open .panel {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
+}
+
+.header {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px 12px 10px 16px;
+  border-bottom: 1px solid color-mix(in srgb, var(--hypr-border, #45475a) 55%, transparent);
+}
+
+.headerText { display: flex; flex-direction: column; min-width: 0; }
+.title {
+  font-family: var(--hypr-font-mono, 'JetBrains Mono', monospace);
+  font-size: 13px;
+  color: var(--hypr-text, #c0caf5);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.palette { font-size: 11px; color: var(--hypr-muted, #7f849c); }
+
+.close {
+  flex: 0 0 auto;
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  border: none;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--hypr-subtext, #a9b1d6);
+  cursor: pointer;
+  transition: background var(--hypr-dur-fast) ease, color var(--hypr-dur-fast) ease;
+}
+.close:hover { background: color-mix(in srgb, var(--hypr-red, #f7768e) 18%, transparent); color: var(--hypr-red, #f7768e); }
+
+.grid {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  padding: 12px;
+}
+
+.thumb {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  border-radius: 9px;
+  border: 2px solid transparent;
+  background-size: cover;
+  background-position: center;
+  background-color: var(--hypr-crust, #0a0a12);
+  cursor: pointer;
+  padding: 0;
+  /* Cascade in with the panel, offset per index. */
+  opacity: 0;
+  transform: translateY(6px) scale(0.96);
+}
+.island.open .thumb {
+  animation: thumbIn 360ms var(--spring) forwards;
+  animation-delay: calc(120ms + var(--i) * 22ms);
+}
+
+.thumb:hover,
+.thumb:focus-visible {
+  transform: translateY(-2px) scale(1.04);
+  border-color: color-mix(in srgb, var(--hypr-accent, #7aa2f7) 55%, transparent);
+  outline: none;
+  z-index: 1;
+}
+
+.thumb.active {
+  border-color: var(--hypr-accent, #7aa2f7);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--hypr-accent, #7aa2f7) 35%, transparent);
+}
+
+.check {
+  position: absolute;
+  right: 4px;
+  bottom: 3px;
+  width: 16px;
+  height: 16px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  font-size: 10px;
+  color: var(--hypr-crust, #0a0a12);
+  background: var(--hypr-accent, #7aa2f7);
+}
+
+@keyframes thumbIn {
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Reduced motion / low-power: no morph, no cascade — just show/hide. */
+@media (prefers-reduced-motion: reduce) {
+  .island, .capsule, .panel { transition: none; }
+  .island.open .thumb { animation: none; opacity: 1; transform: none; }
+}
+
+@media (max-width: 768px) {
+  .island { display: none; }
+}
