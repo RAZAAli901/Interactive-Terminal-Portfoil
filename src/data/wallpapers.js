@@ -1,13 +1,18 @@
 /**
  * Wallpaper manifest.
  *
- * All twenty wallpapers are original SVG artwork authored for this project, in
- * the palettes the Linux ricing community actually uses. They are vectors, so
- * each one is a few kilobytes and stays crisp at any resolution — and because
- * they are original there is no third-party licensing attached to the repo.
+ * Every wallpaper is original SVG artwork authored for this project, in the
+ * palettes the Linux ricing community actually uses (Tokyo Night, Catppuccin,
+ * Gruvbox, Nord, Kanagawa, Dracula, Everforest, Rosé Pine, Synthwave…) plus a
+ * set of anime-aesthetic scenes (torii at dusk, sakura at night, a coastal
+ * dawn, neon rain). They are vectors, so each is a few kilobytes and stays
+ * crisp at any resolution — and because they are original there is no
+ * third-party licensing attached to the repo.
  *
- * They are deliberately dark and low-contrast: translucent glass windows and the
- * neural-network canvas sit on top of them.
+ * The scene wallpapers are produced by `scripts/gen-wallpapers.mjs` (seeded, so
+ * output is reproducible); the earlier abstract set is authored by hand. They
+ * are deliberately dark and low-contrast so the translucent glass windows read
+ * clearly on top.
  */
 
 export const WALLPAPERS = [
@@ -31,6 +36,27 @@ export const WALLPAPERS = [
   { id: 'concentric-arcs', name: 'Concentric Arcs', palette: 'Minimal', file: 'concentric-arcs.svg' },
   { id: 'isometric-grid', name: 'Isometric Horizon', palette: 'Minimal', file: 'isometric-grid.svg' },
   { id: 'scanlines', name: 'Scanlines', palette: 'Terminal', file: 'scanlines.svg' },
+
+  // ── Scene wallpapers (scripts/gen-wallpapers.mjs) ──────────────────────────
+  // Anime-aesthetic scenes.
+  { id: 'anime-torii-dusk', name: 'Torii Dusk', palette: 'Anime', file: 'anime-torii-dusk.svg' },
+  { id: 'anime-fuji-sunset', name: 'Crimson Fuji', palette: 'Anime', file: 'anime-fuji-sunset.svg' },
+  { id: 'anime-sakura-night', name: 'Sakura Night', palette: 'Anime', file: 'anime-sakura-night.svg' },
+  { id: 'anime-coast-dawn', name: 'Coastal Dawn', palette: 'Anime', file: 'anime-coast-dawn.svg' },
+  { id: 'anime-neon-rain', name: 'Neon Rain', palette: 'Anime', file: 'anime-neon-rain.svg' },
+  // Popular rice palettes.
+  { id: 'kanagawa-wave', name: 'Seafoam', palette: 'Kanagawa', file: 'kanagawa-wave.svg' },
+  { id: 'kanagawa-peak', name: 'Lone Peak', palette: 'Kanagawa', file: 'kanagawa-peak.svg' },
+  { id: 'tokyo-storm-peaks', name: 'Storm Peaks', palette: 'Tokyo Night Storm', file: 'tokyo-storm-peaks.svg' },
+  { id: 'catppuccin-macchiato-tide', name: 'Lavender Tide', palette: 'Catppuccin Macchiato', file: 'catppuccin-macchiato-tide.svg' },
+  { id: 'catppuccin-frappe-peaks', name: 'Frappé Ridges', palette: 'Catppuccin Frappé', file: 'catppuccin-frappe-peaks.svg' },
+  { id: 'synthwave-outrun', name: 'Outrun', palette: 'Synthwave', file: 'synthwave-outrun.svg' },
+  { id: 'synthwave-retro', name: 'Retrowave', palette: 'Synthwave', file: 'synthwave-retro.svg' },
+  { id: 'dracula-tide', name: 'Nocturne Tide', palette: 'Dracula', file: 'dracula-tide.svg' },
+  { id: 'gruvbox-peaks', name: 'Autumn Ridge', palette: 'Gruvbox', file: 'gruvbox-peaks.svg' },
+  { id: 'nord-fjord', name: 'Fjord', palette: 'Nord', file: 'nord-fjord.svg' },
+  { id: 'rose-pine-moon-tide', name: 'Moonlit Tide', palette: 'Rosé Pine Moon', file: 'rose-pine-moon-tide.svg' },
+  { id: 'everforest-hills', name: 'Rolling Hills', palette: 'Everforest', file: 'everforest-hills.svg' },
 ];
 
 export const DEFAULT_WALLPAPER = 'tokyo-night-skyline';
