@@ -76,19 +76,19 @@ export default function WallpaperIsland({ wallpapers, current, onSelect, onPrevi
   // Click-away + Escape close the island; closing also drops any hover preview.
   useEffect(() => {
     if (!open) return undefined;
-    const onDown = (e) => { if (!rootRef.current?.contains(e.target)) close(); };
-    const onKey = (e) => { if (e.key === 'Escape') close(); };
+    const dismiss = () => { setOpen(false); onPreview?.(null); };
+    const onDown = (e) => { if (!rootRef.current?.contains(e.target)) dismiss(); };
+    const onKey = (e) => { if (e.key === 'Escape') dismiss(); };
     document.addEventListener('mousedown', onDown);
     window.addEventListener('keydown', onKey);
     return () => {
       document.removeEventListener('mousedown', onDown);
       window.removeEventListener('keydown', onKey);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open]);
+  }, [open, onPreview]);
 
   // A closed island must never leave a stale preview applied.
-  useEffect(() => { if (!open) clearPreview(); /* eslint-disable-next-line react-hooks/exhaustive-deps */ }, [open]);
+  useEffect(() => { if (!open) onPreview?.(null); }, [open, onPreview]);
 
   return (
     <div
